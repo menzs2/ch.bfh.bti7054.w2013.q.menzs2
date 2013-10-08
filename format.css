@@ -1,0 +1,24 @@
+body{
+	font-family:Arial
+	}
+
+.footer {
+	
+	font-style:italic
+	}
+	
+.navigation{
+	/*background-color:gray;*/
+	
+	text-align:center;
+	border:2px ridge silver;}
+	
+#main {
+	
+}	
+
+#first{
+	text-transform:uppercase;
+	
+}
+
