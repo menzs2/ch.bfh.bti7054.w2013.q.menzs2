@@ -1,5 +1,6 @@
 body{
-	font-family:Arial
+	font-family:Arial;
+	background-color:gray;
 	}
 
 .footer {
@@ -8,22 +9,25 @@ body{
 	}
 	
 .navigation{
-	/*background-color:gray;*/
+	background-color:gray;
 	
 	text-align:center;
 	border:2px ridge silver;}
 	
 #mainnavigation{
-	font-size:24pt;
+	font-size:32pt;
+	
 }	
 
 	
 #main {
+	font-size:16pt;
+	margin:20mm 0 0 0
 	
 }	
 
 #first{
-	text-transform:uppercase;
+	
 	
 }
 
