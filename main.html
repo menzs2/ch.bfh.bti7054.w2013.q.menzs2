@@ -7,7 +7,11 @@
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
 <body background="kesselgulasch_2.jpg"> <!-- here starts the main part -->
-<div class="navigation"> <p ID="mainnavigation"> <strong>main</strong> <a href="menu.html">menu</a> <a href="location.html"> location</a> </p>
+<?php $navigation = array(main => "main.php", menu=>"menu.php", location=>"location.html")?>
+<div class="navigation"> <p ID="mainnavigation"> <?php 
+				foreach($navigation as $link){
+				}
+				?><strong>main</strong> <a href="menu.php">menu</a> <a href="location.html"> location</a> </p>
 <p ID="subnavigation>">the subnavigation</p>
 </div>
 <div ID="main">

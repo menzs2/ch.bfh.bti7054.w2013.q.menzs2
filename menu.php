@@ -7,12 +7,18 @@
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
 <body> <!-- here starts the main part -->
+<?php $dishes = array(0=>"Rindsgulasch", 1=>"Scharfes Rindsgulasch", 2=>"Schweinsgulasch", 3=>"Wurstgulasch")?>
 <div class="navigation"><p ID="mainnavigation"> <a  href="main.html">main</a>  <strong>menu</strong> <a href="location.html">location</a></p>
 	<p ID="subnavigation>">the subnavigation</p>
 </div>
 <div ID="menue">
-<p ID="first"> Stellen Sie sich ein Menu zusammen</br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>
+<p ID="first"> Stellen Sie sich ein Menu zusammen</p>
+<p><?php 
+	foreach($dishes as $item){
+		echo "$item</br>";
+		}
+	?>
+	</p>
 </div>
 <!-- footer -->
 <div class="footer"><p> Gulasch-to-Go</p>
