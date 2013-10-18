@@ -8,9 +8,15 @@
 </head>
 <body> <!-- here starts the main part -->
 <?php $dishes = array(0=>"Rindsgulasch", 1=>"Scharfes Rindsgulasch", 2=>"Schweinsgulasch", 3=>"Wurstgulasch")?>
-<div class="navigation"><p ID="mainnavigation"> <a  href="main.html">main</a>  <strong>menu</strong> <a href="location.html">location</a></p>
-	<p ID="subnavigation>">the subnavigation</p>
-</div>
+<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")?>
+<div class="navigation"> <p ID="mainnavigation"> 
+<?php 
+				foreach($navigation as $name => $link){
+						echo "<a href=\"$link\">$name</a> ";
+				}
+				?>
+				</p>
+</div>				
 <div ID="menue">
 <p ID="first"> Stellen Sie sich ein Menu zusammen</p>
 <p><?php 
