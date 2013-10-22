@@ -1,33 +1,40 @@
+/*Style for all pages*/
+
 body{
 	font-family:Arial;
 	background-color:gray;
 	}
 
-.footer {
 	
+.footer {
+	clear:both;
 	font-style:italic
 	}
 	
 .navigation{
 	background-color:gray;
-	
-	text-align:center;
-	border:2px ridge silver;}
-	
-#mainnavigation{
 	font-size:32pt;
-	
-}	
+	text-align:center;
+}
 
-	
-#main {
+/*main page*/	
+#welcome {
 	font-size:32pt;
 	margin:20mm 0 0 0
 	
 }	
-
-#first{
-	
+/*menu page*/
+#maincourse{
+	width:300px;
+	float:left;
+	border:2px ridge silver;;	
 	
 }
+
+#extras{
+	width:300px;
+	float:right;
+	border:2px ridge silver;
+ }
+ /*Information Page*/
 
