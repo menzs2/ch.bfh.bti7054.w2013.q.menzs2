@@ -8,49 +8,37 @@
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
 
-<body> <!-- here starts the main part -->
-<?php $maindishes = array(
-					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
-					1=> array( 'name'=>"Scharfes Rindsgulasch",'description'=> " auch lecker", 'price'=> 13.50),
-					2=> array( 'name'=>"Schweinsgulasch",'description'=> " sehr lecker", 'price'=> 12.20),
-					3=> array( 'name'=>"Wurstgulasch",'description'=> "wie von Mutti", 'price'=> 10.50), 
-					4=> array( 'name'=>"Lamm Pilaw",'description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80)
-					)?>
-<?php $extras = array(
-					0=> array( 'name'=>"Knödel",'description'=> "lecker", 'price'=> 2.50), 
-					1=> array( 'name'=>"Sauerrahm",'description'=> " auch lecker", 'price'=> 2.20),
-					2=> array( 'name'=>"Pilze",'description'=> " sehr lecker", 'price'=> 2.50),
-					3=> array( 'name'=>"Mehr Paprika",'description'=> "mehr schärfe", 'price'=> 1.00), 
-					4=> array( 'name'=>"Mehr Zwiebeln",'description'=> "aber hallo", 'price'=> 2.80)
-					)?>					
-<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")?>
+<body > <!-- here starts the main part -->
+<?php require("file.php")?> 
+								
 
 <!-- The navigation bar -->
-<div class="navigation">  <p>
-<?php 
-				foreach($navigation as $name => $link){
-						echo "<a href=\"$link\">$name</a> ";
-				}
-				?>
-				</p>
+<div class="navigation"> 
+ <p>
+	<?php navigation_list();?>
+</p>
 </div>		
-
+<!-- Menu selection -->
 <div ID="menue">
 <p ID="first"> Stellen Sie sich ein Menu zusammen</p>
-<div ID="maincourse"<p><?php 
-	foreach($maindishes as $item){
-		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</p>";
-		}
-	?></div>
+
+<div ID="maincourse"><h1>Gerichte</h1>
+	<?php main_dishes(); ?>
 	
-<div ID="extras">	
+	</div>
+	
+<div ID="sidedish">	<h1>Beilagen und Extras</h1>
 <?php 
-	foreach($extras as $item){
-		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</p>";
-		}
+	side_dishes();
 	?>
 </div>
-
+	
+<div ID="extras">	<h1>Getränke</h1>
+<?php 
+	extras();
+	?>
+</div>
+</div>
 <!-- footer -->
 <div class="footer"><p> Gulasch-to-Go</p>
 <p><a href="location.php">über uns</a></p>

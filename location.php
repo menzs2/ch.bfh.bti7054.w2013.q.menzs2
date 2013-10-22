@@ -6,23 +6,34 @@
 <title>Gulasch-To-Go</title>
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
-<body> <!-- here starts the main part -->
-<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")?>
-<div Class="navigation">  <p ID="navi">
-<?php 
-				foreach($navigation as $name => $link){
-						echo "<a href=\"$link\">$name</a> ";
-				}				?>
-				</p>
+<body>
+	<!-- here starts the main part -->
+<?php require("file.php")?> 
+								
 
-</div>
-<div ID="location">
-<p> Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>
-</div>
-<!-- footer -->
-<div class="footer"><p> Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et</p>
-	<a href="location.html">über uns</a>
-</div>
+<!-- The navigation bar -->
+<div class="navigation"> 
+ <p>
+	<?php navigation_list();?>
+</p>
+</div>		
+	<div ID="location">
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+			tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
+			minim veniam, quis nostrud exercitation ullamco laboris
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+			tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
+			minim veniam, quis nostrud exercitation ullamco laboris
+		</p>
+	</div>
+	<!-- footer -->
+	<div class="footer">
+		<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+			tempor incidunt ut labore et</p>
+		<a href="location.php">über uns</a>
+	</div>
 </body>
 </html>

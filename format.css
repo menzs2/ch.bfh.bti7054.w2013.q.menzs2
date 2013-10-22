@@ -1,40 +1,45 @@
 /*Style for all pages*/
+body {
+	font-family: Arial;
+	background-color: gray;
+}
 
-body{
-	font-family:Arial;
-	background-color:gray;
-	}
-
-	
 .footer {
-	clear:both;
-	font-style:italic
-	}
-	
-.navigation{
-	background-color:gray;
-	font-size:32pt;
-	text-align:center;
+	clear: both;
+	font-style: italic
 }
 
-/*main page*/	
+.navigation {
+	background-color: gray;
+	font-size: 32pt;
+	text-align: center;
+}
+
+/*main page*/
 #welcome {
-	font-size:32pt;
-	margin:20mm 0 0 0
-	
-}	
+	font-size: 32pt;
+	margin: 20mm 0 0 0
+}
 /*menu page*/
-#maincourse{
-	width:300px;
-	float:left;
-	border:2px ridge silver;;	
-	
+#menu {
+	margin-left: 20mm;
 }
 
-#extras{
-	width:300px;
-	float:right;
-	border:2px ridge silver;
- }
- /*Information Page*/
+#maincourse {
+	width: 400px;
+	float: left;
+	border: 2px ridge silver;
+}
 
+#sidedish {
+	width: 400px;
+	border: 2px ridge silver;
+	float: left;
+}
+
+#extras {
+	width: 400px;
+	float: left;
+	border: 2px ridge silver;
+}
+/*Information Page*/
