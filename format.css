@@ -28,18 +28,18 @@ body {
 #maincourse {
 	width: 400px;
 	float: left;
-	border: 2px ridge silver;
+	border: 5px ridge silver;
 }
 
 #sidedish {
 	width: 400px;
-	border: 2px ridge silver;
+	border: 5px ridge silver;
 	float: left;
 }
 
 #extras {
 	width: 400px;
 	float: left;
-	border: 2px ridge silver;
+	border: 5px ridge silver;
 }
 /*Information Page*/

@@ -1,13 +1,35 @@
 <!-- Navigation -->
-<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")?>
+<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")
 
+			function get_param($name, $default) {
+				if (isset ( $_GET [$name] ))
+					return urldecode ( $_GET [$name] );
+				else
+					return $default;
+			}
+			
+			function add_param($url, $name, $value, $sep = "&") {
+				$new_url = $url . $sep . $name . "=" . urlencode ( $value );
+				return $new_url;
+}
+
+			function navigation() {
+				global $navigation;
+ 				$lan = get_param ( "lan", "de" );
+				foreach ( $navigation as $name) {
+					$url = $_SERVER ['PHP_SELF'];
+					$url = add_param ( $url, "id", $i, "?" );
+					$url = add_param ( $url, "lan", $lan );
+					echo "<a href=\"$url\">{$text[$lan]} $i</a><br />";?>
 <?php 
 		function navigation_list(){
 			global $navigation;
 			foreach ( $navigation as $name => $link ) {
-			echo "<a href=\"$link\">$name</a> ";
+			echo "<a href=\"$link?id=$name\">$name</a> ";
 			}
-		}?>
+		}
+		
+		?>
 <!-- menu items -->
 <?php
  	$maindishes = array(
@@ -15,13 +37,14 @@
 					1=> array( 'name'=>"Scharfes Rindsgulasch",'description'=> " auch lecker", 'price'=> 13.50),
 					2=> array( 'name'=>"Schweinsgulasch",'description'=> " sehr lecker", 'price'=> 12.20),
 					3=> array( 'name'=>"Wurstgulasch",'description'=> "wie von Mutti", 'price'=> 10.50), 
-					4=> array( 'name'=>"Lamm Pilaw",'description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80)
+					4=> array( 'name'=>"Lamm Pilaw",'description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
+ 					5=> array( 'name'=>"Erädpfelgulasch",'description'=> "für Kartoffelliebhaber", 'price'=> 10.50)
 					);
 
  $sidedishes = array(
 					0=> array( 'name'=>"Knödel",'description'=> "lecker", 'price'=> 2.50), 
 					1=> array( 'name'=>"Sauerrahm",'description'=> " auch lecker", 'price'=> 2.20),
-					2=> array( 'name'=>"Pilze",'description'=> " sehr lecker", 'price'=> 2.50),
+					2=> array( 'name'=>"mit Pilzen",'description'=> " sehr lecker", 'price'=> 2.50),
 					3=> array( 'name'=>"Mehr Paprika",'description'=> "mehr schärfe", 'price'=> 1.00), 
 					4=> array( 'name'=>"Mehr Zwiebeln",'description'=> "aber hallo", 'price'=> 2.80)
 					)	;
@@ -30,7 +53,7 @@
 					1=> array( 'name'=>"Pilsener Urquell",'description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
 					2=> array( 'name'=>"Störtebeker Schwarzbier",'description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
 					3=> array( 'name'=>"Merlot",'description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
-					4=> array( 'name'=>"Cola",'description'=> "", 'price'=> 2.80)
+					4=> array( 'name'=>"Cola",'description'=> "Schwarz, süss, und kalt", 'price'=> 2.80)
 					);	?>
 					
 													
@@ -58,7 +81,7 @@
 		}	
 	?>
 <!-- welcome message -->	
-	<?php $welcom_message =	<<<WELC
+	<?php $welcome_message =	<<<WELC
 	<p>Willkommen bei Gulasch-To-Go </p>
 			
 	Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen

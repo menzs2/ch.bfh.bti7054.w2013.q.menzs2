@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
 
-<body > <!-- here starts the main part -->
+<body background="kesselgulasch_2.jpg"> <!-- here starts the main part -->
 <?php require("file.php")?> 
 								
 
@@ -22,7 +22,7 @@
 <div ID="menue">
 <p ID="first"> Stellen Sie sich ein Menu zusammen</p>
 
-<div ID="maincourse"><h1>Gerichte</h1>
+<div ID="maincourse" ><h1>Gerichte</h1>
 	<?php main_dishes(); ?>
 	
 	</div>
