@@ -31,7 +31,7 @@
 				return $new_url;
 			}
 			function menu() {
-				global $text;
+				global $navigation;
 				$lan = get_param ( "lan", "de" );
 				echo "<h1>Menu</h1>";
 				for($i = 0; $i < 10; $i ++) {

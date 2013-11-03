@@ -20,7 +20,7 @@
 
 	</div>
 	<div ID="welcome">
-		<?php echo $welcom_message;?>
+		<?php echo $welcome_message;?>
 	</div>
 
 	<!-- footer -->

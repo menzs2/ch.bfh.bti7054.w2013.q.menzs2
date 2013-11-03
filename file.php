@@ -1,26 +1,7 @@
 <!-- Navigation -->
 <?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")
 
-			function get_param($name, $default) {
-				if (isset ( $_GET [$name] ))
-					return urldecode ( $_GET [$name] );
-				else
-					return $default;
-			}
-			
-			function add_param($url, $name, $value, $sep = "&") {
-				$new_url = $url . $sep . $name . "=" . urlencode ( $value );
-				return $new_url;
-}
-
-			function navigation() {
-				global $navigation;
- 				$lan = get_param ( "lan", "de" );
-				foreach ( $navigation as $name) {
-					$url = $_SERVER ['PHP_SELF'];
-					$url = add_param ( $url, "id", $i, "?" );
-					$url = add_param ( $url, "lan", $lan );
-					echo "<a href=\"$url\">{$text[$lan]} $i</a><br />";?>
+?>
 <?php 
 		function navigation_list(){
 			global $navigation;
