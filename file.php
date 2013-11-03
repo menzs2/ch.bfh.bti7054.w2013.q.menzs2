@@ -2,6 +2,9 @@
 <?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")
 
 ?>
+<?php $navi = array('main' => "main", 'menu'=>"menu", 'location'=>"location")
+
+?>
 <?php 
 		function navigation_list(){
 			global $navigation;

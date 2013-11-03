@@ -15,7 +15,7 @@
 
 	<div class='navigation'>
 		<p> 
-			<?php navigation_list();?>
+			<?php menu();?>
 		</p>
 
 	</div>
@@ -31,29 +31,28 @@
 				return $new_url;
 			}
 			function menu() {
-				global $navigation;
+				global $navi;
 				$lan = get_param ( "lan", "de" );
-				echo "<h1>Menu</h1>";
-				for($i = 0; $i < 10; $i ++) {
+				foreach ( $navi as $name ){
 					$url = $_SERVER ['PHP_SELF'];
-					$url = add_param ( $url, "id", $i, "?" );
+					$url = add_param ( $url, "id", $name, "?" );
 					$url = add_param ( $url, "lan", $lan );
-					echo "<a href=\"$url\">{$text[$lan]} $i</a><br />";
+					echo "<a href=\"$url\">$name</a> ";
 				}
 			}
-			function content() {
-				global $text;
-				global $title;
-				$lan = get_param ( "lan", "de" );
-				echo "<h1>" . $title [$lan] . "</h1>";
-				echo $text [$lan] . " " . get_param ( "id", 0 );
-			}
-			function language() {
-				$url = $_SERVER ['PHP_SELF'];
-				$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-				echo "<a href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
-				echo "<a href=\"" . add_param ( $url, "lan", "en" ) . "\">EN</a> ";
-			}
+			//function content() {
+				//global $text;
+				//global $title;
+				//$lan = get_param ( "lan", "de" );
+				//echo "<h1>" . $title [$lan] . "</h1>";
+				//echo $text [$lan] . " " . get_param ( "id", 0 );
+			//}
+			//function language() {
+				//$url = $_SERVER ['PHP_SELF'];
+				//$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
+				//echo "<a href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
+				//echo "<a href=\"" . add_param ( $url, "lan", "en" ) . "\">EN</a> ";
+			//}
 			$text = array (
 					"de" => "Seite",
 					"en" => "Page" 
@@ -64,9 +63,9 @@
 			);
 			?>
 
-	<?php '<div ID="welcome">
-		echo $welcome_message;
-	</div>''?>
+	 <div ID="welcome">
+		<?phpecho $welcome_message;?>
+	</div>
 
 	<!-- footer -->
 	<div class="footer">
