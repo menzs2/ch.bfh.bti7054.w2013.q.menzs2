@@ -22,22 +22,22 @@
 <div ID="menue">
 <p ID="first"> Stellen Sie sich ein Menu zusammen</p>
 
-<div ID="maincourse" ><h1>Gerichte</h1>
-	<?php main_dishes(); ?>
+	<div ID="maincourse" ><h1>Gerichte</h1>
+		<?php main_dishes(); ?>
 	
 	</div>
 	
-<div ID="sidedish">	<h1>Beilagen und Extras</h1>
-<?php 
-	side_dishes();
-	?>
-</div>
+	<div ID="sidedish">	<h1>Beilagen und Extras</h1>
+		<?php 
+		side_dishes();
+		?>
+	</div>
 	
-<div ID="extras">	<h1>Getränke</h1>
-<?php 
-	extras();
-	?>
-</div>
+	<div ID="extras">	<h1>Getränke</h1>
+		<?php 
+		extras();
+		?>
+<	/div>
 </div>
 <!-- footer -->
 <div class="footer"><p> Gulasch-to-Go</p>

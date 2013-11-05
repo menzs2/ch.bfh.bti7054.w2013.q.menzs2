@@ -1,19 +1,58 @@
 <!-- Navigation -->
-<?php $navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php")
-
+<?php 		$navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php");
+			$text = array ("de" => "Seite","en" => "Page" );
+			$title = array ("de" => "Willkommen","en" => "Welcome");
 ?>
 <?php $navi = array('main' => "main", 'menu'=>"menu", 'location'=>"location")
 
 ?>
+
+<?php $content = array("main" =>	"<div ID=\"welcome\">
+									 $welcome_message 
+									</div>", 
+						"menu" => 	"<div ID=>\"menue\">
+									<p ID=\"first>\"> Stellen Sie sich ein Menu zusammen</p>
+
+										<div ID=\"maincourse\" ><h1>Gerichte</h1>
+											<?php main_dishes(); ?>
+										
+										</div>
+										
+										<div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>
+											<?php 
+											side_dishes();
+											?>
+										</div>
+										
+										<div ID=\"extras\">	<h1>Getränke</h1>
+											<?php 
+											extras();
+											?>
+									<	/div>
+									</div>", 
+									"location" => "<div ID=\"location\">
+													<p>
+														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
+														minim veniam, quis nostrud exercitation ullamco laboris
+													</p>
+													<p>
+														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
+														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
+														minim veniam, quis nostrud exercitation ullamco laboris
+													</p>
+												</div>"
+									)?>
 <?php 
-		function navigation_list(){
-			global $navigation;
-			foreach ( $navigation as $name => $link ) {
-			echo "<a href=\"$link?id=$name\">$name</a> ";
-			}
-		}
+		//function navigation_list(){
+			//global $navigation;
+			//foreach ( $navigation as $name => $link ) {
+			//echo "<a href=\></a>"$link?id=$name\">$name</a> ";
+			//}
+		//}
 		
 		?>
+	
 <!-- menu items -->
 <?php
  	$maindishes = array(
@@ -43,6 +82,28 @@
 													
 					
 	<?php 
+		function menu(){
+			echo "<div ID=>\"menue\">
+									<p ID=\"first>\"> Stellen Sie sich ein Menu zusammen</p>
+
+										<div ID=\"maincourse\" ><h1>Gerichte</h1>
+											<?php". main_dishes() ."
+										?>
+										</div>
+										
+										<div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>
+											<?php".
+											side_dishes().
+											"?>
+										</div>
+										
+										<div ID=\"extras\">	<h1>Getränke</h1>
+											<?php". 
+											extras()
+											."?>
+									<	/div>
+									</div>"
+		;}
 		function main_dishes(){
 			global $maindishes;
 			foreach($maindishes as $item){
@@ -65,7 +126,7 @@
 		}	
 	?>
 <!-- welcome message -->	
-	<?php $welcome_message =	<<<WELC
+	<?php $welcome_message=	 <<<WELC
 	<p>Willkommen bei Gulasch-To-Go </p>
 			
 	Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen
@@ -73,6 +134,5 @@
 	
 	
 WELC;
-	
-			
+
 ?>			
