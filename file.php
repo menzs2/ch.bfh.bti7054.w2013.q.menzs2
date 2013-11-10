@@ -1,36 +1,22 @@
 <!-- Navigation -->
-<?php 		$navigation = array('main' => "main.php", 'menu'=>"menu.php", 'location'=>"location.php");
-			$text = array ("de" => "Seite","en" => "Page" );
-			$title = array ("de" => "Willkommen","en" => "Welcome");
-?>
-<?php $navi = array('main' => "main", 'menu'=>"menu", 'location'=>"location")
 
-?>
+<?php 
+$navigation = array( "main","menu", "location");
 
-<?php $content = array("main" =>	"<div ID=\"welcome\">
-									 $welcome_message 
-									</div>", 
-						"menu" => 	"<div ID=>\"menue\">
-									<p ID=\"first>\"> Stellen Sie sich ein Menu zusammen</p>
-
-										<div ID=\"maincourse\" ><h1>Gerichte</h1>
-											<?php main_dishes(); ?>
-										
-										</div>
-										
-										<div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>
-											<?php 
-											side_dishes();
-											?>
-										</div>
-										
-										<div ID=\"extras\">	<h1>Getränke</h1>
-											<?php 
-											extras();
-											?>
-									<	/div>
-									</div>", 
-									"location" => "<div ID=\"location\">
+function navigation_bar() {
+			global $navigation;
+						 $lan = get_param ( "lan", "de" );
+						foreach ( $navigation as $name ){
+							$url = $_SERVER ['PHP_SELF'];
+							$url = add_param ( $url, "id", $name, "?" );
+							$url = add_param ( $url, "lan", $lan );
+							echo "<a href=\"$url\">$name</a> ";
+				}}?>
+				
+<!--Content -->
+<?php $content = array('main' =>	'main_page', 'menu' => 'menu_list' ,
+						
+									'location' => "<div ID=\"location\">
 													<p>
 														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
 														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
@@ -42,20 +28,19 @@
 														minim veniam, quis nostrud exercitation ullamco laboris
 													</p>
 												</div>"
-									)?>
-<?php 
-		//function navigation_list(){
-			//global $navigation;
-			//foreach ( $navigation as $name => $link ) {
-			//echo "<a href=\></a>"$link?id=$name\">$name</a> ";
-			//}
-		//}
-		
-		?>
+									);
+function content() {
+				global $content;
+				$con = get_param ( "id", "main" );
+				$content[$con]();
+				 
+				
+			}?>
+
 	
 <!-- menu items -->
 <?php
- 	$maindishes = array(
+ $maindishes = array(
 					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
 					1=> array( 'name'=>"Scharfes Rindsgulasch",'description'=> " auch lecker", 'price'=> 13.50),
 					2=> array( 'name'=>"Schweinsgulasch",'description'=> " sehr lecker", 'price'=> 12.20),
@@ -80,30 +65,25 @@
 					);	?>
 					
 													
-					
+	<!--functions -->				
 	<?php 
-		function menu(){
-			echo "<div ID=>\"menue\">
-									<p ID=\"first>\"> Stellen Sie sich ein Menu zusammen</p>
-
-										<div ID=\"maincourse\" ><h1>Gerichte</h1>
-											<?php". main_dishes() ."
-										?>
-										</div>
-										
-										<div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>
-											<?php".
-											side_dishes().
-											"?>
-										</div>
-										
-										<div ID=\"extras\">	<h1>Getränke</h1>
-											<?php". 
-											extras()
-											."?>
-									<	/div>
-									</div>"
-		;}
+	    function main_page(){
+			global $welcome_message;
+		  echo "<div ID=\"welcome\">$welcome_message</div>";
+	
+		}
+		?>
+		<?php
+		function menu_list(){
+			echo "<div ID=>\"menu\"><p ID=\"first>\"> Stellen Sie sich ein Menu zusammen</p>";
+			echo "<div ID=\"maincourse\" ><h1>Gerichte</h1>";
+			main_dishes();
+			echo "</div><div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>";
+			side_dishes();
+			echo "</div><div ID=\"extras\">	<h1>Getränke</h1>";
+			extras();
+			echo"<	/div></div>";
+			}
 		function main_dishes(){
 			global $maindishes;
 			foreach($maindishes as $item){
@@ -135,4 +115,32 @@
 	
 WELC;
 
-?>			
+?>		
+	<!-- logic-->
+<?php
+			function get_param($name, $default) {
+				if (isset ( $_GET [$name] ))
+					return urldecode ( $_GET [$name] );
+				else
+					return $default;
+			}
+			function add_param($url, $name, $value, $sep = "&") {
+				$new_url = $url . $sep . $name . "=" . urlencode ( $value );
+				return $new_url;
+			}?>
+			
+
+		<?php
+			
+			
+			
+			
+			
+			//function language() {
+				//$url = $_SERVER ['PHP_SELF'];
+				//$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
+				//echo "<a href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
+				//echo "<a href=\"" . add_param ( $url, "lan", "en" ) . "\">EN</a> ";
+			//}
+			
+			?>	

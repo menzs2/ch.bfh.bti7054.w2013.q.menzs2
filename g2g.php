@@ -13,57 +13,26 @@
 <?php require("file.php")?> 
 	<!-- The Navigation Bar -->
 
-	<div class='navigation'>
+	<div class="navigation">
 		<p> 
-			<?php navigation_menu();?>
+			<?php navigation_bar();?>
 		</p>
-
 	</div>
-	<div><?php content();?></div>
 	
-<?php
-			function get_param($name, $default) {
-				if (isset ( $_GET [$name] ))
-					return urldecode ( $_GET [$name] );
-				else
-					return $default;
-			}
-			function add_param($url, $name, $value, $sep = "&") {
-				$new_url = $url . $sep . $name . "=" . urlencode ( $value );
-				return $new_url;
-			}?>
-			
-			<?php function navigation_menu() {
-				  global $navi;
-						  $lan = get_param ( "lan", "de" );
-						foreach ( $navi as $name ){
-							$url = $_SERVER ['PHP_SELF'];
-							$url = add_param ( $url, "id", $name, "?" );
-							$url = add_param ( $url, "lan", $lan );
-							echo "<a href=\"$url\">$name</a> ";
-				}?>
-		<?php
-			
-			}
-			function content() {
-				global $content;
-				$con = get_param ( "id", "main" );
-				echo $content[$con] ;
-			}
-			//function language() {
-				//$url = $_SERVER ['PHP_SELF'];
-				//$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-				//echo "<a href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
-				//echo "<a href=\"" . add_param ( $url, "lan", "en" ) . "\">EN</a> ";
-			//}
-			
-			?>
+<!-- content -->
 
-
+<?php content();?>
 
 	<!-- footer -->
 	<div class="footer">
 		<a href="location.php">über uns</a>
 	</div>
+	
+
+			
+
+
+
+	
 </body>
 </html>
