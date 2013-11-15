@@ -18,8 +18,8 @@
 			<?php navigation_bar();?>
 		</p>
 	</div>
-	
-<!-- content -->
+
+	<!-- content -->
 
 <?php content();?>
 
@@ -27,12 +27,12 @@
 	<div class="footer">
 	<?php	footer();?>
 	</div>
-	
-
-			
 
 
 
-	
+
+
+
+
 </body>
 </html>
