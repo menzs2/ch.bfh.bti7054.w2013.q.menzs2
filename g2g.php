@@ -2,15 +2,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
+<?php require("file.php")?> 
 <head>
-<title>Gulasch-To-Go</title>
+<title><?php title();?></title>
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 </head>
 
 
 <body background="kesselgulasch_2.jpg">
-<?php require("file.php")?> 
+
 	<!-- The Navigation Bar -->
 
 	<div class="navigation">
@@ -23,9 +23,9 @@
 
 <?php content();?>
 
-	<!-- footer -->
+<!-- footer -->
 	<div class="footer">
-		<a href="location.php">über uns</a>
+	<?php	footer();?>
 	</div>
 	
 
