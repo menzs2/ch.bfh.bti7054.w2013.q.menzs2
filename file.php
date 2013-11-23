@@ -1,146 +1,134 @@
 
 <!-- Start Navigation -->
-<?php 
-$navigation = array( 'main' => "Main", 'menu' =>"Menu", 'location'=> "Location");
+<?php
 
 
 function navigation_bar() {
-	pages();
-	language();
-	$page = get_param("id", 0);
-	if ($page != 'main'){
-		login();
+	pages ();
+	language ();
+	$page = get_param ( "id", 0 );
+	if ($page != 'main') {
+		login ();
 	}
-	
 }
-				
-function pages(){
+function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
-		foreach ( $navigation as $id => $name){
-			$url = $_SERVER ['PHP_SELF'];
-			$url = add_param ( $url, "id", $id, "?" );
-			$url = add_param ( $url, "lan", $lan );
-			echo "<a href=\"$url\">$name</a> ";
-			}
+	foreach ( $navigation as $id => $name ) {
+		$url = $_SERVER ['PHP_SELF'];
+		$url = add_param ( $url, "id", $id, "?" );
+		$url = add_param ( $url, "lan", $lan );
+		echo "<a href=\"$url\">$name</a> ";
+	}
 }
-		
-
 function language() {
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
 }
-
-function login(){
+function login() {
 	echo 'login';
 }
 ?>
-<!-- End Navigation -->	
+<!-- End Navigation -->
 
-			
+
 <!--Content -->
-<?php $content = array('main' =>	'main_page', 'menu' => 'menu_list' ,'location' => 'informations'
-									);
+<?php
+
+$content = array (
+		'main' => 'main_page',
+		'menu' => 'menu_list',
+		'location' => 'informations' 
+);
 function content() {
 	global $content;
-		$con = get_param ( "id", "main" );
-		$content[$con]();
-				 
-				
-}?>
+	$con = get_param ( "id", "main" );
+	$content [$con] ();
+}
+?>
 
-	
+
 <!--footer-->
-<?php 
-function footer(){
+<?php
+function footer() {
+	if (get_param ( "id", 0 ) == 'main') {
+		language();
+	}
+	
 	$lan = get_param ( "lan", "de" );
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "location", "?" );
 	$url = add_param ( $url, "lan", $lan );
 	echo "<a href=\"$url\">über uns</a> ";
-	
 }
 ?>
-				
-													
+
+
 <!--functions -->
 
 
 <!--Title-->
-<?php 
-function title(){
-		global $navigation;
-		$name = get_param("id", "main");
-		echo "Gulasch-2-Go - $navigation[$name]";
-		
+<?php
+function title() {
+	global $navigation;
+	$name = get_param ( "id", "main" );
+	echo "Gulasch-2-Go - $navigation[$name]";
 }
 ?>
 					
-<?php 
-function main_page(){
-	w_message();
-	main_page_content();
-	
-	
+<?php
+function main_page() {
+	w_message ();
+	main_page_content ();
 }
-
-function w_message(){
+function w_message() {
 	global $welcome_message;
 	$lan = get_param ( "lan", "de" );
 	echo "<div ID=\"welcome\">$welcome_message[$lan]</div>";
 }
-
-function main_page_content(){
-echo "<div ID=\"main_login\">".login()."</div>"
-		<div ID=\"main_DE\">".		;
+function main_page_content() {
+	echo "<div ID=\"main_login\">".login()."</div>";
 }
-
-
-
-function menu_list(){
+function menu_list() {
 	global $language;
 	$lan = get_param ( "lan", "de" );
 	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
 	echo "<div ID=\"maincourse\" ><h1>Gerichte</h1>";
-		main_dishes();
+	main_dishes ();
 	echo "</div><div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>";
-		side_dishes();
+	side_dishes ();
 	echo "</div><div ID=\"extras\">	<h1>Getränke</h1>";
-		extras();
-	echo"</div></div>";
+	extras ();
+	echo "</div></div>";
 }
-
-function main_dishes(){
+function main_dishes() {
 	global $maindishes;
-	foreach($maindishes as $item){
+	foreach ( $maindishes as $item ) {
 		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
-		amount_fields();
+		amount_fields ();
 		echo "</p>";
 	}
 }
-		
-function side_dishes(){
+function side_dishes() {
 	global $sidedishes;
-	foreach($sidedishes as $item){
+	foreach ( $sidedishes as $item ) {
 		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
-		amount_fields();
+		amount_fields ();
 		echo "</p>";
 	}
 }
-		
-function extras(){
+function extras() {
 	global $extras;
-	foreach($extras as $item){
+	foreach ( $extras as $item ) {
 		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
-		amount_fields();
+		amount_fields ();
 		echo "</p>";
 	}
-}	
-		
-function informations(){
-	echo "<div ID=\"location\">						<p>
+}
+function informations() {
+	echo "<div ID=\"information\">						<p>
 														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
 														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
 														minim veniam, quis nostrud exercitation ullamco laboris
@@ -162,21 +150,21 @@ function get_param($name, $default) {
 	else
 		return $default;
 }
-
 function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
 	return $new_url;
 }
-function amount_fields(){
-		echo 	"<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	</form>";
+function amount_fields() {
+	echo "<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	</form>";
+}
+?>
 
-}	
-?>	
-			
 <!--Text, Data-->
-			
-	<!-- menu items -->
+
+<!-- menu items -->
 <?php
+$navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location");
+
 $maindishes = array(
 					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
 					1=> array( 'name'=>"Scharfes Rindsgulasch",'description'=> " auch lecker", 'price'=> 13.50),
@@ -208,8 +196,8 @@ $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir lief
 	
 $language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
 
-?>	
-<!-- unused code-->	
+?>
+<!-- unused code-->
 <?php
 		//function languages(){
 						//global $navigation;
