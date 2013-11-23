@@ -7,6 +7,11 @@ $navigation = array( 'main' => "Main", 'menu' =>"Menu", 'location'=> "Location")
 function navigation_bar() {
 	pages();
 	language();
+	$page = get_param("id", 0);
+	if ($page != 'main'){
+		login();
+	}
+	
 }
 				
 function pages(){
@@ -26,6 +31,10 @@ function language() {
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
+}
+
+function login(){
+	echo 'login';
 }
 ?>
 <!-- End Navigation -->	
@@ -51,6 +60,7 @@ function footer(){
 	$url = add_param ( $url, "id", "location", "?" );
 	$url = add_param ( $url, "lan", $lan );
 	echo "<a href=\"$url\">über uns</a> ";
+	
 }
 ?>
 				
@@ -70,11 +80,24 @@ function title(){
 					
 <?php 
 function main_page(){
+	w_message();
+	main_page_content();
+	
+	
+}
+
+function w_message(){
 	global $welcome_message;
 	$lan = get_param ( "lan", "de" );
 	echo "<div ID=\"welcome\">$welcome_message[$lan]</div>";
-	
 }
+
+function main_page_content(){
+echo "<div ID=\"main_login\">".login()."</div>"
+		<div ID=\"main_DE\">".		;
+}
+
+
 
 function menu_list(){
 	global $language;
