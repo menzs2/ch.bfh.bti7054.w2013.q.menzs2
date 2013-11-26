@@ -27,9 +27,7 @@ function language() {
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
 }
-function login() {
-	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
-}
+
 ?>
 <!-- End Navigation -->
 
@@ -40,7 +38,7 @@ function login() {
 $content = array (
 		'main' => 'main_page',
 		'menu' => 'menu_list',
-		'location' => 'informations' 
+		'location' => 'informations' ,
 		'cart' => 'cart'
 );
 function content() {
@@ -107,7 +105,7 @@ function menu_list() {
 function main_dishes() {
 	global $maindishes;
 	foreach ( $maindishes as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
+		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
 		amount_fields ();
 		echo "</p>";
 	}
@@ -115,7 +113,7 @@ function main_dishes() {
 function side_dishes() {
 	global $sidedishes;
 	foreach ( $sidedishes as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
+		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
 		amount_fields ();
 		echo "</p>";
 	}
@@ -123,7 +121,7 @@ function side_dishes() {
 function extras() {
 	global $extras;
 	foreach ( $extras as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF $item[price]</br>";
+		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
 		amount_fields ();
 		echo "</p>";
 	}
@@ -159,6 +157,9 @@ function amount_fields() {
 	echo "<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	
 														<input type=\"submit\" value=\"Bestellen\" />	
 			</form>";
+}
+function login() {
+	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
 }
 ?>
 
