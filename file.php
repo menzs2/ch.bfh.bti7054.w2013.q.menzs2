@@ -28,7 +28,7 @@ function language() {
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
 }
 function login() {
-	echo 'login';
+	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
 }
 ?>
 <!-- End Navigation -->
@@ -41,6 +41,7 @@ $content = array (
 		'main' => 'main_page',
 		'menu' => 'menu_list',
 		'location' => 'informations' 
+		'cart' => 'cart'
 );
 function content() {
 	global $content;
@@ -155,7 +156,9 @@ function add_param($url, $name, $value, $sep = "&") {
 	return $new_url;
 }
 function amount_fields() {
-	echo "<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	</form>";
+	echo "<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	
+														<input type=\"submit\" value=\"Bestellen\" />	
+			</form>";
 }
 ?>
 
