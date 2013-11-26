@@ -1,14 +1,12 @@
 
 <!-- Start Navigation -->
 <?php
-
-
 function navigation_bar() {
 	pages ();
 	language ();
 	$page = get_param ( "id", 0 );
 	if ($page != 'main') {
-		login ();
+		login();
 	}
 }
 function pages() {
@@ -18,7 +16,8 @@ function pages() {
 		$url = $_SERVER ['PHP_SELF'];
 		$url = add_param ( $url, "id", $id, "?" );
 		$url = add_param ( $url, "lan", $lan );
-		echo "<a href=\"$url\">$name</a> ";
+		referencing($url, $name);
+		
 	}
 }
 function language() {
@@ -27,7 +26,6 @@ function language() {
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
 	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
 }
-
 ?>
 <!-- End Navigation -->
 
@@ -35,12 +33,7 @@ function language() {
 <!--Content -->
 <?php
 
-$content = array (
-		'main' => 'main_page',
-		'menu' => 'menu_list',
-		'location' => 'informations' ,
-		'cart' => 'cart'
-);
+
 function content() {
 	global $content;
 	$con = get_param ( "id", "main" );
@@ -60,7 +53,7 @@ function footer() {
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "location", "?" );
 	$url = add_param ( $url, "lan", $lan );
-	echo "<a href=\"$url\">über uns</a> ";
+	referencing($url, 'über uns');
 }
 ?>
 
@@ -85,10 +78,12 @@ function main_page() {
 function w_message() {
 	global $welcome_message;
 	$lan = get_param ( "lan", "de" );
-	echo "<div ID=\"welcome\">$welcome_message[$lan]</div>";
+	simple_div('welcome', $welcome_message[$lan]);
+
 }
 function main_page_content() {
-	echo "<div ID=\"main_login\">".login()."</div>";
+	simple_div('main_login', login());
+	
 }
 function menu_list() {
 	global $language;
@@ -105,25 +100,19 @@ function menu_list() {
 function main_dishes() {
 	global $maindishes;
 	foreach ( $maindishes as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
-		amount_fields ();
-		echo "</p>";
+		item_list($item);
 	}
 }
 function side_dishes() {
 	global $sidedishes;
 	foreach ( $sidedishes as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
-		amount_fields ();
-		echo "</p>";
+		item_list($item);
 	}
 }
 function extras() {
 	global $extras;
 	foreach ( $extras as $item ) {
-		echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
-		amount_fields ();
-		echo "</p>";
+		item_list($item);
 	}
 }
 function informations() {
@@ -138,6 +127,19 @@ function informations() {
 														minim veniam, quis nostrud exercitation ullamco laboris
 													</p>
 												</div>";
+}
+
+function cart(){
+
+}
+
+function client_information(){
+	echo "<form action=\"g2g.php\" method=\"get\">		
+			<input  type=\"text\" size=\"20\" name=\"first_name\">Vorname</input>
+			<input  type=\"text\" size=\"20\" name=\"name\">Nachname</input>			
+														<input type=\"submit\" value=\"Bestellen\" />	
+			</form>";
+
 }
 ?>
 
@@ -161,12 +163,27 @@ function amount_fields() {
 function login() {
 	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
 }
+//creates a reference
+function referencing($url, $text, $class=''){
+	echo "<a $class href=\"$url\">$text</a> ";
+}
+//list menu items
+function item_list($item){
+	echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
+		amount_fields ();
+		echo "</p>";
+}
+function simple_div($div_id, $div_content){
+	echo "<div ID=\"$div_id\">$div_content</div>";
+}
 ?>
 
-<!--Text, Data-->
+<!--Text, Data to be moved to DB-->
 
 <!-- menu items -->
 <?php
+$content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
+
 $navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location");
 
 $maindishes = array(
@@ -203,15 +220,5 @@ $language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choiss
 ?>
 <!-- unused code-->
 <?php
-		//function languages(){
-						//global $navigation;
-						//global $language;
-						//$id = get_param ( "id", "main" );
-						//for ( $i = 0; $i <2;$i++){
-							//$url = $_SERVER ['PHP_SELF'];
-							//$url = add_param ( $url, "id", $id, "?" );
-							//$url = add_param ( $url, "lan", $language[$i] );
-							//echo "<a href=\"$url\">$language[$i]</a> ";
-					//}
-					//}
+		
 ?>					
