@@ -23,9 +23,9 @@ function pages() {
 function language() {
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "de" ) . "\">DE</a> ";
-	echo "<a class=\"language\" href=\"" . add_param ( $url, "lan", "fr" ) . "\">FR</a> ";
-}
+	referencing(add_param ( $url, "lan", "de" ), 'DE', "class=\"language\"");
+	referencing(add_param ( $url, "lan", "fr" ), 'FR', "class=\"language\"");
+}	
 ?>
 <!-- End Navigation -->
 
@@ -91,7 +91,7 @@ function menu_list() {
 	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
 	echo "<div ID=\"maincourse\" ><h1>Gerichte</h1>";
 	main_dishes ();
-	echo "</div><div ID=\"sidedish\">	<h1>Beilagen und Extras</h1>";
+	echo "</div><div ID=\"sidedish\"> <h1>Beilagen und Extras</h1>";
 	side_dishes ();
 	echo "</div><div ID=\"extras\">	<h1>Getränke</h1>";
 	extras ();
@@ -160,6 +160,14 @@ function amount_fields() {
 														<input type=\"submit\" value=\"Bestellen\" />	
 			</form>";
 }
+function item_option($item){
+	echo "<form action=\"g2g.php\" method=\"get\">";
+	global $options;
+	foreach ( $options as $item ) {	
+	echo "	<input  type=\"checkbox\" >$item[name]</input>";
+	}
+	echo		"</form>";
+}
 function login() {
 	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
 }
@@ -197,10 +205,10 @@ $maindishes = array(
 
 $sidedishes = array(
 					0=> array( 'name'=>"Knödel",'description'=> "lecker", 'price'=> 2.50), 
-					1=> array( 'name'=>"Sauerrahm",'description'=> " auch lecker", 'price'=> 2.20),
-					2=> array( 'name'=>"mit Pilzen",'description'=> " sehr lecker", 'price'=> 2.50),
-					3=> array( 'name'=>"Mehr Paprika",'description'=> "mehr schärfe", 'price'=> 1.00), 
-					4=> array( 'name'=>"Mehr Zwiebeln",'description'=> "aber hallo", 'price'=> 2.80)
+					1=> array( 'name'=>"Kartoffelstock",'description'=> " auch lecker", 'price'=> 2.20),
+					2=> array( 'name'=>"Breite Nudeln",'description'=> " sehr lecker", 'price'=> 2.50),
+					3=> array( 'name'=>"Spätzle",'description'=> "mehr schärfe", 'price'=> 1.00), 
+					4=> array( 'name'=>"Rösti",'description'=> "aber hallo", 'price'=> 2.80)
 					)	;
 $extras = array(
 					0=> array( 'name'=>"Ueli Bier",'description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
@@ -209,6 +217,13 @@ $extras = array(
 					3=> array( 'name'=>"Merlot",'description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
 					4=> array( 'name'=>"Cola",'description'=> "Schwarz, süss, und kalt", 'price'=> 2.80)
 					);	
+$options = array(
+					0=> array( 'name'=>"schärfer",'description'=> "lecker", 'price'=> 2.50), 
+					1=> array( 'name'=>"Sauerrahm",'description'=> " auch lecker", 'price'=> 2.20),
+					2=> array( 'name'=>"mit Pilzen",'description'=> " sehr lecker", 'price'=> 2.50),
+					3=> array( 'name'=>"Mehr Paprika",'description'=> "mehr schärfe", 'price'=> 1.00), 
+					4=> array( 'name'=>"Mehr Zwiebeln",'description'=> "aber hallo", 'price'=> 2.80),
+					5=> array( 'name'=>"milder",'description'=> "aber hallo", 'price'=> 0.00))	;					
 	
 
 $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
