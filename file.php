@@ -189,6 +189,8 @@ function simple_div($div_id, $div_content){
 <!--Text, Data to be moved to DB-->
 
 <!-- menu items -->
+
+
 <?php
 $content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
 
