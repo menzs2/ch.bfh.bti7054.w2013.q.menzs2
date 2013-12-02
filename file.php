@@ -130,15 +130,18 @@ function informations() {
 }
 
 function cart(){
-
+	simple_div('client', client_information());
 }
 
 function client_information(){
-	echo "<form action=\"g2g.php\" method=\"get\">		
-			<input  type=\"text\" size=\"20\" name=\"first_name\">Vorname</input>
-			<input  type=\"text\" size=\"20\" name=\"name\">Nachname</input>			
-														<input type=\"submit\" value=\"Bestellen\" />	
-			</form>";
+	global $customer_form;
+	$size = "size=\"20\"";
+	echo "<form action=\"g2g.php\" method=\"get\">";
+	foreach($customer_form as $name => $displayed_name)
+	{
+		text_input($name, $displayed_name, $size);
+	}
+	echo"</form>";
 
 }
 ?>
@@ -160,13 +163,15 @@ function amount_fields() {
 														<input type=\"submit\" value=\"Bestellen\" />	
 			</form>";
 }
+
 function item_option($item){
-	echo "<form action=\"g2g.php\" method=\"get\">";
 	global $options;
+	echo "<form action=\"g2g.php\" method=\"get\">";
+	
 	foreach ( $options as $item ) {	
 	echo "	<input  type=\"checkbox\" >$item[name]</input>";
 	}
-	echo		"</form>";
+	echo"</form>";
 }
 function login() {
 	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
@@ -184,6 +189,10 @@ function item_list($item){
 function simple_div($div_id, $div_content){
 	echo "<div ID=\"$div_id\">$div_content</div>";
 }
+//create an input field
+function text_input($name, $displayed_name, $size =20){
+	echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$displayed_name</input> </br>";
+}
 ?>
 
 <!--Text, Data to be moved to DB-->
@@ -194,7 +203,15 @@ function simple_div($div_id, $div_content){
 <?php
 $content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
 
-$navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location");
+$navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location", 'cart' => 'Cart');
+
+$customer_form = array(	'salutation' => 'Anrede',
+						'firstname' => 'Vorname',
+						'lastname' => 'Nachname',
+						'street' => 'Strasse',
+						'postcode' => 'PLZ',
+						'place' => 'Ort');
+
 
 $maindishes = array(
 					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
