@@ -1,4 +1,5 @@
-
+<!--php code for Gulasch-2-Go 
+Author: menzs2-->
 <!-- Start Navigation -->
 <?php
 function navigation_bar() {
@@ -137,6 +138,12 @@ function client_information(){
 	echo"</form>";
 
 }
+
+//list menu items
+function item_list($item){
+	echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
+		amount_fields ();
+		echo "</p>";
 ?>
 
 <!-- logic-->
@@ -173,11 +180,7 @@ function login() {
 function referencing($url, $text, $class=''){
 	echo "<a $class href=\"$url\">$text</a> ";
 }
-//list menu items
-function item_list($item){
-	echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
-		amount_fields ();
-		echo "</p>";
+
 }
 function simple_div($div_id, $div_content){
 	echo "<div ID=\"$div_id\">$div_content</div>";
