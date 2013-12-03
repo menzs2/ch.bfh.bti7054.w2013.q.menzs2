@@ -21,10 +21,11 @@ function pages() {
 	}
 }
 function language() {
+	$class = "class=\"language\"";
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-	referencing(add_param ( $url, "lan", "de" ), 'DE', "class=\"language\"");
-	referencing(add_param ( $url, "lan", "fr" ), 'FR', "class=\"language\"");
+	referencing(add_param ( $url, "lan", "de" ), 'DE', $class);
+	referencing(add_param ( $url, "lan", "fr" ), 'FR', $class);
 }	
 ?>
 <!-- End Navigation -->
@@ -116,17 +117,9 @@ function extras() {
 	}
 }
 function informations() {
-	echo "<div ID=\"information\">						<p>
-														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
-														minim veniam, quis nostrud exercitation ullamco laboris
-													</p>
-													<p>
-														Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
-														tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad
-														minim veniam, quis nostrud exercitation ullamco laboris
-													</p>
-												</div>";
+	global $information_message;
+	$lan = get_param("lan", "de");
+	simple_div('information', $information_message[$lan]);
 }
 
 function cart(){
@@ -195,6 +188,8 @@ function text_input($name, $displayed_name, $size =20){
 }
 ?>
 
+
+
 <!--Text, Data to be moved to DB-->
 
 <!-- menu items -->
@@ -251,6 +246,8 @@ $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir lief
 	
 $language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
 
+$information_message = array(	'de' =>"<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
+								'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");
 ?>
 <!-- unused code-->
 <?php
