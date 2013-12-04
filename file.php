@@ -1,13 +1,14 @@
-<!--php code for Gulasch-2-Go 
-Author: menzs2-->
+<!--php code for Gulasch-2-Go
+ Author: menzs2-->
 <!-- Start Navigation -->
 <?php
 function navigation_bar() {
 	pages ();
-	language ();
+	
 	$page = get_param ( "id", 0 );
 	if ($page != 'main') {
 		login();
+		languages();
 	}
 }
 function pages() {
@@ -17,25 +18,23 @@ function pages() {
 		$url = $_SERVER ['PHP_SELF'];
 		$url = add_param ( $url, "id", $id, "?" );
 		$url = add_param ( $url, "lan", $lan );
-		referencing($url, $name);
-		
+		referencing ( $url, $name );
 	}
 }
-function language() {
+function languages() {
 	$class = "class=\"language\"";
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-	referencing(add_param ( $url, "lan", "de" ), 'DE', $class);
-	referencing(add_param ( $url, "lan", "fr" ), 'FR', $class);
-}	
+	referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
+	referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
+}
 ?>
 <!-- End Navigation -->
 
 
 <!--Content -->
 <?php
-
-
+//the main content chooser
 function content() {
 	global $content;
 	$con = get_param ( "id", "main" );
@@ -48,19 +47,19 @@ function content() {
 <?php
 function footer() {
 	if (get_param ( "id", 0 ) == 'main') {
-		language();
+		languages();
 	}
 	
 	$lan = get_param ( "lan", "de" );
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "location", "?" );
 	$url = add_param ( $url, "lan", $lan );
-	referencing($url, 'über uns');
+	referencing ( $url, 'über uns' );
 }
 ?>
 
 
-<!--functions -->
+<!--Content Functions -->
 
 
 <!--Title-->
@@ -80,12 +79,10 @@ function main_page() {
 function w_message() {
 	global $welcome_message;
 	$lan = get_param ( "lan", "de" );
-	simple_div('welcome', $welcome_message[$lan]);
-
+	simple_div ( 'welcome', $welcome_message [$lan] );
 }
 function main_page_content() {
-	simple_div('main_login', login());
-	
+	simple_div ( 'main_login', login () );
 }
 function menu_list() {
 	global $language;
@@ -102,48 +99,53 @@ function menu_list() {
 function main_dishes() {
 	global $maindishes;
 	foreach ( $maindishes as $item ) {
-		item_list($item);
+		item_list ( $item );
 	}
 }
 function side_dishes() {
 	global $sidedishes;
 	foreach ( $sidedishes as $item ) {
-		item_list($item);
+		item_list ( $item );
 	}
 }
 function extras() {
 	global $extras;
 	foreach ( $extras as $item ) {
-		item_list($item);
+		item_list ( $item );
 	}
 }
 function informations() {
 	global $information_message;
-	$lan = get_param("lan", "de");
-	simple_div('information', $information_message[$lan]);
+	$lan = get_param ( "lan", "de" );
+	simple_div ( 'information', $information_message [$lan] );
 }
-
-function cart(){
-	simple_div('client', client_information());
+function cart() {
+	simple_div ( 'client', client_information () );
 }
-
-function client_information(){
+function client_information() {
 	global $customer_form;
 	$size = "size=\"20\"";
 	echo "<form action=\"g2g.php\" method=\"get\">";
-	foreach($customer_form as $name => $displayed_name)
-	{
-		text_input($name, $displayed_name, $size);
+	foreach ( $customer_form as $name => $displayed_name ) {
+		text_input ( $name, $displayed_name, $size );
 	}
-	echo"</form>";
-
+	echo "</form>";
 }
 
-//list menu items
-function item_list($item){
-	echo "<p>$item[name]</br>$item[description]</br>CHF ".number_format($item['price'],2)."</br>";
-		amount_fields ();
-		echo "</p>";
+// list menu items
+function item_list($item) {
+	echo "<p>$item[name]</br>$item[description]</br>CHF " . number_format ( $item ['price'], 2 ) . "</br>";
+	form("g2g.php", "get", "amount", amount_fields ());
+	echo "</p>";
+}
+function item_option($item) {
+	global $options;
+	echo "<form action=\"g2g.php\" method=\"get\">";
+	foreach ( $options as $item ) {
+		echo "	<input  type=\"checkbox\" >$item[name]</input>";
+	}
+	echo "</form>";
+}
 ?>
 
 <!-- logic-->
@@ -158,36 +160,37 @@ function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
 	return $new_url;
 }
+
 function amount_fields() {
-	echo "<form action=\"g2g.php\" method=\"get\"><input  type=\"text\" size=\"5\" name=\"amount\">Menge</input>	
-														<input type=\"submit\" value=\"Bestellen\" />	
-			</form>";
+	text_input("amount", "Menge", 5);
 }
 
-function item_option($item){
-	global $options;
-	echo "<form action=\"g2g.php\" method=\"get\">";
-	
-	foreach ( $options as $item ) {	
-	echo "	<input  type=\"checkbox\" >$item[name]</input>";
-	}
-	echo"</form>";
+function form($action, $method, $name, $content) {
+	echo "<form action=\"$action\" method=\"$method\" name=\"$name\">$content</form>";
 }
+
 function login() {
-	echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" />	</form>";
+	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
+	// echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" /> </form>";
 }
-//creates a reference
-function referencing($url, $text, $class=''){
+
+// creates a reference
+function referencing($url, $text, $class = '') {
 	echo "<a $class href=\"$url\">$text</a> ";
 }
 
-}
-function simple_div($div_id, $div_content){
+function simple_div($div_id, $div_content) {
 	echo "<div ID=\"$div_id\">$div_content</div>";
 }
-//create an input field
-function text_input($name, $displayed_name, $size =20){
+
+// create an text input field
+function text_input($name, $content, $size = 20) {
 	echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$displayed_name</input> </br>";
+}
+
+// create an text input field
+function submit_input($value, $displayed_name = '') {
+	echo "<input  type=\"submit\" value=\"$value\">$displayed_name</input> </br>";
 }
 ?>
 
