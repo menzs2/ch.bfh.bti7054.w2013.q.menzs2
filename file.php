@@ -1,5 +1,4 @@
-<!--php code for Gulasch-2-Go
- Author: menzs2-->
+<!--php code for Gulasch-2-Go Author: menzs2-->
 <!-- Start Navigation -->
 <?php
 function navigation_bar() {
@@ -82,45 +81,16 @@ function w_message() {
 	simple_div ( 'welcome', $welcome_message [$lan] );
 }
 function main_page_content() {
-	simple_div ( 'main_login', login () );
+	func_div ( 'main_login', 'login' );
 }
-function menu_list() {
-	global $language;
-	$lan = get_param ( "lan", "de" );
-	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
-	echo "<div ID=\"maincourse\" ><h1>Gerichte</h1>";
-	main_dishes ();
-	echo "</div><div ID=\"sidedish\"> <h1>Beilagen und Extras</h1>";
-	side_dishes ();
-	echo "</div><div ID=\"extras\">	<h1>Getränke</h1>";
-	extras ();
-	echo "</div></div>";
-}
-function main_dishes() {
-	global $maindishes;
-	foreach ( $maindishes as $item ) {
-		item_list ( $item );
-	}
-}
-function side_dishes() {
-	global $sidedishes;
-	foreach ( $sidedishes as $item ) {
-		item_list ( $item );
-	}
-}
-function extras() {
-	global $extras;
-	foreach ( $extras as $item ) {
-		item_list ( $item );
-	}
-}
+
 function informations() {
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
 }
 function cart() {
-	simple_div ( 'client', client_information () );
+	func_div ( 'client', 'client_information' );
 }
 function client_information() {
 	global $customer_form;
@@ -133,6 +103,36 @@ function client_information() {
 }
 
 // list menu items
+function menu_list() {
+	global $language;
+	$lan = get_param ( "lan", "de" );
+	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
+	func_div('maincourse', 'main_dishes');
+        func_div('sidedish', 'side_dishes');
+	func_div('extras', 'beverages');
+	echo "</div>";
+}
+function main_dishes() {
+	global $maindishes;
+	echo "<h1>Gerichte</h1>";
+	foreach ( $maindishes as $item ) {
+		item_list ( $item );
+	}
+}
+function side_dishes() {
+	global $sidedishes;
+        echo "<h1>Beilagen</h1>";
+	foreach ( $sidedishes as $item ) {
+		item_list ( $item );
+	}
+}
+function beverages() {
+	global $extras;
+	echo "<h1>Getränke</h1>";
+	foreach ( $extras as $item ) {
+		item_list ( $item );
+	}
+}
 function item_list($item) {
 	echo "<p>$item[name]</br>$item[description]</br>CHF " . number_format ( $item ['price'], 2 ) . "</br>";
 	form("g2g.php", "get", "amount", amount_fields ());
@@ -151,10 +151,11 @@ function item_option($item) {
 <!-- logic-->
 <?php
 function get_param($name, $default) {
-	if (isset ( $_GET [$name] ))
+	if (isset ( $_GET [$name] )){
 		return urldecode ( $_GET [$name] );
-	else
-		return $default;
+        }
+	else{
+        return $default;}
 }
 function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
@@ -165,32 +166,44 @@ function amount_fields() {
 	text_input("amount", "Menge", 5);
 }
 
-function form($action, $method, $name, $content) {
-	echo "<form action=\"$action\" method=\"$method\" name=\"$name\">$content</form>";
-}
 
 function login() {
 	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
-	// echo "<form action=\"g2g.php\" method=\"get\" name=\"login1\"><input type=\"submit\" value=\"login\" /> </form>";
 }
 
-// creates a reference
+// creates a reference to another page
 function referencing($url, $text, $class = '') {
 	echo "<a $class href=\"$url\">$text</a> ";
 }
-
+//a HTML DIV that has a String as the content
 function simple_div($div_id, $div_content) {
-	echo "<div ID=\"$div_id\">$div_content</div>";
+	echo "<div ID=\"$div_id\">;$div_content</div>";
 }
-
+//a HTML DIV that has a funtion as the content
+function func_div($div_id, $func) {
+	echo "<div ID=\"$div_id\">";
+        call_user_func($func); 
+        echo"</div>";
+}
+//Functions for forms
+//Creates a form
+function form($action, $method, $name, $content) {
+	echo "<form action=\"$action\" method=\"$method\" name=\"$name\">$content</form>";
+}
 // create an text input field
 function text_input($name, $content, $size = 20) {
-	echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$displayed_name</input> </br>";
+	echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
 }
 
 // create an text input field
 function submit_input($value, $displayed_name = '') {
 	echo "<input  type=\"submit\" value=\"$value\">$displayed_name</input> </br>";
+}
+class form{
+    
+}
+    function _construct($action, $method, $name){
+        
 }
 ?>
 
@@ -254,8 +267,5 @@ $language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choiss
 
 $information_message = array(	'de' =>"<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
 								'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");
+
 ?>
-<!-- unused code-->
-<?php
-		
-?>					
