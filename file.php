@@ -1,15 +1,132 @@
 <!--php code for Gulasch-2-Go Author: menzs2-->
-<!-- Start Navigation -->
+
+<script type="text/javascript" src="file.js"></script>
+<!--Title-->
 <?php
+function title() {
+	global $navigation;
+	$name = get_param ( "id", "main" );
+	echo "Gulasch-2-Go - $navigation[$name]";
+}
+?>
+<!-- Start Navigation -->
+    <?php
 function navigation_bar() {
 	pages ();
-	
 	$page = get_param ( "id", 0 );
 	if ($page != 'main') {
 		login();
 		languages();
 	}
 }
+?>
+<!-- End Navigation -->
+
+
+<!--Content -->
+<?php
+//the main content chooser
+function content() {
+	global $content;
+	$con = get_param ( "id", "main" );
+	call_user_func($content [$con]);
+}
+?>
+
+
+<!--footer-->
+<?php
+function footer() {
+	if (get_param ( "id", 0 ) == 'main') {
+		languages();
+	}
+	else{
+	$url = set_url('location');
+            referencing ( $url, 'über uns' );
+        }
+}
+?>
+
+
+<!--Content Functions -->
+
+
+
+					
+<?php
+
+
+function main_page() {
+	w_message ();
+	main_page_content ();
+}
+function w_message() {
+	global $welcome_message;
+	$lan = get_param ( "lan", "de" );
+	simple_div ( 'welcome', $welcome_message [$lan] );
+}
+function main_page_content() {
+	func_div ( 'main_login', 'login' );
+        simple_div('withlogin', '');
+}
+
+function informations() {
+	global $information_message;
+	$lan = get_param ( "lan", "de" );
+	simple_div ( 'information', $information_message [$lan] );
+}
+function cart() {
+	func_div ( 'client', 'client_information' );
+        referencing(set_url('cart'), 'cart');
+        
+}
+function client_information() {
+	global $customer_form;
+        $action= set_url('cart');
+	$size = "size=\"20\"";
+	echo "<form action=\"$action\" method=\"get\">";
+            foreach ( $customer_form as $name => $displayed_name ) {
+                    text_input ( $name, $displayed_name, $size );
+            }
+            submit_input('purchase', "onclick=\"purchase_confirmation()\"");
+        echo "</form>";
+}
+
+// list menu items
+function menu_list() {
+	global $language;
+        global $maindishes;
+        global $sidedishes;
+        global $beverages;
+        $lan = get_param ( "lan", "de" );
+	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
+	func_div('maincourse', 'item_list', array($maindishes, 'Gerichte'));
+        func_div('sidedish', 'item_list', array($sidedishes, 'Beilagen'));
+	func_div('extras', 'item_list',array($beverages, 'Getränke'));
+	echo "</div>";
+}
+function item_list($group, $group_title){
+        echo "<h1>$group_title</h1>";
+        foreach ( $group as $item ) {
+		list_item ( $item );
+	}
+}
+
+function list_item($item) {
+	$action = set_url('cart');
+        echo "<p>$item[name]</br>$item[description]</br>CHF " . number_format ( $item ['price'], 2 ) . "</br>";
+	form($action, "get", "amount", amount_fields ());
+	echo "</p>";
+}
+function item_option($item) {
+	global $options;
+	echo "<form action=\"g2g.php\" method=\"get\">";
+	foreach ( $options as $item ) {
+		echo "	<input  type=\"checkbox\" >$item[name]</input>";
+	}
+	echo "</form>";
+}
+
 function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
@@ -26,127 +143,7 @@ function languages() {
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
 	referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
 	referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
-}
-?>
-<!-- End Navigation -->
-
-
-<!--Content -->
-<?php
-//the main content chooser
-function content() {
-	global $content;
-	$con = get_param ( "id", "main" );
-	$content [$con] ();
-}
-?>
-
-
-<!--footer-->
-<?php
-function footer() {
-	if (get_param ( "id", 0 ) == 'main') {
-		languages();
-	}
-	
-	$lan = get_param ( "lan", "de" );
-	$url = $_SERVER ['PHP_SELF'];
-	$url = add_param ( $url, "id", "location", "?" );
-	$url = add_param ( $url, "lan", $lan );
-	referencing ( $url, 'über uns' );
-}
-?>
-
-
-<!--Content Functions -->
-
-
-<!--Title-->
-<?php
-function title() {
-	global $navigation;
-	$name = get_param ( "id", "main" );
-	echo "Gulasch-2-Go - $navigation[$name]";
-}
-?>
-					
-<?php
-function main_page() {
-	w_message ();
-	main_page_content ();
-}
-function w_message() {
-	global $welcome_message;
-	$lan = get_param ( "lan", "de" );
-	simple_div ( 'welcome', $welcome_message [$lan] );
-}
-function main_page_content() {
-	func_div ( 'main_login', 'login' );
-}
-
-function informations() {
-	global $information_message;
-	$lan = get_param ( "lan", "de" );
-	simple_div ( 'information', $information_message [$lan] );
-}
-function cart() {
-	func_div ( 'client', 'client_information' );
-}
-function client_information() {
-	global $customer_form;
-	$size = "size=\"20\"";
-	echo "<form action=\"g2g.php\" method=\"get\">";
-	foreach ( $customer_form as $name => $displayed_name ) {
-		text_input ( $name, $displayed_name, $size );
-	}
-	echo "</form>";
-}
-
-// list menu items
-function menu_list() {
-	global $language;
-	$lan = get_param ( "lan", "de" );
-	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
-	func_div('maincourse', 'main_dishes');
-        func_div('sidedish', 'side_dishes');
-	func_div('extras', 'beverages');
-	echo "</div>";
-}
-function main_dishes() {
-	global $maindishes;
-	echo "<h1>Gerichte</h1>";
-	foreach ( $maindishes as $item ) {
-		item_list ( $item );
-	}
-}
-function side_dishes() {
-	global $sidedishes;
-        echo "<h1>Beilagen</h1>";
-	foreach ( $sidedishes as $item ) {
-		item_list ( $item );
-	}
-}
-function beverages() {
-	global $extras;
-	echo "<h1>Getränke</h1>";
-	foreach ( $extras as $item ) {
-		item_list ( $item );
-	}
-}
-function item_list($item) {
-	echo "<p>$item[name]</br>$item[description]</br>CHF " . number_format ( $item ['price'], 2 ) . "</br>";
-	form("g2g.php", "get", "amount", amount_fields ());
-	echo "</p>";
-}
-function item_option($item) {
-	global $options;
-	echo "<form action=\"g2g.php\" method=\"get\">";
-	foreach ( $options as $item ) {
-		echo "	<input  type=\"checkbox\" >$item[name]</input>";
-	}
-	echo "</form>";
-}
-?>
+}?>
 
 <!-- logic-->
 <?php
@@ -161,9 +158,16 @@ function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
 	return $new_url;
 }
-
+function set_url($page){
+        $lan = get_param ( "lan", "de" );
+	$url = $_SERVER ['PHP_SELF'];
+	$url = add_param ( $url, "id", "$page", "?" );
+	$url = add_param ( $url, "lan", $lan );
+        return $url;
+}
 function amount_fields() {
 	text_input("amount", "Menge", 5);
+        submit_input("to Cart");
 }
 
 
@@ -180,9 +184,14 @@ function simple_div($div_id, $div_content) {
 	echo "<div ID=\"$div_id\">;$div_content</div>";
 }
 //a HTML DIV that has a funtion as the content
-function func_div($div_id, $func) {
+function func_div($div_id, $func, $params=false) {
 	echo "<div ID=\"$div_id\">";
-        call_user_func($func); 
+        if ($params != false){
+            call_user_func_array($func, $params); 
+        }
+        else {
+            call_user_func($func);
+        }
         echo"</div>";
 }
 //Functions for forms
@@ -196,8 +205,8 @@ function text_input($name, $content, $size = 20) {
 }
 
 // create an text input field
-function submit_input($value, $displayed_name = '') {
-	echo "<input  type=\"submit\" value=\"$value\">$displayed_name</input> </br>";
+function submit_input($value, $eventhandler='', $displayed_name = '') {
+	echo "<input  type=\"submit\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
 }
 class form{
     
@@ -243,7 +252,7 @@ $sidedishes = array(
 					3=> array( 'name'=>"Spätzle",'description'=> "mehr schärfe", 'price'=> 1.00), 
 					4=> array( 'name'=>"Rösti",'description'=> "aber hallo", 'price'=> 2.80)
 					)	;
-$extras = array(
+$beverages = array(
 					0=> array( 'name'=>"Ueli Bier",'description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
 					1=> array( 'name'=>"Pilsener Urquell",'description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
 					2=> array( 'name'=>"Störtebeker Schwarzbier",'description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),

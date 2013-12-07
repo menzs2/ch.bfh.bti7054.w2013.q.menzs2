@@ -18,3 +18,8 @@ document.getElementById("form").submit();
 function show_options(){
 
 }
+
+function purchase_confirmation(){
+    var message = "Mit OK bestätigen Sie Ihre Bestellung";
+    result = window.confirm(message);
+}

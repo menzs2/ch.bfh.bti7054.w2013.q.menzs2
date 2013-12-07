@@ -6,10 +6,12 @@
 <head>
 <title><?php title();?></title>
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
+<script type="text/javascript" src="file.js"></script>
+
 </head>
 
 
-<body background="kesselgulasch_2.jpg">
+<body background="kesselgulasch_2.jpg" >
 
 	<!-- The Navigation Bar -->
 
@@ -20,9 +22,9 @@
 	</div>
 
 	<!-- content -->
-
-<?php content();?>
-
+        <div class="content">
+        <?php content();?>
+        </div>
 <!-- footer -->
 	<div class="footer">
 	<?php	footer();?>
