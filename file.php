@@ -67,9 +67,9 @@ function w_message() {
 }
 function main_page_content() {
 	global $information_message;
-	simple_div('withlogin', "Bestellen mit Login");
+	simple_div('withlogin', "Bestellen mit Login", "onclick=\"purchase_confirmation()\"");
 	simple_div('justinfo', "Ich schau mich um");
-	simple_div('nologin',"Bestellen ohne login");
+	simple_div('nologin',"Bestellen ohne login","onclick=\"purchase_confirmation()\"");
 }
 
 function informations() {
@@ -182,8 +182,8 @@ function referencing($url, $text, $class = '') {
 	echo "<a $class href=\"$url\">$text</a> ";
 }
 //a HTML DIV that has a String as the content
-function simple_div($div_id, $div_content) {
-	echo "<div ID=\"$div_id\">$div_content</div>";
+function simple_div($div_id, $div_content, $eventhandler='') {
+	echo "<div ID=\"$div_id\" $eventhandler>$div_content</div>";
 }
 //a HTML DIV that has a funtion as the content
 function func_div($div_id, $func, $params=false) {
