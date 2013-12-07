@@ -66,8 +66,10 @@ function w_message() {
 	simple_div ( 'welcome', $welcome_message [$lan] );
 }
 function main_page_content() {
-	func_div ( 'main_login', 'login' );
-        simple_div('withlogin', '');
+	global $information_message;
+	simple_div('withlogin', "Bestellen mit Login");
+	simple_div('justinfo', "Ich schau mich um");
+	simple_div('nologin',"Bestellen ohne login");
 }
 
 function informations() {
@@ -95,14 +97,14 @@ function client_information() {
 // list menu items
 function menu_list() {
 	global $language;
-        global $maindishes;
+    global $maindishes;
         global $sidedishes;
         global $beverages;
         $lan = get_param ( "lan", "de" );
 	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
-	func_div('maincourse', 'item_list', array($maindishes, 'Gerichte'));
+		func_div('maincourse', 'item_list', array($maindishes, 'Gerichte'));
         func_div('sidedish', 'item_list', array($sidedishes, 'Beilagen'));
-	func_div('extras', 'item_list',array($beverages, 'Getränke'));
+		func_div('extras', 'item_list',	array($beverages, 'Getränke'));
 	echo "</div>";
 }
 function item_list($group, $group_title){
@@ -181,7 +183,7 @@ function referencing($url, $text, $class = '') {
 }
 //a HTML DIV that has a String as the content
 function simple_div($div_id, $div_content) {
-	echo "<div ID=\"$div_id\">;$div_content</div>";
+	echo "<div ID=\"$div_id\">$div_content</div>";
 }
 //a HTML DIV that has a funtion as the content
 function func_div($div_id, $func, $params=false) {
