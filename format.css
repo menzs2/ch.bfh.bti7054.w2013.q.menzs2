@@ -1,7 +1,7 @@
 /*Style for all pages*/
 body {
 	font-family: Arial;
-	background-color: RGB(250,255,200)
+	background-color: RGB(250,255,200);
 }
 
 .footer {
@@ -53,6 +53,7 @@ position: relative; left:250px;
 width: 250px;
 heigth: 300 px;
 border: 5px ridge silver;
+
 
 }
 /*menu page*/

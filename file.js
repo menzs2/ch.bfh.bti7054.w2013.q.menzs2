@@ -23,3 +23,6 @@ function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);
 }
+function to_cart(){
+
+}

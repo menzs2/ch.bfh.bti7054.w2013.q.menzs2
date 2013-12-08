@@ -215,6 +215,50 @@ class form{
 }
     function _construct($action, $method, $name){
         
+}?>
+
+<!--Classes-->
+
+<?php
+//a product
+class shop_Item{
+	private $name;
+	private $type;
+	private $description;
+	private $price;
+	function _construct($name, $type, $description, $price){
+		this=>name = $name;
+		this=>type = $type;
+		this=>description = $description;
+		this=>price = $price;
+	}
+	function displayItem(){
+		echo "<p>this=>$name</br>this=>$description</br>CHF " . number_format ( this=>$price, 2 ) . "</br>";
+		form($action, "get", "amount", amount_fields ());
+		echo "</p>";
+	}
+	
+}
+
+//a shopping cart that stores all selected Items
+class shoppingcart{
+	private $items= array();
+	function _construct();
+	
+	public function add_item($item, $quantity){
+		if (!isset($this->items[$item])) $this->items[$item] = 0;
+		this->items[$art] += $quantity;
+}
+	public function removeItem($art, $num) {
+		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
+		$this->items[$art] -= $num;
+		if ($this->items[$art] == 0) unset($this->items[$art]);
+		return true;
+		}
+		else return false;
+		}
+
+	} 
 }
 ?>
 
