@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php require("file.php")
-session_start();?> 
+?> 
 <head>
 <title><?php title();?></title>
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
