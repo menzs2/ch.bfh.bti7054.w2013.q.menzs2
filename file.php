@@ -73,10 +73,14 @@ function main_page_content() {
 }
 
 function informations() {
-	global $maindishes;
-	$product = new shop_Item($maindishes[0]['name'], 'maindishes', $maindishes[0]['description'], $maindishes[0]['price']);
-	func_div('testproduct', $product->displayItem());  
-	
+	global $dishes;
+	$productlist = new productList();
+	foreach ($dishes as $items){
+		
+	$productlist->add_item( new shop_Item($items));
+	} 
+	$productlist->displayProductList(); 
+
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
@@ -229,19 +233,22 @@ class productList{
 	private $items = array();
 	
 	public function add_item($item){
-		$itemkey = $item[name];
-		$typekey = $item[type];
+		$itemkey = $item->name;
+		$typekey = $item->type;
 		if (!isset($this->items[$typekey])) {
 			$this->items[$typekey] = array();
 			}
 		$this->items[$typekey][$itemkey] = $item;
 	}
 	public function displayProductList(){
-		foreach($items as $type){
-			func_div($type, 'displayItemTypList', $type);
+		foreach($this->items as $typekey=>$type){
+			echo "<div ID=\"$typekey\">";
+			$this->displayItemTypeList($type);
+			echo"</div>";
+			//func_div($typekey, 'displayItemTypeList', array($type));
 			}
 	}
-	public function displayItemTypList($type){
+	public function displayItemTypeList($type){
 			foreach($type as $item){
 				$item->displayItem();
 			}
@@ -250,16 +257,16 @@ class productList{
 //a product
 class shop_Item{
 
-	private $name;
-	private $type;
+	public $name;
+	public $type;
 	private $description;
 	private $price;
 	
-	function __construct($name, $type, $description, $price){
-		$this->name = $name;
-		$this->type = $type;
-		$this->description = $description;
-		$this->price = $price;
+	function __construct($item){
+		$this->name = $item['name'];
+		$this->type = $item['type'];
+		$this->description = $item['description'];
+		$this->price = $item['price'];
 	}
 	function displayItem(){
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
@@ -309,7 +316,23 @@ $customer_form = array(	'salutation' => 'Anrede',
 						'street' => 'Strasse',
 						'postcode' => 'PLZ',
 						'place' => 'Ort');
-
+						
+$dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
+					1=> array( 'name'=>"Scharfes Rindsgulasch",'type'=>'maincourse','description'=> " auch lecker", 'price'=> 13.50),
+					2=> array( 'name'=>"Schweinsgulasch",'type'=>'maincourse','description'=> " sehr lecker", 'price'=> 12.20),
+					3=> array( 'name'=>"Wurstgulasch",'type'=>'maincourse','description'=> "wie von Mutti", 'price'=> 10.50), 
+					4=> array( 'name'=>"Lamm Pilaw",'type'=>'maincourse','description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
+ 					5=> array( 'name'=>"Erädpfelgulasch",'type'=>'maincourse','description'=> "für Kartoffelliebhaber", 'price'=> 10.50),
+					6=> array( 'name'=>"Knödel",'type'=>'sidedish','description'=> "lecker", 'price'=> 2.50), 
+					7=> array( 'name'=>"Kartoffelstock",'type'=>'sidedish','description'=> " auch lecker", 'price'=> 2.20),
+					8=> array( 'name'=>"Breite Nudeln",'type'=>'sidedish','description'=> " sehr lecker", 'price'=> 2.50),
+					9=> array( 'name'=>"Spätzle",'type'=>'sidedish','description'=> "mehr schärfe", 'price'=> 1.00), 
+					10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
+					11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
+					12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
+					13=> array( 'name'=>"Störtebeker Schwarzbier",'type'=>'extras','description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
+					14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
+					15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
 
 $maindishes = array(
 					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
