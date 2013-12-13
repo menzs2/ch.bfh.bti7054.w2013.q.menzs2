@@ -74,11 +74,7 @@ function main_page_content() {
 
 function informations() {
 	global $dishes;
-	$productlist = new productList();
-	foreach ($dishes as $items){
-		
-	$productlist->add_item( new shop_Item($items));
-	} 
+	$productlist = new productList($dishes);
 	$productlist->displayProductList(); 
 
 	global $information_message;
@@ -104,8 +100,8 @@ function client_information() {
 
 // list menu items
 function menu_list() {
-	global $language;
-    global $maindishes;
+	global $language;   
+        global $maindishes;
         global $sidedishes;
         global $beverages;
         $lan = get_param ( "lan", "de" );
@@ -231,8 +227,14 @@ class form{
 class productList{
 	
 	private $items = array();
+        
+        function __construct($dishes){
+           foreach ($dishes as $items){		
+                $this->add_item( new shop_Item($items));
+                }  
+        }
 	
-	public function add_item($item){
+	private function add_item($item){
 		$itemkey = $item->name;
 		$typekey = $item->type;
 		if (!isset($this->items[$typekey])) {
@@ -245,10 +247,10 @@ class productList{
 			echo "<div ID=\"$typekey\">";
 			$this->displayItemTypeList($type);
 			echo"</div>";
-			//func_div($typekey, 'displayItemTypeList', array($type));
 			}
 	}
-	public function displayItemTypeList($type){
+	private function displayItemTypeList($type,$group_title){
+                        echo "<h1>$group_title</h1>";
 			foreach($type as $item){
 				$item->displayItem();
 			}
