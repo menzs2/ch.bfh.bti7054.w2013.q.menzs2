@@ -23,9 +23,9 @@
 	</div>
 
 	<!-- content -->
-        <div class="content">
-        <?php content();?>
-        </div>
+
+	<?php content();?>
+
 <!-- footer -->
 	<div class="footer">
 	<?php	footer();?>

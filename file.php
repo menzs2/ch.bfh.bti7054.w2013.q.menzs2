@@ -29,7 +29,7 @@ function navigation_bar() {
 function content() {
 	global $content;
 	$con = get_param ( "id", "main" );
-	call_user_func($content [$con]);
+	func_div('content', $content [$con]);
 }
 ?>
 
@@ -50,9 +50,6 @@ function footer() {
 
 <!--Content Functions -->
 
-
-
-
 <?php
 
 
@@ -60,23 +57,19 @@ function main_page() {
 	w_message ();
 	main_page_content ();
 }
-function w_message() {
-	global $welcome_message;
-	$lan = get_param ( "lan", "de" );
-	simple_div ( 'welcome', $welcome_message [$lan] );
-}
-function main_page_content() {
-	global $information_message;
-	simple_div('withlogin', "Bestellen mit Login", "onclick=\"purchase_confirmation()\"");
-	simple_div('justinfo', "Ich schau mich um");
-	simple_div('nologin',"Bestellen ohne login","onclick=\"purchase_confirmation()\"");
-}
+	function w_message() {
+		global $welcome_message;
+		$lan = get_param ( "lan", "de" );
+		simple_div ( 'welcome', $welcome_message [$lan] );
+	}
+	function main_page_content() {
+		global $information_message;
+		simple_div('withlogin', "Bestellen mit Login", "onclick=\"purchase_confirmation()\"");
+		simple_div('justinfo', "Ich schau mich um");
+		simple_div('nologin',"Bestellen ohne login","onclick=\"to_page()\"");
+	}
 
 function informations() {
-	global $dishes;
-	$productlist = new productList($dishes);
-	$productlist->displayProductList(); 
-
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
@@ -100,15 +93,12 @@ function client_information() {
 
 // list menu items
 function menu_list() {
-	global $language;   
-        global $maindishes;
-        global $sidedishes;
-        global $beverages;
-        $lan = get_param ( "lan", "de" );
-	echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
-		func_div('maincourse', 'item_list', array($maindishes, 'Gerichte'));
-        func_div('sidedish', 'item_list', array($sidedishes, 'Beilagen'));
-		func_div('extras', 'item_list',	array($beverages, 'Getränke'));
+	global $language;
+	global $dishes;
+	$lan = get_param ( "lan", "de" );
+	$productlist = new productList($dishes);
+		echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
+	$productlist->displayProductList(); 
 	echo "</div>";
 }
 function item_list($group, $group_title){
@@ -244,13 +234,14 @@ class productList{
 	}
 	public function displayProductList(){
 		foreach($this->items as $typekey=>$type){
+			global $titles;
 			echo "<div ID=\"$typekey\">";
-			$this->displayItemTypeList($type);
+			$this->displayItemTypeList($type, $titles[$typekey]);
 			echo"</div>";
 			}
 	}
 	private function displayItemTypeList($type,$group_title){
-                        echo "<h1>$group_title</h1>";
+			echo "<h1>$group_title</h1>";
 			foreach($type as $item){
 				$item->displayItem();
 			}
@@ -312,6 +303,8 @@ $content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'inf
 
 $navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location", 'cart' => 'Cart');
 
+$titles = array('maincourse'=>'Gerichte', 'sidedish'=>'Beilagen', 'extras'=>'Getränke');
+
 $customer_form = array(	'salutation' => 'Anrede',
 						'firstname' => 'Vorname',
 						'lastname' => 'Nachname',
@@ -336,29 +329,6 @@ $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','descrip
 					14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
 					15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
 
-$maindishes = array(
-					0=> array( 'name'=>"Rindsgulasch",'description'=> "lecker", 'price'=> 12.50), 
-					1=> array( 'name'=>"Scharfes Rindsgulasch",'description'=> " auch lecker", 'price'=> 13.50),
-					2=> array( 'name'=>"Schweinsgulasch",'description'=> " sehr lecker", 'price'=> 12.20),
-					3=> array( 'name'=>"Wurstgulasch",'description'=> "wie von Mutti", 'price'=> 10.50), 
-					4=> array( 'name'=>"Lamm Pilaw",'description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
- 					5=> array( 'name'=>"Erädpfelgulasch",'description'=> "für Kartoffelliebhaber", 'price'=> 10.50)
-					);
-
-$sidedishes = array(
-					0=> array( 'name'=>"Knödel",'description'=> "lecker", 'price'=> 2.50), 
-					1=> array( 'name'=>"Kartoffelstock",'description'=> " auch lecker", 'price'=> 2.20),
-					2=> array( 'name'=>"Breite Nudeln",'description'=> " sehr lecker", 'price'=> 2.50),
-					3=> array( 'name'=>"Spätzle",'description'=> "mehr schärfe", 'price'=> 1.00), 
-					4=> array( 'name'=>"Rösti",'description'=> "aber hallo", 'price'=> 2.80)
-					)	;
-$beverages = array(
-					0=> array( 'name'=>"Ueli Bier",'description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
-					1=> array( 'name'=>"Pilsener Urquell",'description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
-					2=> array( 'name'=>"Störtebeker Schwarzbier",'description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
-					3=> array( 'name'=>"Merlot",'description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
-					4=> array( 'name'=>"Cola",'description'=> "Schwarz, süss, und kalt", 'price'=> 2.80)
-					);	
 $options = array(
 					0=> array( 'name'=>"schärfer",'description'=> "lecker", 'price'=> 2.50), 
 					1=> array( 'name'=>"Sauerrahm",'description'=> " auch lecker", 'price'=> 2.20),
