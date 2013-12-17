@@ -196,12 +196,7 @@ function text_input($name, $content, $size = 20) {
 function submit_input($value, $eventhandler='', $displayed_name = '') {
 	echo "<input  type=\"submit\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
 }
-class form{
-    
-}
-    function _construct($action, $method, $name){
-        
-}?>
+?>
 
 <!--Classes-->
 
@@ -300,6 +295,9 @@ class shoppingcart{
 
 
 <?php
+
+$mysqli = new mysqli("localhost", "root", "");
+
 $content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
 
 $navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location", 'cart' => 'Cart');

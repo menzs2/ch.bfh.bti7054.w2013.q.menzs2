@@ -16,6 +16,7 @@ document.getElementById("form").submit();
 }
 
 function show_options(){
+    var options = getElementByID()
 
 }
 
