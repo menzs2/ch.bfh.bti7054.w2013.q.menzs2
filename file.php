@@ -68,15 +68,28 @@ function main_page() {
 		simple_div('justinfo', "Ich schau mich um");
 		simple_div('nologin',"Bestellen ohne login","onclick=\"to_page()\"");
 	}
+// list menu items
+function menu_list() {
+	global $language;
+	global $dishes;
+	$lan = get_param ( "lan", "de" );
+	$productlist = new productList($dishes);
+		echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
+	$productlist->displayProductList(); 
+	echo "</div>";
+}
 
 function informations() {
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
 }
+
 function cart() {
-	func_div ( 'client', 'client_information' );
-        referencing(set_url('cart'), 'cart');
+	$shopcart = new shoppingcart();
+        func_div ( 'client', 'client_information' );
+        $shopcart->displayCart();
+        
         
 }
 function client_information() {
@@ -91,29 +104,8 @@ function client_information() {
         echo "</form>";
 }
 
-// list menu items
-function menu_list() {
-	global $language;
-	global $dishes;
-	$lan = get_param ( "lan", "de" );
-	$productlist = new productList($dishes);
-		echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
-	$productlist->displayProductList(); 
-	echo "</div>";
-}
-function item_list($group, $group_title){
-        echo "<h1>$group_title</h1>";
-        foreach ( $group as $item ) {
-		list_item ( $item );
-	}
-}
 
-function list_item($item) {
-	$action = set_url('cart');
-        echo "<p>$item[name]</br>$item[description]</br>CHF " . number_format ( $item ['price'], 2 ) . "</br>";
-	form($action, "get", "amount", amount_fields ());
-	echo "</p>";
-}
+/*
 function item_option($item) {
 	global $options;
 	echo "<form action=\"g2g.php\" method=\"get\">";
@@ -122,7 +114,7 @@ function item_option($item) {
 	}
 	echo "</form>";
 }
-
+*/
 function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
@@ -266,6 +258,7 @@ class shop_Item{
 		form('g2g.php', "get", "amount", amount_fields ());
 		echo "</p>";
 	}
+        
 	
 }
 
@@ -286,6 +279,14 @@ class shoppingcart{
 		}
 		else return false;
 		}
+                
+        public function displayCart(){
+                    echo "<div ID=\"cart\">";
+                        foreach ($items as $shopitem){
+                            $shopitem->displayItem();
+                        }                            
+			echo"</div>"; ;
+                }
 
 	 
 }
