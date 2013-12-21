@@ -15,7 +15,6 @@ function navigation_bar() {
 	pages ();
 	$page = get_param ( "id", 0 );
 	if ($page != 'main') {
-		login();
 		languages();
 	}
 }
@@ -27,9 +26,13 @@ function navigation_bar() {
 <?php
 //the main content chooser
 function content() {
+	if (!isset($_SESSION["lan"])){
+		$_SESSION["lan"]= "de";
+	}
 	global $content;
-	$con = get_param ( "id", "main" );
-	func_div('content', $content [$con]);
+		$con = $content[get_param ( "id", "main" )];
+	
+	func_div('content', $con);
 }
 ?>
 
@@ -80,6 +83,9 @@ function menu_list() {
 }
 
 function informations() {
+	$url = set_url('informations');
+	echo $url;
+	echo $_SESSION["lan"];
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
@@ -96,7 +102,7 @@ function client_information() {
 	global $customer_form;
         $action= set_url('cart');
 	$size = "size=\"20\"";
-	echo "<form action=\"$action\" method=\"get\">";
+	echo "<form ID=\"customerform\"action=\"$action\" method=\"get\">";
             foreach ( $customer_form as $name => $displayed_name ) {
                     text_input ( $name, $displayed_name, $size );
             }
@@ -122,11 +128,11 @@ function pages() {
 		$url = $_SERVER ['PHP_SELF'];
 		$url = add_param ( $url, "id", $id, "?" );
 		$url = add_param ( $url, "lan", $lan );
-		referencing ( $url, $name );
+		referencing ( $url, $name, "class=\"reference\"" );
 	}
 }
 function languages() {
-	$class = "class=\"language\"";
+	$class = "class=\"reference\"";
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
 	referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
@@ -134,6 +140,7 @@ function languages() {
 }?>
 
 <!-- logic-->
+
 <?php
 function get_param($name, $default) {
 	if (isset ( $_GET [$name] )){
@@ -153,6 +160,15 @@ function set_url($page){
 	$url = add_param ( $url, "lan", $lan );
         return $url;
 }
+function chooselanguage(){
+	if (!isset($_SESSION["lan"])){
+		echo "<div>";
+		button("Deutsch", "setlanguage", array('de'));
+		button("Fran&ccedilais", "setlanguage", array('fr'));
+		echo "</div>";
+	}
+}
+
 function amount_fields() {
 	text_input("amount", "Menge", 5);
         submit_input("to Cart");
@@ -162,7 +178,15 @@ function amount_fields() {
 function login() {
 	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
 }
+function button($name, $function, $params){
+	echo "<input type=\"button\" name=\"$name\">";
+	call_user_func_array($function, $param);
+	echo "</input> ";
+}
 
+function setlanguage($language){
+	$_SESSION["lan"] = $language;
+}
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
 	echo "<a $class href=\"$url\">$text</a> ";
@@ -201,6 +225,21 @@ function submit_input($value, $eventhandler='', $displayed_name = '') {
 <!--Classes-->
 
 <?php
+class form{
+	private $action;
+	private $method;
+	private $formname;
+	private $content= array();
+	
+	function __construct($action, $name, $method='get'){
+		$this->action = set_url($page);
+		$this->formname = $name;
+		$this->method = $method;
+		}
+	function add_input($type, $value, $eventhandler='', $displayed_name = ''){
+	$content[] = "<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input> </br>"
+	}
+}
 class productList{
 	
 	private $items = array();
@@ -296,7 +335,10 @@ class shoppingcart{
 
 <?php
 
-$mysqli = new mysqli("localhost", "root", "");
+$mysql = new mysqli("localhost", "root", "");
+$mysql->select_db("g2g");
+
+$productquery = "SELECT * FROM Texts as descr JOIN (SELECT * FROM `MenuItem` Join Texts on TXT_PK = MIT_Name) as name ON descr.TXT_PK = MIT_Description";
 
 $content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
 
