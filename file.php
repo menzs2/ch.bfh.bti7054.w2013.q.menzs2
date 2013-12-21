@@ -121,6 +121,14 @@ function item_option($item) {
 	echo "</form>";
 }
 */
+
+function ppages(){
+	global $navigation;
+	$lan = get_param ( "lan", "de" );
+	foreach ( $navigation as $id => $name ) {
+		button('button', $name, "class=\"reference\"", "onclick=\"$id()\""); 
+	}
+}
 function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
@@ -178,8 +186,8 @@ function amount_fields() {
 function login() {
 	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
 }
-function button($type, $value, $displayed_name='', $eventhandler=''){
-	"<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input>";
+function button($type, $value, $class='',$eventhandler=''){
+	echo "<input  $class type=\"$type\" value=\"$value\" $eventhandler></input>";
 }
 
 function setlanguage($language){

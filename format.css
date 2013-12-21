@@ -22,7 +22,7 @@ body {
 }
 .reference{
 	background-color: RGB(120,2,27);
-
+	border: clear;
 }
 /*main page*/
 #welcome {
