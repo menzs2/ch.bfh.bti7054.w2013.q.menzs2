@@ -24,7 +24,15 @@ function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);
 }
-function to_page() {
-	//document.getElementById("content"
-		
+function menu() {
+	window.location ="g2g.php?id=menu&lan=de";
+}
+function information() {
+	window.location = "g2g.php?id=location&lan=de";
+}
+function login() {
+	window.location = "g2g.php?id=loginlan=de";
+}
+function cart() {
+	window.location ="g2g.php?id=cart&lan=de";
 }

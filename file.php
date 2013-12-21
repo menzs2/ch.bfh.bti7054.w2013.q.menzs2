@@ -27,7 +27,7 @@ function navigation_bar() {
 //the main content chooser
 function content() {
 	if (!isset($_SESSION["lan"])){
-		$_SESSION["lan"]= "de";
+		$_SESSION["lan"]= get_param("lan", "de");
 	}
 	global $content;
 		$con = $content[get_param ( "id", "main" )];
@@ -67,9 +67,10 @@ function main_page() {
 	}
 	function main_page_content() {
 		global $information_message;
+		$page = 'menu';
 		simple_div('withlogin', "Bestellen mit Login", "onclick=\"purchase_confirmation()\"");
-		simple_div('justinfo', "Ich schau mich um");
-		simple_div('nologin',"Bestellen ohne login","onclick=\"to_page()\"");
+		simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
+		simple_div('nologin',"Bestellen ohne login","onclick=\"$page()\"");
 	}
 // list menu items
 function menu_list() {
@@ -94,10 +95,9 @@ function informations() {
 function cart() {
 	$shopcart = new shoppingcart();
         func_div ( 'client', 'client_information' );
-        $shopcart->displayCart();
-        
-        
+        //$shopcart->displayCart();
 }
+
 function client_information() {
 	global $customer_form;
         $action= set_url('cart');
@@ -178,23 +178,24 @@ function amount_fields() {
 function login() {
 	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
 }
-function button($name, $function, $params){
-	echo "<input type=\"button\" name=\"$name\">";
-	call_user_func_array($function, $param);
-	echo "</input> ";
+function button($type, $value, $displayed_name='', $eventhandler=''){
+	"<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input>";
 }
 
 function setlanguage($language){
 	$_SESSION["lan"] = $language;
 }
+
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
 	echo "<a $class href=\"$url\">$text</a> ";
 }
+
 //a HTML DIV that has a String as the content
 function simple_div($div_id, $div_content, $eventhandler='') {
 	echo "<div ID=\"$div_id\" $eventhandler>$div_content</div>";
 }
+
 //a HTML DIV that has a funtion as the content
 function func_div($div_id, $func, $params=false) {
 	echo "<div ID=\"$div_id\">";
@@ -206,11 +207,13 @@ function func_div($div_id, $func, $params=false) {
         }
         echo"</div>";
 }
+
 //Functions for forms
 //Creates a form
 function form($action, $method, $name, $content) {
 	echo "<form action=\"$action\" method=\"$method\" name=\"$name\">$content</form>";
 }
+
 // create an text input field
 function text_input($name, $content, $size = 20) {
 	echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
@@ -225,20 +228,30 @@ function submit_input($value, $eventhandler='', $displayed_name = '') {
 <!--Classes-->
 
 <?php
+//HTML Form as a class
 class form{
 	private $action;
 	private $method;
 	private $formname;
-	private $content= array();
+	private $formcontent= array();
 	
 	function __construct($action, $name, $method='get'){
 		$this->action = set_url($page);
 		$this->formname = $name;
 		$this->method = $method;
 		}
+		
 	function add_input($type, $value, $eventhandler='', $displayed_name = ''){
-	$content[] = "<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input> </br>"
+	$formcontent[] = "<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
 	}
+	
+	function displayForm(){
+		echo "<form action=\"$action\" method=\"$method\" name=\"$name\">";
+		foreach (formcontent as $content){
+			echo $content;
+		echo "</form>";
+		}
+	}	
 }
 class productList{
 	
