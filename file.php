@@ -343,7 +343,7 @@ class shop_Item{
 	function displayShopItem(){
 		$url = set_url('cart');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"get\" name=\"$this->name\">";
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
 		amount_fields($this->name);
 		echo "</form></p>";
 	}
@@ -366,7 +366,7 @@ class shoppingcart{
 	}
 	
 	public function add_item($itemkey, $qty){
-		for ($i = 0; $i < $quantity; $i++)
+		for ($i = 0; $i < $qty; $i++)
 			$this->items[] = $itemkey;
 			$_SESSION["cart"] = serialize($this);//serialize ($items);
 }
@@ -385,7 +385,7 @@ class shoppingcart{
 				echo "Es ist noch nichts im Warenkorb";
 			}
 			else{
-				foreach ($items as $shopitemkey){
+				foreach ($this->items as $shopitemkey){
 					echo $shopitemkey;
 					//$productlist->displayItem($shopitemkey);
 				}
@@ -393,9 +393,13 @@ class shoppingcart{
 			echo"</div>"; ;
 	}
 	public function checkForInput(){
-		if (isset($_POST["itemkey"]) && isset($_Post["qty"])){
+			//echo $_POST["itemkey"];
+			//echo $_POST["qty"];
+		if (isset($_POST["itemkey"])){
 			$itemkey = $_POST["itemkey"];
 			$quantity = $_POST["qty"];
+			echo $itemkey;
+			echo $quantity;
 			$this->add_item($itemkey, $quantity);
 		}
 	}
