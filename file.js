@@ -22,6 +22,11 @@ function show_options(){
 function hidenavigation(){
 	docment.getElementByName("navigation").style.display = "none";
 }
+function addItemToCart(){
+
+	document.write("<?php> $shoppingcart->addItem($itemkey) ?>" )
+}
+
 function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);

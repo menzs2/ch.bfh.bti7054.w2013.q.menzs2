@@ -1,9 +1,12 @@
 <!--php code for Gulasch-2-Go Author: menzs2-->
 
+
+
 <script type="text/javascript" src="file.js"></script>
 
 <!--Title-->
 <?php
+
 function title() {
 	global $navigation;
 	$name = get_param ( "id", "main" );
@@ -15,10 +18,10 @@ function title() {
 function navigation_bar() {
 	$page = get_param ( "id", 0 );
 	pages ();
-		if ($page != 'main') {
+	if ($page != 'main') {
 		languages();
-		}
 	}
+}
 
 
 ?>
@@ -39,7 +42,6 @@ function content() {
 				call_user_func('chooselanguage');
 			echo	"</div>";
 			}
-	
 	else{
 		func_div('content', $con);
 	}
@@ -63,6 +65,10 @@ function footer() {
 
 <!--Content Functions -->
 <?php
+//Choose the language if it is no already set
+function chooselanguage(){
+	func_div('chooselan', 'languages', array('long'));
+}
 //
 function main_page() {
 	w_message ();
@@ -75,25 +81,23 @@ function main_page() {
 	function main_page_content() {
 		global $information_message;
 		$page = 'menu';
-		simple_div('withlogin', "Bestellen mit Login", "onclick=\"purchase_confirmation()\"");
+		simple_div('withlogin', "Bestellen mit Login", "onclick=\"$page()\"");
 		simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
 		simple_div('nologin',"Bestellen ohne login","onclick=\"$page()\"");
 	}
+
 // list menu items
 function menu_list() {
 	global $menu_message;
 	global $dishes;
 	$lan = $_SESSION["lan"];
 	$productlist = new productList($dishes);
-		echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
+	echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
 	$productlist->displayProductList(); 
 	echo "</div>";
 }
 
 function informations() {
-	$url = set_url('informations');
-	echo $url;
-	echo $_SESSION["lan"];
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
@@ -102,18 +106,21 @@ function informations() {
 function cart() {
 	global $dishes;
 	$productlist = new productList($dishes);
-	if (!isset ($_SESSION["cart"])){
-		$_SESSION["cart"] = new shoppingcart();
-	}
-        func_div ( 'client', 'client_information' );
-        //$shopcart->displayCart();
+	func_div ( 'client', 'client_information' );
+	$shopcart = new shoppingcart();
+	$shopcart->checkForInput();
+	$shopcart->displayCart($productlist);
+	if (isset($_POST["firstname"])){
+		$name = $_POST["firstname"];
+		}
+	echo $name;
 }
 
 function client_information() {
 	global $customer_form;
 	$action= set_url('cart');
 	$size = "size=\"20\"";
-	echo "<form ID=\"customerform\"action=\"$action\" method=\"get\">";
+	echo "<form ID=\"customerform\"action=\"$action\" method=\"post\">";
 		foreach ( $customer_form as $name => $displayed_name ) {
 			echo "$displayed_name";
 			text_input ( $name, '', $size );
@@ -134,35 +141,13 @@ function item_option($item) {
 }
 */
 
-//Links for the pages
-function pages() {
-	global $navigation;
-	$lan = get_param ( "lan", "de" );
-	foreach ( $navigation as $id => $name ) {
-		$url = $_SERVER ['PHP_SELF'];
-		$url = add_param ( $url, "id", $id, "?" );
-		referencing ( $url, $name, "class=\"reference\"" );
-	}
-}
-//change the language
-function languages($lenght='short') {
-	global $language;
-	$class = "class=\"reference\"";
-	$url = $_SERVER ['PHP_SELF'];
-	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-	if($lenght == 'long'){
-		referencing ( add_param ( $url, "lan", "de" ), 'Deutsch', $class );
-		referencing ( add_param ( $url, "lan", "fr" ), 'Fran&ccedil;ais', $class );
-	}
-	else{
-		referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
-		referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
-}
-}?>
+
+?>
 
 <!-- logic-->
 
 <?php
+
 function get_param($name, $default) {
 	if (isset ( $_GET [$name] )){
 		return urldecode ( $_GET [$name] );
@@ -177,39 +162,46 @@ function add_param($url, $name, $value, $sep = "&") {
 }
 
 function set_url($page){
-	$lan = get_param ( "lan", "de" );
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "$page", "?" );
 	return $url;
-}
-
-function chooselanguage(){
-	func_div('chooselan', 'languages', array('long'));
 }
 
 function setlanguage($language){
 	$_SESSION["lan"] = $language;
 	javascript:main();
 }
-
-function amount_fields() {
-	echo "<select name=\"name\" size=\"1\">";
+//Links for the pages
+function pages() {
+	global $navigation;
+	foreach ( $navigation as $id => $name ) {
+		$url = set_url($id);
+		referencing ( $url, $name, "class=\"reference\"" );
+	}
+}
+//change the language
+function languages($lenght='') {
+	global $language;
+	$class = "class=\"reference\"";
+	$url = set_url( get_param ( "id", 0 ));
+	if($lenght == 'long'){
+		referencing ( add_param ( $url, "lan", "de" ), 'Deutsch', $class );
+		referencing ( add_param ( $url, "lan", "fr" ), 'Fran&ccedil;ais', $class );
+	}
+	else{
+		referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
+		referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
+	}
+}
+function amount_fields($itemkey) {
+	echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
+	echo "<select name=\"qty\" size=\"1\">";
 			for ($i =0; $i<7; $i++){
 				echo "<option value=\"$i\">$i</option>";
 			}
 	echo "</select>";
 	submit_input("to Cart");
 }
-
-
-function login() {
-	form ( "g2g.php", "get", "login", submit_input ( "login" ) );
-}
-function button($type, $value, $class='',$eventhandler=''){
-	echo "<input  $class type=\"$type\" value=\"$value\" $eventhandler></input>";
-}
-
-
 
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
@@ -254,7 +246,7 @@ function submit_input($value, $eventhandler='', $displayed_name = '') {
 
 <?php
 //HTML Form as a class
-class form{
+class aform{
 	private $action;
 	private $method;
 	private $formname;
@@ -329,20 +321,35 @@ class shop_Item{
 		$this->price = $item['price'];
 	}
 	function displayShopItem(){
+		$url = set_url('cart');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		form('g2g.php', "get", "amount", amount_fields ());
-		echo "</p>";
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
+		amount_fields($this->name);
+		echo "</form></p>";
+	}
+	function addToCart(){
+		if (!isset ($_SESSION["cart"])){
+			$_SESSION["cart"] = new shoppingcart();
+		}
+		$cart = $_SESSION["cart"];
+		$cart->add_item($this->name, 1);
 	}
 }
 
 //a shopping cart that stores all selected Items
 class shoppingcart{
 	private $items= array();
-	//function __construct();
+	function __construct(){
+		if (isset($_SESSION["cart"])){
+			
+			$this->items = unserialize($_SESSION["cart"]);
+		}
+	}
 	
 	public function add_item($itemkey, $quantity){
 		for ($i = 1; $i <= $quantity; $i++)
 			$this->items[] = $itemkey;
+			$_SESSION["cart"] = serialize ($items);
 }
 	public function removeItem($art, $num) {
 		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
@@ -354,11 +361,23 @@ class shoppingcart{
 		}
 
 	public function displayCart($productlist){
-		echo "<div ID=\"cart\">";
-			foreach ($items as $shopitemkey){
-				$productlist->displayItem($shopitemkey);
+		echo "<div ID=\"shoppingcart\">";
+			if (count($this->items) == 0){
+				echo "Es ist noch nichts im Warenkorb";
+			}
+			else{
+				foreach ($items as $shopitemkey){
+					$productlist->displayItem($shopitemkey);
+				}
 			}
 			echo"</div>"; ;
+	}
+	public function checkForInput(){
+		if (isset($_POST["itemkey"]) && isset($_Post["qty"])){
+			$itemkey = $_POST["itemkey"];
+			$quantity = $_POST["qty"];
+			$this->add_item($itemkey, $quantity);
+		}
 	}
 }
 ?>

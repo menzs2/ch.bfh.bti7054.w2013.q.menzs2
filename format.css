@@ -94,3 +94,8 @@ border: 5px ridge silver;
 	border-radius: 10px;
 }
 /*Information Page*/
+
+#shhoppingcart{
+	float:right;
+	font-size: 24pt;
+}
