@@ -1,12 +1,13 @@
 /*Style for all pages*/
 body {
-	font-family: Arial;
+	font-family: Helvetica;
 	background-color: RGB(250,255,200);
 }
 
 .footer {
 	clear: both;
-	position:relative; top:20px;
+	position:relative; 
+	top:20px;
 	background-color: RGB(80,2,27);
 	font-size: 32pt;
 	text-align: center;
@@ -18,12 +19,17 @@ body {
 	font-size: 32pt;
 	text-align: center;
 	border-radius: 25px;
+	height: 50px;
+}
+
+.reference{
+	display:inline;
+	text-decoration:none;
+	background-color: RGB(255,2,27);
 	
 }
-.reference{
-	background-color: RGB(120,2,27);
-	border: clear;
-}
+.reference:link    { color:#717171; background-color:transparent; }
+.reference:visited { color:#717171; background-color:transparent; }
 /*main page*/
 #welcome {
 	position:relative;

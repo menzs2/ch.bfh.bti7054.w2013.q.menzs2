@@ -1,6 +1,7 @@
 <!--php code for Gulasch-2-Go Author: menzs2-->
 
 <script type="text/javascript" src="file.js"></script>
+
 <!--Title-->
 <?php
 function title() {
@@ -10,7 +11,7 @@ function title() {
 }
 ?>
 <!-- Start Navigation -->
-    <?php
+<?php
 function navigation_bar() {
 	pages ();
 	$page = get_param ( "id", 0 );
@@ -45,17 +46,16 @@ function footer() {
 	}
 	else{
 	$url = set_url('location');
-            referencing ( $url, 'über uns' );
-        }
+		referencing ( $url, 'über uns' );//will be change do display simple information text
+	}
 }
 ?>
 
 
 <!--Content Functions -->
-
 <?php
 
-
+//
 function main_page() {
 	w_message ();
 	main_page_content ();
@@ -103,11 +103,11 @@ function client_information() {
         $action= set_url('cart');
 	$size = "size=\"20\"";
 	echo "<form ID=\"customerform\"action=\"$action\" method=\"get\">";
-            foreach ( $customer_form as $name => $displayed_name ) {
-                    text_input ( $name, $displayed_name, $size );
-            }
-            submit_input('purchase', "onclick=\"purchase_confirmation()\"");
-        echo "</form>";
+		foreach ( $customer_form as $name => $displayed_name ) {
+			text_input ( $name, $displayed_name, $size );
+		}
+	submit_input('purchase', "onclick=\"purchase_confirmation()\"");
+	echo "</form>";
 }
 
 
@@ -122,13 +122,7 @@ function item_option($item) {
 }
 */
 
-function ppages(){
-	global $navigation;
-	$lan = get_param ( "lan", "de" );
-	foreach ( $navigation as $id => $name ) {
-		button('button', $name, "class=\"reference\"", "onclick=\"$id()\""); 
-	}
-}
+
 function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
@@ -153,16 +147,18 @@ function languages() {
 function get_param($name, $default) {
 	if (isset ( $_GET [$name] )){
 		return urldecode ( $_GET [$name] );
-        }
+	}
 	else{
-        return $default;}
+		return $default;}
 }
+
 function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
 	return $new_url;
 }
+
 function set_url($page){
-        $lan = get_param ( "lan", "de" );
+	$lan = get_param ( "lan", "de" );
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "$page", "?" );
 	$url = add_param ( $url, "lan", $lan );
@@ -178,8 +174,12 @@ function chooselanguage(){
 }
 
 function amount_fields() {
-	text_input("amount", "Menge", 5);
-        submit_input("to Cart");
+	echo "<select name=\"name\" size=\"1\">";
+			for ($i =0; $i<7; $i++){
+				echo "<option value=\"$i\">$i</option>";
+			}
+	echo "</select>";
+	submit_input("to Cart");
 }
 
 
@@ -207,13 +207,13 @@ function simple_div($div_id, $div_content, $eventhandler='') {
 //a HTML DIV that has a funtion as the content
 function func_div($div_id, $func, $params=false) {
 	echo "<div ID=\"$div_id\">";
-        if ($params != false){
-            call_user_func_array($func, $params); 
-        }
-        else {
-            call_user_func($func);
-        }
-        echo"</div>";
+		if ($params != false){
+			call_user_func_array($func, $params); 
+		}
+		else {
+			call_user_func($func);
+		}
+	echo"</div>";
 }
 
 //Functions for forms
@@ -259,17 +259,17 @@ class form{
 			echo $content;
 		echo "</form>";
 		}
-	}	
+	}
 }
 class productList{
 	
 	private $items = array();
-        
-        function __construct($dishes){
-           foreach ($dishes as $items){		
-                $this->add_item( new shop_Item($items));
-                }  
-        }
+
+		function __construct($dishes){
+			foreach ($dishes as $items){		
+				$this->add_item( new shop_Item($items));
+			}  
+		}
 	
 	private function add_item($item){
 		$itemkey = $item->name;
@@ -313,8 +313,6 @@ class shop_Item{
 		form('g2g.php', "get", "amount", amount_fields ());
 		echo "</p>";
 	}
-        
-	
 }
 
 //a shopping cart that stores all selected Items
@@ -334,16 +332,14 @@ class shoppingcart{
 		}
 		else return false;
 		}
-                
-        public function displayCart(){
-                    echo "<div ID=\"cart\">";
-                        foreach ($items as $shopitem){
-                            $shopitem->displayItem();
-                        }                            
-			echo"</div>"; ;
-                }
 
-	 
+	public function displayCart(){
+		echo "<div ID=\"cart\">";
+			foreach ($items as $shopitem){
+				$shopitem->displayItem();
+			}                            
+			echo"</div>"; ;
+	}
 }
 ?>
 
