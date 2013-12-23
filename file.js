@@ -19,10 +19,15 @@ function show_options(){
     var options = getElementByID()
 
 }
-
+function chooseLanguage(){
+	window.location = "g2g.php?id=chooseLanguages"
+}
 function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);
+}
+function main() {
+	window.location ="g2g.php?id=main";
 }
 function menu() {
 	window.location ="g2g.php?id=menu";

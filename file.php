@@ -27,18 +27,18 @@ function navigation_bar() {
 <?php
 //the main content chooser
 function content() {
-	if (!isset($_SESSION["lan"])){
-		$_SESSION["lan"]= get_param("lan", "fr");
-	}
-	else{
-		if (isset ( $_GET ["lan"] )){
-		$_SESSION["lan"] = urldecode ( $_GET ["lan"] );
-	}
-}
 	global $content;
-		$con = $content[get_param ( "id", "main" )];
+	$con = $content[get_param ( "id", "main" )];
+	if (isset ( $_GET ["lan"] )){
+			$_SESSION["lan"] = urldecode ( $_GET ["lan"] );
+			}
+	if (!isset($_SESSION["lan"])){
+			func_div('content', 'chooselanguage');
+		}
 	
-	func_div('content', $con);
+	else{
+		func_div('content', $con);
+	}
 }
 ?>
 
@@ -59,7 +59,6 @@ function footer() {
 
 <!--Content Functions -->
 <?php
-
 //
 function main_page() {
 	w_message ();
@@ -168,12 +167,14 @@ function set_url($page){
 	return $url;
 }
 function chooselanguage(){
-	if (!isset($_SESSION["lan"])){
 		echo "<div>";
-		button("Deutsch", "setlanguage", array('de'));
-		button("Fran&ccedilais", "setlanguage", array('fr'));
+		languages();
 		echo "</div>";
-	}
+	
+}
+function setlanguage($language){
+	$_SESSION["lan"] = $language;
+	javascript:main();
 }
 
 function amount_fields() {
@@ -193,9 +194,7 @@ function button($type, $value, $class='',$eventhandler=''){
 	echo "<input  $class type=\"$type\" value=\"$value\" $eventhandler></input>";
 }
 
-function setlanguage($language){
-	$_SESSION["lan"] = $language;
-}
+
 
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
