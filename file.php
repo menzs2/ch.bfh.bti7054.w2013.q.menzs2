@@ -1,4 +1,7 @@
-<!--php code for Gulasch-2-Go Author: menzs2-->
+<!--
+php code for Gulasch-2-Go 
+Author: Stephan Menzi menzs2
+-->
 
 
 
@@ -6,7 +9,6 @@
 
 <!--Title-->
 <?php
-
 function title() {
 	global $navigation;
 	$name = get_param ( "id", "main" );
@@ -22,8 +24,6 @@ function navigation_bar() {
 		languages();
 	}
 }
-
-
 ?>
 <!-- End Navigation -->
 
@@ -47,7 +47,7 @@ function content() {
 	}
 }
 ?>
-
+<!--Content -->
 
 <!--footer-->
 <?php
@@ -63,30 +63,20 @@ function footer() {
 ?>
 
 
-<!--Content Functions -->
+<!--Main Content Functions: Calls the functions that display the main content of the page-->
 <?php
 //Choose the language if it is no already set
 function chooselanguage(){
 	func_div('chooselan', 'languages', array('long'));
 }
-//
+//The main/welcome page
 function main_page() {
 	w_message ();
 	main_page_content ();
 }
-	function w_message() {
-		global $welcome_message;
-		simple_div ( 'welcome', $welcome_message [$_SESSION["lan"]]);
-	}
-	function main_page_content() {
-		global $information_message;
-		$page = 'menu';
-		simple_div('withlogin', "Bestellen mit Login", "onclick=\"$page()\"");
-		simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
-		simple_div('nologin',"Bestellen ohne login","onclick=\"$page()\"");
-	}
 
-// list menu items
+
+//the list of the menu items
 function menu_list() {
 	global $menu_message;
 	global $dishes;
@@ -96,13 +86,13 @@ function menu_list() {
 	$productlist->displayProductList(); 
 	echo "</div>";
 }
-
-function informations() {
+//information on our shop
+function information() {
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
 }
-
+//the shoppingcart and the clientInformation
 function cart() {
 	global $dishes;
 	$productlist = new productList($dishes);
@@ -110,11 +100,29 @@ function cart() {
 	$shopcart = new shoppingcart();
 	$shopcart->checkForInput();
 	$shopcart->displayCart($productlist);
-	if (isset($_POST["firstname"])){
-		$name = $_POST["firstname"];
-		}
-	echo $name;
 }
+
+
+
+
+
+
+?>
+<!-- specific functions for pages-->
+<?php
+
+function w_message() {
+	global $welcome_message;
+	simple_div ( 'welcome', $welcome_message [$_SESSION["lan"]]);
+}
+
+function main_page_content() {
+	global $information_message;
+	$page = 'menu';
+	simple_div('withlogin', "Bestellen mit Login", "onclick=\"$page()\"");
+	simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
+	simple_div('nologin',"Bestellen ohne login","onclick=\"$page()\"");
+	}
 
 function client_information() {
 	global $customer_form;
@@ -129,6 +137,15 @@ function client_information() {
 	echo "</form>";
 }
 
+function amount_fields($itemkey) {
+	echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
+	echo "<select name=\"qty\" size=\"1\">";
+			for ($i =0; $i<7; $i++){
+				echo "<option value=\"$i\">$i</option>";
+			}
+	echo "</select>";
+	submit_input("to Cart");
+}
 
 /*
 function item_option($item) {
@@ -141,10 +158,8 @@ function item_option($item) {
 }
 */
 
-
 ?>
-
-<!-- logic-->
+<!-- general logic-->
 
 <?php
 
@@ -160,13 +175,13 @@ function add_param($url, $name, $value, $sep = "&") {
 	$new_url = $url . $sep . $name . "=" . urlencode ( $value );
 	return $new_url;
 }
-
+//set the url to one of the pages
 function set_url($page){
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "$page", "?" );
 	return $url;
 }
-
+//set the language
 function setlanguage($language){
 	$_SESSION["lan"] = $language;
 	javascript:main();
@@ -193,15 +208,7 @@ function languages($lenght='') {
 		referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
 	}
 }
-function amount_fields($itemkey) {
-	echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
-	echo "<select name=\"qty\" size=\"1\">";
-			for ($i =0; $i<7; $i++){
-				echo "<option value=\"$i\">$i</option>";
-			}
-	echo "</select>";
-	submit_input("to Cart");
-}
+
 
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
@@ -242,6 +249,7 @@ function submit_input($value, $eventhandler='', $displayed_name = '') {
 }
 ?>
 
+
 <!--Classes-->
 
 <?php
@@ -270,6 +278,7 @@ class aform{
 		}
 	}
 }
+//The productlist 
 class productList{
 
 	private $items = array();
@@ -382,25 +391,25 @@ class shoppingcart{
 }
 ?>
 
-
-
-<!--Text, Data to be moved to DB-->
-
-<!-- menu items -->
-
+<!-- SQL -->
 
 <?php
-
-
-
 $mysql = new mysqli("localhost", "root", "");
 $mysql->select_db("g2g");
 
 $productquery = "SELECT * FROM Texts as descr JOIN (SELECT * FROM `MenuItem` Join Texts on TXT_PK = MIT_Name) as name ON descr.TXT_PK = MIT_Description";
+?>
 
-$content = array ('main' => 'main_page','menu' => 'menu_list','location' => 'informations' ,'cart' => 'cart');
+<!--Text, Data to be moved to DB-->
 
-$navigation = array ('main' => "Main",'menu' => "Menu",'location' => "Location", 'cart' => 'Cart');
+
+
+
+<?php
+
+$content = array ('main' => 'main_page','menu' => 'menu_list','information' => 'information' ,'cart' => 'cart');
+
+$navigation = array ('main' => "Main",'menu' => "Menu",'information' => "Information", 'cart' => 'Cart');
 
 $titles = array('maincourse'=>'Gerichte', 'sidedish'=>'Beilagen', 'extras'=>'Getränke');
 

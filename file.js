@@ -38,7 +38,7 @@ function menu() {
 	window.location ="g2g.php?id=menu";
 }
 function information() {
-	window.location = "g2g.php?id=location";
+	window.location = "g2g.php?id=information";
 }
 function login() {
 	window.location = "g2g.php?id=login";
