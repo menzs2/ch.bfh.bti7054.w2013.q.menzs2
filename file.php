@@ -78,6 +78,7 @@ function main_page() {
 
 //the list of the menu items
 function menu_list() {
+	checkforCart();
 	global $menu_message;
 	global $dishes;
 	$lan = $_SESSION["lan"];
@@ -94,12 +95,12 @@ function information() {
 }
 //the shoppingcart and the clientInformation
 function cart() {
+	checkforCart();
 	global $dishes;
 	$productlist = new productList($dishes);
 	func_div ( 'client', 'client_information' );
-	$shopcart = new shoppingcart();
-	$shopcart->checkForInput();
-	$shopcart->displayCart($productlist);
+	$shopcart = unserialize($_SESSION["cart"]);
+	$shopcart->displayCart();
 }
 
 
@@ -147,6 +148,16 @@ function amount_fields($itemkey) {
 	submit_input("to Cart");
 }
 
+function checkforCart(){
+	$shopcart;
+	if (!isset($_SESSION["cart"])){
+		$shopcart = new shoppingcart();	
+	}
+	else {
+		$shopcart = unserialize(($_SESSION["cart"]));
+	}
+	$shopcart->checkForInput();
+}
 /*
 function item_option($item) {
 	global $options;
@@ -285,11 +296,11 @@ class productList{
 
 		function __construct($dishes){
 			foreach ($dishes as $items){		
-				$this->add_item( new shop_Item($items));
+				$this->addShopItem( new shop_Item($items));
 			}  
 		}
 	
-	private function add_item($item){
+	private function addShopItem($item){
 		$itemkey = $item->name;
 		$typekey = $item->type;
 		if (!isset($this->items[$typekey])) {
@@ -332,33 +343,32 @@ class shop_Item{
 	function displayShopItem(){
 		$url = set_url('cart');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
+		echo "<form action=\"$url\" method=\"get\" name=\"$this->name\">";
 		amount_fields($this->name);
 		echo "</form></p>";
 	}
-	function addToCart(){
-		if (!isset ($_SESSION["cart"])){
-			$_SESSION["cart"] = new shoppingcart();
-		}
-		$cart = $_SESSION["cart"];
-		$cart->add_item($this->name, 1);
-	}
+//	function addToCart(){
+//		if (!isset ($_SESSION["cart"])){
+//			$_SESSION["cart"] = new shoppingcart();
+//		}
+//		$cart = $_SESSION["cart"];
+//		$cart->add_item($this->name, 1);
+//	}
 }
 
 //a shopping cart that stores all selected Items
 class shoppingcart{
 	private $items= array();
 	function __construct(){
-		if (isset($_SESSION["cart"])){
-			
-			$this->items = unserialize($_SESSION["cart"]);
+		if (!isset($_SESSION["cart"])){
+		$_SESSION["cart"] = serialize($this);
 		}
 	}
 	
-	public function add_item($itemkey, $quantity){
-		for ($i = 1; $i <= $quantity; $i++)
+	public function add_item($itemkey, $qty){
+		for ($i = 0; $i < $quantity; $i++)
 			$this->items[] = $itemkey;
-			$_SESSION["cart"] = serialize ($items);
+			$_SESSION["cart"] = serialize($this);//serialize ($items);
 }
 	public function removeItem($art, $num) {
 		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
@@ -369,14 +379,15 @@ class shoppingcart{
 		else return false;
 		}
 
-	public function displayCart($productlist){
+	public function displayCart(){
 		echo "<div ID=\"shoppingcart\">";
 			if (count($this->items) == 0){
 				echo "Es ist noch nichts im Warenkorb";
 			}
 			else{
 				foreach ($items as $shopitemkey){
-					$productlist->displayItem($shopitemkey);
+					echo $shopitemkey;
+					//$productlist->displayItem($shopitemkey);
 				}
 			}
 			echo"</div>"; ;
