@@ -25,14 +25,14 @@ function purchase_confirmation(){
     result = window.confirm(message);
 }
 function menu() {
-	window.location ="g2g.php?id=menu&lan=de";
+	window.location ="g2g.php?id=menu";
 }
 function information() {
-	window.location = "g2g.php?id=location&lan=de";
+	window.location = "g2g.php?id=location";
 }
 function login() {
-	window.location = "g2g.php?id=loginlan=de";
+	window.location = "g2g.php?id=login";
 }
 function cart() {
-	window.location ="g2g.php?id=cart&lan=de";
+	window.location ="g2g.php?id=cart";
 }

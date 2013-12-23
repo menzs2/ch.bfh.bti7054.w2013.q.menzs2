@@ -28,8 +28,13 @@ function navigation_bar() {
 //the main content chooser
 function content() {
 	if (!isset($_SESSION["lan"])){
-		$_SESSION["lan"]= get_param("lan", "de");
+		$_SESSION["lan"]= get_param("lan", "fr");
 	}
+	else{
+		if (isset ( $_GET ["lan"] )){
+		$_SESSION["lan"] = urldecode ( $_GET ["lan"] );
+	}
+}
 	global $content;
 		$con = $content[get_param ( "id", "main" )];
 	
@@ -62,8 +67,7 @@ function main_page() {
 }
 	function w_message() {
 		global $welcome_message;
-		$lan = get_param ( "lan", "de" );
-		simple_div ( 'welcome', $welcome_message [$lan] );
+		simple_div ( 'welcome', $welcome_message [$_SESSION["lan"]]);
 	}
 	function main_page_content() {
 		global $information_message;
@@ -76,7 +80,7 @@ function main_page() {
 function menu_list() {
 	global $language;
 	global $dishes;
-	$lan = get_param ( "lan", "de" );
+	$lan = $_SESSION["lan"];
 	$productlist = new productList($dishes);
 		echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
 	$productlist->displayProductList(); 
@@ -100,7 +104,7 @@ function cart() {
 
 function client_information() {
 	global $customer_form;
-        $action= set_url('cart');
+	$action= set_url('cart');
 	$size = "size=\"20\"";
 	echo "<form ID=\"customerform\"action=\"$action\" method=\"get\">";
 		foreach ( $customer_form as $name => $displayed_name ) {
@@ -122,17 +126,17 @@ function item_option($item) {
 }
 */
 
-
+//Links for the pages
 function pages() {
 	global $navigation;
 	$lan = get_param ( "lan", "de" );
 	foreach ( $navigation as $id => $name ) {
 		$url = $_SERVER ['PHP_SELF'];
 		$url = add_param ( $url, "id", $id, "?" );
-		$url = add_param ( $url, "lan", $lan );
 		referencing ( $url, $name, "class=\"reference\"" );
 	}
 }
+//change the language
 function languages() {
 	$class = "class=\"reference\"";
 	$url = $_SERVER ['PHP_SELF'];
@@ -161,8 +165,7 @@ function set_url($page){
 	$lan = get_param ( "lan", "de" );
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", "$page", "?" );
-	$url = add_param ( $url, "lan", $lan );
-        return $url;
+	return $url;
 }
 function chooselanguage(){
 	if (!isset($_SESSION["lan"])){
@@ -404,5 +407,4 @@ $language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choiss
 
 $information_message = array(	'de' =>"<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
 								'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");
-
 ?>
