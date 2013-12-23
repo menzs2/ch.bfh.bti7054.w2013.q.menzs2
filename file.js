@@ -19,8 +19,8 @@ function show_options(){
     var options = getElementByID()
 
 }
-function chooseLanguage(){
-	window.location = "g2g.php?id=chooseLanguages"
+function hidenavigation(){
+	docment.getElementByName("navigation").style.display = "none";
 }
 function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";

@@ -13,12 +13,14 @@ function title() {
 <!-- Start Navigation -->
 <?php
 function navigation_bar() {
-	pages ();
 	$page = get_param ( "id", 0 );
-	if ($page != 'main') {
+	pages ();
+		if ($page != 'main') {
 		languages();
+		}
 	}
-}
+
+
 ?>
 <!-- End Navigation -->
 
@@ -33,8 +35,10 @@ function content() {
 			$_SESSION["lan"] = urldecode ( $_GET ["lan"] );
 			}
 	if (!isset($_SESSION["lan"])){
-			func_div('content', 'chooselanguage');
-		}
+			echo "<div ID=\"content\" onload = \"hidenavigation()\">";
+				call_user_func('chooselanguage');
+			echo	"</div>";
+			}
 	
 	else{
 		func_div('content', $con);
@@ -50,8 +54,8 @@ function footer() {
 		languages();
 	}
 	else{
-	$url = set_url('location');
-		referencing ( $url, 'über uns' );//will be change do display simple information text
+		$g2gadress = 'Gulasch-To-Go, Zähringerstrasse 34, 3012 Bern';
+		echo "$g2gadress";
 	}
 }
 ?>
@@ -77,11 +81,11 @@ function main_page() {
 	}
 // list menu items
 function menu_list() {
-	global $language;
+	global $menu_message;
 	global $dishes;
 	$lan = $_SESSION["lan"];
 	$productlist = new productList($dishes);
-		echo "<div ID=\"menu\"><p ID=\"first>\"> $language[$lan]</p>";
+		echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
 	$productlist->displayProductList(); 
 	echo "</div>";
 }
@@ -96,7 +100,11 @@ function informations() {
 }
 
 function cart() {
-	$shopcart = new shoppingcart();
+	global $dishes;
+	$productlist = new productList($dishes);
+	if (!isset ($_SESSION["cart"])){
+		$_SESSION["cart"] = new shoppingcart();
+	}
         func_div ( 'client', 'client_information' );
         //$shopcart->displayCart();
 }
@@ -107,7 +115,8 @@ function client_information() {
 	$size = "size=\"20\"";
 	echo "<form ID=\"customerform\"action=\"$action\" method=\"get\">";
 		foreach ( $customer_form as $name => $displayed_name ) {
-			text_input ( $name, $displayed_name, $size );
+			echo "$displayed_name";
+			text_input ( $name, '', $size );
 		}
 	submit_input('purchase', "onclick=\"purchase_confirmation()\"");
 	echo "</form>";
@@ -136,12 +145,19 @@ function pages() {
 	}
 }
 //change the language
-function languages() {
+function languages($lenght='short') {
+	global $language;
 	$class = "class=\"reference\"";
 	$url = $_SERVER ['PHP_SELF'];
 	$url = add_param ( $url, "id", get_param ( "id", 0 ), "?" );
-	referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
-	referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
+	if($lenght == 'long'){
+		referencing ( add_param ( $url, "lan", "de" ), 'Deutsch', $class );
+		referencing ( add_param ( $url, "lan", "fr" ), 'Fran&ccedil;ais', $class );
+	}
+	else{
+		referencing ( add_param ( $url, "lan", "de" ), 'DE', $class );
+		referencing ( add_param ( $url, "lan", "fr" ), 'FR', $class );
+}
 }?>
 
 <!-- logic-->
@@ -166,12 +182,11 @@ function set_url($page){
 	$url = add_param ( $url, "id", "$page", "?" );
 	return $url;
 }
+
 function chooselanguage(){
-		echo "<div>";
-		languages();
-		echo "</div>";
-	
+	func_div('chooselan', 'languages', array('long'));
 }
+
 function setlanguage($language){
 	$_SESSION["lan"] = $language;
 	javascript:main();
@@ -264,7 +279,7 @@ class form{
 	}
 }
 class productList{
-	
+
 	private $items = array();
 
 		function __construct($dishes){
@@ -292,13 +307,16 @@ class productList{
 	private function displayItemTypeList($type,$group_title){
 			echo "<h1>$group_title</h1>";
 			foreach($type as $item){
-				$item->displayItem();
+				$item->displayShopItem();
 			}
 		}
+	public function displayItem($itemkey){
+		$this->items[$itemkey]->displayShopItem;
+	}
 }
 //a product
 class shop_Item{
-
+	public $code;
 	public $name;
 	public $type;
 	private $description;
@@ -310,7 +328,7 @@ class shop_Item{
 		$this->description = $item['description'];
 		$this->price = $item['price'];
 	}
-	function displayItem(){
+	function displayShopItem(){
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
 		form('g2g.php', "get", "amount", amount_fields ());
 		echo "</p>";
@@ -322,9 +340,9 @@ class shoppingcart{
 	private $items= array();
 	//function __construct();
 	
-	public function add_item($item, $quantity){
-		if (!isset($this->items[$item])) $this->items[$item] = 0;
-		$this->items[$art] += $quantity;
+	public function add_item($itemkey, $quantity){
+		for ($i = 1; $i <= $quantity; $i++)
+			$this->items[] = $itemkey;
 }
 	public function removeItem($art, $num) {
 		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
@@ -335,11 +353,11 @@ class shoppingcart{
 		else return false;
 		}
 
-	public function displayCart(){
+	public function displayCart($productlist){
 		echo "<div ID=\"cart\">";
-			foreach ($items as $shopitem){
-				$shopitem->displayItem();
-			}                            
+			foreach ($items as $shopitemkey){
+				$productlist->displayItem($shopitemkey);
+			}
 			echo"</div>"; ;
 	}
 }
@@ -353,6 +371,8 @@ class shoppingcart{
 
 
 <?php
+
+
 
 $mysql = new mysqli("localhost", "root", "");
 $mysql->select_db("g2g");
@@ -401,8 +421,10 @@ $options = array(
 $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
 									'fr'=>"<p>Bienvenue chéz Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>");
 	
+$menu_message = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
 	
-$language = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
+	
+$language = array ('de' => "Deutsch" , 'fr' =>"Fran&ccedil;ais");
 
 $information_message = array(	'de' =>"<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
 								'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");

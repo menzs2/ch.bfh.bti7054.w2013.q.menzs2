@@ -27,7 +27,8 @@
 	<!-- content -->
 
 	<?php 
-	content() ;?>
+	content() ;
+	?>
 
 <!-- footer -->
 	<div class="footer">

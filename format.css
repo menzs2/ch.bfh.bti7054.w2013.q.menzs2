@@ -31,6 +31,10 @@ body {
 .reference:link    { color:#717171; background-color:transparent; }
 .reference:visited { color:#717171; background-color:transparent; }
 /*main page*/
+#chooselan{
+	font-size: 36pt;
+	text-align:center;
+}
 #welcome {
 	position:relative;
 	font-size: 32pt;
