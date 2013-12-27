@@ -3,10 +3,6 @@ php code for Gulasch-2-Go
 Author: Stephan Menzi menzs2<script type="text/javascript" src="file.js"></script>
 -->
 
-
-
-
-
 <!--Title-->
 <?php
 function title() {
