@@ -92,9 +92,12 @@ function menu_list() {
 }
 //information on our shop
 function information() {
+	$myShopDB = new ShopDB();
+	$res= $myShopDB->getAllProducts();
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
+	$myShopDB->close();
 }
 //the shoppingcart and the clientInformation
 function cart() {
@@ -123,10 +126,10 @@ function w_message() {
 		echo "<p>$textelem->textelement</p>";
 	}
 	echo "</div>";
+	$myShopDB->close();
 }
 
 function main_page_content() {
-	global $information_message;
 	$page = 'menu';
 	simple_div('withlogin', "Bestellen mit Login", "onclick=\"menu()\"");
 	simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
@@ -311,7 +314,9 @@ class productList{
 	private $items = array();
 
 		function __construct($dishes){
-			foreach ($dishes as $items){		
+			$myShopDB = new ShopDB();
+			$res = $myShopDB->getAllProducts();
+			while ($items = $res->fetch_object()){
 				$this->addShopItem( new shop_Item($items));
 			}  
 		}
@@ -345,17 +350,18 @@ class productList{
 //a product
 class shop_Item{
 	private $arrayIndex;
-	public $code;
+	public $itemkey;
 	public $name;
 	public $type;
 	private $description;
 	private $price;
 	
 	function __construct($item){
-		$this->name = $item['name'];
-		$this->type = $item['type'];
-		$this->description = $item['description'];
-		$this->price = $item['price'];
+		$this->itemkey = $item->itemkey;
+		$this->name = $item->name;
+		$this->type = $item->type;
+		$this->description = $item->description;
+		$this->price = $item->price;
 	}
 	function displayShopItem(){
 		$url = set_url('menu');
@@ -388,7 +394,7 @@ class shoppingcart{
 		for ($i = 0; $i < $qty; $i++){
 			$this->items[] = $itemkey;
 		}
-		resetIndices();
+		//resetIndices();
 		$_SESSION["cart"] = serialize($this);
 }
 	private function addItem($itemkey){
@@ -451,8 +457,10 @@ class ShopDB extends mysqli{
 	
 	function getAllProducts(){
 		$lan = $_SESSION['lan'];
-		$dishes = $this->query();
-		return $dishes;
+		$fields = "MIT_PK AS itemkey, MIT_Type AS type, name.name, descr.TXT_$lan AS description, MIT_Price AS price";
+		$innerquery= "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `MenuItem` Join Texts on TXT_PK = MIT_Name)";
+		return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description");
+
 	}
 	function getProduct($code){
 		
@@ -462,12 +470,10 @@ class ShopDB extends mysqli{
 	}
 	public function getText($code){
 		$lan= $_SESSION['lan'];
-		return  $this->query("SELECT TXT_de as textelement FROM Texts where TXT_code like \"$code%\"");
+		return  $this->query("SELECT TXT_$lan as textelement FROM Texts where TXT_code like \"$code%\"");
 		
 	}
 }
-
-$productquery = "SELECT * FROM Texts as descr JOIN (SELECT * FROM `MenuItem` Join Texts on TXT_PK = MIT_Name) as name ON descr.TXT_PK = MIT_Description";
 ?>
 
 <!--Text, Data to be moved to DB-->
@@ -481,7 +487,7 @@ $content = array ('main' => 'main_page','menu' => 'menu_list','information' => '
 
 $navigation = array ('main' => "Main",'menu' => "Menu",'information' => "Information", 'cart' => 'Cart');
 
-$titles = array('maincourse'=>'Gerichte', 'sidedish'=>'Beilagen', 'extras'=>'Getränke');
+$titles = array('maindish'=>'Gerichte', 'sidedish'=>'Beilagen', 'extras'=>'Getränke');
 
 $customer_form = array(	'salutation' => 'Anrede',
 						'firstname' => 'Vorname',
