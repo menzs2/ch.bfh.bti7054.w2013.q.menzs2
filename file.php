@@ -337,7 +337,7 @@ class productList{
 }
 //a product
 class shop_Item{
-	private $arrayIndex
+	private $arrayIndex;
 	public $code;
 	public $name;
 	public $type;
@@ -365,6 +365,7 @@ class shop_Item{
 	}
 	function setIndex($index){
 		$arrayIndex = $index; 
+	}
 }
 
 //a shopping cart that stores all selected Items
@@ -377,11 +378,14 @@ class shoppingcart{
 	}
 	
 	public function addItemFromMenu($itemkey, $qty){
-		for ($i = 0; $i < $qty; $i++)
+		for ($i = 0; $i < $qty; $i++){
 			$this->items[] = $itemkey;
-			$_SESSION["cart"] = serialize($this);
+		}
+		resetIndices();
+		$_SESSION["cart"] = serialize($this);
 }
-	private function addItem(){
+	private function addItem($itemkey){
+		
 		
 	}
 	public function removeItem($itemkey) {
@@ -414,11 +418,17 @@ class shoppingcart{
 			$this->addItemFromMenu($itemkey, $quantity);
 		}
 	}
-	private function resetIndices(){
-		$items = array_values($items);
-		foreach( $items as $key=>$cartItem){
+	private static function resetIndices(){
+		$this->items = array_values($this->items);
+		foreach( $this->items as $key=>$cartItem){
 			$cartItem->setIndex($key);
 		}
+	}
+	function resetCart(){
+		foreach ($items as $key=>$item{
+			unset($items[$key]);
+			}
+		
 	}
 }
 ?>
@@ -426,8 +436,24 @@ class shoppingcart{
 <!-- SQL -->
 
 <?php
-$mysql = new mysqli("localhost", "root", "");
-$mysql->select_db("g2g");
+class ShopDB extends msqli{
+	__construct(){
+	parent:: __construct("localhost", "root", "");
+	parent::select_db("g2g");
+	}
+	
+	function getAllProducts(){
+		$lan = $_SESSION['lan'];
+		$dishes = $this->query(
+		return $dishes
+	}
+	function getProduct($code){
+		
+	}
+	function insertOrder{
+		
+	}
+}
 
 $productquery = "SELECT * FROM Texts as descr JOIN (SELECT * FROM `MenuItem` Join Texts on TXT_PK = MIT_Name) as name ON descr.TXT_PK = MIT_Description";
 ?>
