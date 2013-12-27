@@ -32,7 +32,6 @@ function navigation_bar() {
 <?php
 //the main content chooser
 function content() {
-	//$myShopDB = new ShopDB();
 	global $content;
 	$con = $content[get_param ( "id", "main" )];
 	if (isset ( $_GET ["lan"] )){
@@ -64,7 +63,7 @@ function footer() {
 ?>
 
 
-<!--Main Content Functions: Calls the functions that display the main content of the page-->
+<!--Main Content Functions: Calls the functions that displays the main content of the page-->
 <?php
 //Choose the language if it is no already set
 function chooselanguage(){
@@ -82,9 +81,8 @@ function menu_list() {
 	checkforCart();
 	$shopcart = unserialize($_SESSION["cart"]);
 	global $menu_message;
-	global $dishes;
 	$lan = $_SESSION["lan"];
-	$productlist = new productList($dishes);
+	$productlist = new productList();
 	echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
 	$productlist->displayProductList(); 
 	$shopcart->displayCart('short');
@@ -93,7 +91,7 @@ function menu_list() {
 //information on our shop
 function information() {
 	$myShopDB = new ShopDB();
-	$res= $myShopDB->getAllProducts();
+	$res= $myShopDB->getText();
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
@@ -102,17 +100,10 @@ function information() {
 //the shoppingcart and the clientInformation
 function cart() {
 	checkforCart();
-	global $dishes;
-	$productlist = new productList($dishes);
 	func_div ( 'client', 'client_information' );
 	$shopcart = unserialize($_SESSION["cart"]);
 	$shopcart->displayCart('long');
 }
-
-
-
-
-
 
 ?>
 <!-- specific functions for pages-->
@@ -130,7 +121,6 @@ function w_message() {
 }
 
 function main_page_content() {
-	$page = 'menu';
 	simple_div('withlogin', "Bestellen mit Login", "onclick=\"menu()\"");
 	simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
 	simple_div('nologin',"Bestellen ohne login","onclick=\"menu()\"");
@@ -157,6 +147,7 @@ function client_information() {
 }
 
 function amount_fields($itemkey) {
+	echo "<input  type=\"hidden\"  name=\"add\" value=\"true\">";
 	echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
 	echo "<select name=\"qty\" size=\"1\">";
 			for ($i =0; $i<7; $i++){
@@ -302,7 +293,7 @@ class aform{
 	
 	function displayForm(){
 		echo "<form action=\"$action\" method=\"$method\" name=\"$name\">";
-		foreach (formcontent as $content){
+		foreach ($formcontent as $content){
 			echo $content;
 		echo "</form>";
 		}
@@ -313,12 +304,13 @@ class productList{
 
 	private $items = array();
 
-		function __construct($dishes){
+		function __construct(){
 			$myShopDB = new ShopDB();
 			$res = $myShopDB->getAllProducts();
 			while ($items = $res->fetch_object()){
 				$this->addShopItem( new shop_Item($items));
-			}  
+			}
+			$myShopDB->close();
 		}
 	
 	private function addShopItem($item){
@@ -366,8 +358,8 @@ class shop_Item{
 	function displayShopItem(){
 		$url = set_url('menu');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
-		amount_fields($this->name);
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->itemkey\">";
+		amount_fields($this->itemkey);
 		echo "</form></p>";
 	}
 	function displayCartItem(){
@@ -384,6 +376,7 @@ class shop_Item{
 //a shopping cart that stores all selected Items
 class shoppingcart{
 	private $items= array();
+	
 	function __construct(){
 		if (!isset($_SESSION["cart"])){
 		$_SESSION["cart"] = serialize($this);
@@ -394,21 +387,17 @@ class shoppingcart{
 		for ($i = 0; $i < $qty; $i++){
 			$this->items[] = $itemkey;
 		}
-		//resetIndices();
+		$this->resetIndices();
 		$_SESSION["cart"] = serialize($this);
 }
 	private function addItem($itemkey){
 		
 		
 	}
-	public function removeItem($itemkey) {
-		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
-		$this->items[$art] -= $num;
-		if ($this->items[$art] == 0) unset($this->items[$art]);
-		return true;
-		}
-		else return false;
-		}
+	public function removeItem($index) {
+		unset($this->items[$index]);
+		$this->resetIndices();
+	}
 
 	public function displayCart($cartType){
 		$cartID = $cartType.'shoppingcart';
@@ -418,30 +407,50 @@ class shoppingcart{
 				echo "Es ist noch nichts im Warenkorb";
 			}
 			else{
-				foreach ($this->items as $shopitemkey){
-					echo "$shopitemkey </br>";
+				$myShopDB = new ShopDB();
+				foreach ($this->items as $index=>$shopItemKey){
+					$res = $myShopDB->getProduct($shopItemKey);
+					while($item = $res->fetch_object()){
+					echo "<p>$index $item->name $item->price</p>";
+					}
 				}
+				$myShopDB->close();
 			}
 			echo"</div>"; ;
 	}
 	public function checkForInput(){
-		if (isset($_POST["itemkey"])){
+		$this->checkForAdd();
+		$this->checkForRemove();
+	}
+	private function checkForAdd(){
+		if (isset($_POST["add"])){
 			$itemkey = $_POST["itemkey"];
 			$quantity = $_POST["qty"];
 			$this->addItemFromMenu($itemkey, $quantity);
 		}
 	}
-	private static function resetIndices(){
-		$this->items = array_values($this->items);
-		foreach( $this->items as $key=>$cartItem){
-			$cartItem->setIndex($key);
+	private function checkForRemove(){
+		if (isset($_POST["remove"])){
+			if ($_POST["remove"] == 'all'){
+				$this->resetCart();
+				} 
+			else{
+				$this->removeItem($_POST["remove"]);
+			}
+			$quantity = $_POST["qty"];
+			$this->addItemFromMenu($itemkey, $quantity);
 		}
 	}
-	function resetCart(){
-		foreach ($items as $key=>$item){
-			unset($items[$key]);
-			}
+	private function resetIndices(){
+		$temp = $this->items;
+		$this->items = array_values($temp);
 		
+	}
+	function resetCart(){
+		foreach ($this->items as $key=>$item){
+			unset($this->items[$key]);
+			}
+		$this->items = array();
 	}
 }
 ?>
@@ -462,8 +471,11 @@ class ShopDB extends mysqli{
 		return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description");
 
 	}
-	function getProduct($code){
-		
+	function getProduct($key){
+		$lan = $_SESSION['lan'];
+		$fields = "MIT_PK AS itemkey, MIT_Type AS type, name.name, descr.TXT_$lan AS description, MIT_Price AS price";
+		$innerquery= "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `MenuItem` Join Texts on TXT_PK = MIT_Name)";
+		return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description WHERE MIT_PK = $key");
 	}
 	function insertOrder(){
 		
@@ -495,22 +507,22 @@ $customer_form = array(	'salutation' => 'Anrede',
 						'street' => 'Strasse',
 						'postcode' => 'PLZ');
 						
-$dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
-					1=> array( 'name'=>"Scharfes Rindsgulasch",'type'=>'maincourse','description'=> " auch lecker", 'price'=> 13.50),
-					2=> array( 'name'=>"Schweinsgulasch",'type'=>'maincourse','description'=> " sehr lecker", 'price'=> 12.20),
-					3=> array( 'name'=>"Wurstgulasch",'type'=>'maincourse','description'=> "wie von Mutti", 'price'=> 10.50), 
-					4=> array( 'name'=>"Lamm Pilaw",'type'=>'maincourse','description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
- 					5=> array( 'name'=>"Erädpfelgulasch",'type'=>'maincourse','description'=> "für Kartoffelliebhaber", 'price'=> 10.50),
-					6=> array( 'name'=>"Knödel",'type'=>'sidedish','description'=> "lecker", 'price'=> 2.50), 
-					7=> array( 'name'=>"Kartoffelstock",'type'=>'sidedish','description'=> " auch lecker", 'price'=> 2.20),
-					8=> array( 'name'=>"Breite Nudeln",'type'=>'sidedish','description'=> " sehr lecker", 'price'=> 2.50),
-					9=> array( 'name'=>"Spätzle",'type'=>'sidedish','description'=> "mehr schärfe", 'price'=> 1.00), 
-					10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
-					11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
-					12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
-					13=> array( 'name'=>"Störtebeker Schwarzbier",'type'=>'extras','description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
-					14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
-					15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
+// TODELETE $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
+					//1=> array( 'name'=>"Scharfes Rindsgulasch",'type'=>'maincourse','description'=> " auch lecker", 'price'=> 13.50),
+					//2=> array( 'name'=>"Schweinsgulasch",'type'=>'maincourse','description'=> " sehr lecker", 'price'=> 12.20),
+					//3=> array( 'name'=>"Wurstgulasch",'type'=>'maincourse','description'=> "wie von Mutti", 'price'=> 10.50), 
+					//4=> array( 'name'=>"Lamm Pilaw",'type'=>'maincourse','description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
+ 					//5=> array( 'name'=>"Erädpfelgulasch",'type'=>'maincourse','description'=> "für Kartoffelliebhaber", 'price'=> 10.50),
+					//6=> array( 'name'=>"Knödel",'type'=>'sidedish','description'=> "lecker", 'price'=> 2.50), 
+					//7=> array( 'name'=>"Kartoffelstock",'type'=>'sidedish','description'=> " auch lecker", 'price'=> 2.20),
+					//8=> array( 'name'=>"Breite Nudeln",'type'=>'sidedish','description'=> " sehr lecker", 'price'=> 2.50),
+					//9=> array( 'name'=>"Spätzle",'type'=>'sidedish','description'=> "mehr schärfe", 'price'=> 1.00), 
+					//10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
+					//11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
+					//12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
+					//13=> array( 'name'=>"Störtebeker Schwarzbier",'type'=>'extras','description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
+					//14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
+					//15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
 
 $options = array(
 					0=> array( 'name'=>"schärfer",'description'=> "lecker", 'price'=> 2.50), 
