@@ -337,7 +337,6 @@ class productList{
 }
 //a product
 class shop_Item{
-	private $arrayIndex;
 	public $itemkey;
 	public $name;
 	public $type;
@@ -364,9 +363,6 @@ class shop_Item{
 		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
 		echo "</form></p>";
 	}
-	function setIndex($index){
-		$arrayIndex = $index; 
-	}
 }
 
 //a shopping cart that stores all selected Items
@@ -386,16 +382,13 @@ class shoppingcart{
 		$this->resetIndices();
 		$_SESSION["cart"] = serialize($this);
 }
-	private function addItem($itemkey){
-		
-		
-	}
 	public function removeItem($index) {
 		unset($this->items[$index]);
 		$this->resetIndices();
 	}
 
 	public function displayCart($cartType){
+		$url = set_url(get_param("id", "cart"));
 		$cartID = $cartType.'shoppingcart';
 		echo "<div ID=\"$cartID\">";
 		echo "<h1>Ihr Warenkorb</h1>";
@@ -406,9 +399,12 @@ class shoppingcart{
 				$myShopDB = new ShopDB();
 				foreach ($this->items as $index=>$shopItemKey){
 					$res = $myShopDB->getProduct($shopItemKey);
-					while($item = $res->fetch_object()){
-					echo "<p>$index $item->name $item->price</p>";
-					}
+					$item = $res->fetch_object();
+					echo "<p>$index $item->name".number_format ( $item->price, 2 ) . "</p>";
+					echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
+					echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
+					echo submit_input("remove");
+					echo "</form></p>";
 				}
 				$myShopDB->close();
 			}
@@ -433,8 +429,6 @@ class shoppingcart{
 			else{
 				$this->removeItem($_POST["remove"]);
 			}
-			$quantity = $_POST["qty"];
-			$this->addItemFromMenu($itemkey, $quantity);
 		}
 	}
 	private function resetIndices(){
@@ -456,7 +450,7 @@ class shoppingcart{
 <?php
 class ShopDB extends mysqli{
 	function __construct(){
-		parent:: __construct("localhost", "root", "");
+		parent::__construct("localhost", "root", "");
 		parent::select_db("g2g");
 	}
 	
