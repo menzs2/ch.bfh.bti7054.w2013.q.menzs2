@@ -1,3 +1,43 @@
+//working functions
+
+function purchase_confirmation(){
+    var message = "Mit OK bestätigen Sie Ihre Bestellung";
+    result = window.confirm(message);
+}
+function main() {
+	window.location ="g2g.php?id=main";
+}
+function menu() {
+	window.location ="g2g.php?id=menu";
+}
+function information() {
+	window.location = "g2g.php?id=information";
+}
+function login() {
+	window.location = "g2g.php?id=login";
+}
+function cart() {
+	window.location ="g2g.php?id=cart";
+}
+function create(htmlStr) {
+    var frag = document.createDocumentFragment(),
+        temp = document.createElement('div');
+    temp.innerHTML = htmlStr;
+    while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+    }
+    return frag;
+}
+
+
+
+//functions in desing
+function toCart(){
+	var element = "checkforCart();";
+	var firstnode = document.getElementById("content").childNodes[0];
+	document.insertbefore(element,firstnode);
+
+
 function validate_customer(){
 	var name = document.getElementById("name").value;
 		if (name.length > 6 || name.length < 4) {
@@ -21,28 +61,4 @@ function show_options(){
 }
 function hidenavigation(){
 	docment.getElementByName("navigation").style.display = "none";
-}
-function addItemToCart(){
-
-	document.write("<?php> $shoppingcart->addItem($itemkey) ?>" )
-}
-
-function purchase_confirmation(){
-    var message = "Mit OK bestätigen Sie Ihre Bestellung";
-    result = window.confirm(message);
-}
-function main() {
-	window.location ="g2g.php?id=main";
-}
-function menu() {
-	window.location ="g2g.php?id=menu";
-}
-function information() {
-	window.location = "g2g.php?id=information";
-}
-function login() {
-	window.location = "g2g.php?id=login";
-}
-function cart() {
-	window.location ="g2g.php?id=cart";
 }

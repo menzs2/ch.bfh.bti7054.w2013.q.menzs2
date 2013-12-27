@@ -79,12 +79,14 @@ function main_page() {
 //the list of the menu items
 function menu_list() {
 	checkforCart();
+	$shopcart = unserialize($_SESSION["cart"]);
 	global $menu_message;
 	global $dishes;
 	$lan = $_SESSION["lan"];
 	$productlist = new productList($dishes);
 	echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
 	$productlist->displayProductList(); 
+	$shopcart->displayCart('short');
 	echo "</div>";
 }
 //information on our shop
@@ -100,7 +102,7 @@ function cart() {
 	$productlist = new productList($dishes);
 	func_div ( 'client', 'client_information' );
 	$shopcart = unserialize($_SESSION["cart"]);
-	$shopcart->displayCart();
+	$shopcart->displayCart('long');
 }
 
 
@@ -133,7 +135,14 @@ function client_information() {
 		foreach ( $customer_form as $name => $displayed_name ) {
 			echo "$displayed_name";
 			text_input ( $name, '', $size );
+			
+			}
+		echo "<select name=\"place\" size=\"1\">";
+		global $places;
+			foreach ($places as $place){
+				echo "<option value=\"$place\">$place</option>";
 		}
+		echo "</select>";
 	submit_input('purchase', "onclick=\"purchase_confirmation()\"");
 	echo "</form>";
 }
@@ -341,19 +350,12 @@ class shop_Item{
 		$this->price = $item['price'];
 	}
 	function displayShopItem(){
-		$url = set_url('cart');
+		$url = set_url('menu');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\" onsubmit=toCart() >";
 		amount_fields($this->name);
 		echo "</form></p>";
 	}
-//	function addToCart(){
-//		if (!isset ($_SESSION["cart"])){
-//			$_SESSION["cart"] = new shoppingcart();
-//		}
-//		$cart = $_SESSION["cart"];
-//		$cart->add_item($this->name, 1);
-//	}
 }
 
 //a shopping cart that stores all selected Items
@@ -370,7 +372,7 @@ class shoppingcart{
 			$this->items[] = $itemkey;
 			$_SESSION["cart"] = serialize($this);//serialize ($items);
 }
-	public function removeItem($art, $num) {
+	public function removeItem($itemkey) {
 		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
 		$this->items[$art] -= $num;
 		if ($this->items[$art] == 0) unset($this->items[$art]);
@@ -379,22 +381,22 @@ class shoppingcart{
 		else return false;
 		}
 
-	public function displayCart(){
-		echo "<div ID=\"shoppingcart\">";
+	public function displayCart($cartType){
+		$cartID = $cartType.'shoppingcart';
+		echo "<div ID=\"$cartID\">";
+		echo "<h1>Ihr Warenkorb</h1>";
 			if (count($this->items) == 0){
 				echo "Es ist noch nichts im Warenkorb";
 			}
 			else{
 				foreach ($this->items as $shopitemkey){
-					echo $shopitemkey;
+					echo "$shopitemkey </br>";
 					//$productlist->displayItem($shopitemkey);
 				}
 			}
 			echo"</div>"; ;
 	}
 	public function checkForInput(){
-			//echo $_POST["itemkey"];
-			//echo $_POST["qty"];
 		if (isset($_POST["itemkey"])){
 			$itemkey = $_POST["itemkey"];
 			$quantity = $_POST["qty"];
@@ -432,8 +434,7 @@ $customer_form = array(	'salutation' => 'Anrede',
 						'firstname' => 'Vorname',
 						'lastname' => 'Nachname',
 						'street' => 'Strasse',
-						'postcode' => 'PLZ',
-						'place' => 'Ort');
+						'postcode' => 'PLZ');
 						
 $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
 					1=> array( 'name'=>"Scharfes Rindsgulasch",'type'=>'maincourse','description'=> " auch lecker", 'price'=> 13.50),
@@ -458,8 +459,9 @@ $options = array(
 					2=> array( 'name'=>"mit Pilzen",'description'=> " sehr lecker", 'price'=> 2.50),
 					3=> array( 'name'=>"Mehr Paprika",'description'=> "mehr schärfe", 'price'=> 1.00), 
 					4=> array( 'name'=>"Mehr Zwiebeln",'description'=> "aber hallo", 'price'=> 2.80),
-					5=> array( 'name'=>"milder",'description'=> "aber hallo", 'price'=> 0.00))	;					
+					5=> array( 'name'=>"milder",'description'=> "aber hallo", 'price'=> 0.00))	;
 	
+$places = array('Bern', 'Ostermundigen', 'Köniz','Ittigen');
 
 $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
 									'fr'=>"<p>Bienvenue chéz Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>");
