@@ -32,6 +32,7 @@ function navigation_bar() {
 <?php
 //the main content chooser
 function content() {
+	//$myShopDB = new ShopDB();
 	global $content;
 	$con = $content[get_param ( "id", "main" )];
 	if (isset ( $_GET ["lan"] )){
@@ -115,8 +116,13 @@ function cart() {
 <?php
 
 function w_message() {
-	global $welcome_message;
-	simple_div ( 'welcome', $welcome_message [$_SESSION["lan"]]);
+	$myShopDB = new ShopDB();
+	$res = $myShopDB->getText('welcome');
+	echo "<div ID=\"welcome\">";
+	while($textelem = $res->fetch_object()){
+		echo "<p>$textelem->textelement</p>";
+	}
+	echo "</div>";
 }
 
 function main_page_content() {
@@ -201,11 +207,7 @@ function set_url($page){
 	$url = add_param ( $url, "id", "$page", "?" );
 	return $url;
 }
-//set the language
-function setlanguage($language){
-	$_SESSION["lan"] = $language;
-	javascript:main();
-}
+
 //Links for the pages
 function pages() {
 	global $navigation;
@@ -213,6 +215,11 @@ function pages() {
 		$url = set_url($id);
 		referencing ( $url, $name, "class=\"reference\"" );
 	}
+}
+//set the language
+function setlanguage($language){
+	$_SESSION["lan"] = $language;
+	javascript:main();
 }
 //change the language
 function languages($lenght='') {
@@ -425,7 +432,7 @@ class shoppingcart{
 		}
 	}
 	function resetCart(){
-		foreach ($items as $key=>$item{
+		foreach ($items as $key=>$item){
 			unset($items[$key]);
 			}
 		
@@ -436,21 +443,26 @@ class shoppingcart{
 <!-- SQL -->
 
 <?php
-class ShopDB extends msqli{
-	__construct(){
-	parent:: __construct("localhost", "root", "");
-	parent::select_db("g2g");
+class ShopDB extends mysqli{
+	function __construct(){
+		parent:: __construct("localhost", "root", "");
+		parent::select_db("g2g");
 	}
 	
 	function getAllProducts(){
 		$lan = $_SESSION['lan'];
-		$dishes = $this->query(
-		return $dishes
+		$dishes = $this->query();
+		return $dishes;
 	}
 	function getProduct($code){
 		
 	}
-	function insertOrder{
+	function insertOrder(){
+		
+	}
+	public function getText($code){
+		$lan= $_SESSION['lan'];
+		return  $this->query("SELECT TXT_de as textelement FROM Texts where TXT_code like \"$code%\"");
 		
 	}
 }
@@ -504,8 +516,8 @@ $options = array(
 	
 $places = array('Bern', 'Ostermundigen', 'Köniz','Ittigen');
 
-$welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
-									'fr'=>"<p>Bienvenue chéz Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>");
+//TODELETE $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
+									//'fr'=>"<p>Bienvenue chéz Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>");
 	
 $menu_message = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
 	
