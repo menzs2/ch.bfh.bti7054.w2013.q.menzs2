@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 01. Dez 2013 um 20:52
+-- Erstellungszeit: 27. Dez 2013 um 19:33
 -- Server Version: 5.6.12
 -- PHP-Version: 5.5.3
 
@@ -206,8 +206,8 @@ CREATE TABLE IF NOT EXISTS `OrderOptions` (
 CREATE TABLE IF NOT EXISTS `Texts` (
   `TXT_PK` int(5) NOT NULL AUTO_INCREMENT,
   `TXT_Code` varchar(20) COLLATE latin1_bin NOT NULL,
-  `TXT_DE` varchar(256) COLLATE latin1_bin NOT NULL,
-  `TXT_FR` varchar(256) COLLATE latin1_bin NOT NULL,
+  `TXT_de` varchar(256) COLLATE latin1_bin NOT NULL,
+  `TXT_fr` varchar(256) COLLATE latin1_bin NOT NULL,
   PRIMARY KEY (`TXT_PK`),
   UNIQUE KEY `TXT_Code` (`TXT_Code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=26 ;
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `Texts` (
 -- Daten für Tabelle `Texts`
 --
 
-INSERT INTO `Texts` (`TXT_PK`, `TXT_Code`, `TXT_DE`, `TXT_FR`) VALUES
+INSERT INTO `Texts` (`TXT_PK`, `TXT_Code`, `TXT_de`, `TXT_fr`) VALUES
 (1, 'TextTODO', 'Text not yet in DB', 'Text not yet in DB'),
 (2, 'no text', '', ''),
 (3, 'welcome1', 'Willkommen bei Gulasch-2-Go', 'Bienvenue chez Gulsch-2-go'),

@@ -76,22 +76,19 @@ function main_page() {
 function menu_list() {
 	checkforCart();
 	$shopcart = unserialize($_SESSION["cart"]);
-	global $menu_message;
-	$lan = $_SESSION["lan"];
+	$menu_message = getTextelement("choose");
 	$productlist = new productList();
-	echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[$lan]</p>";
+	echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[0]</p>";
 	$productlist->displayProductList(); 
 	$shopcart->displayCart('short');
 	echo "</div>";
 }
 //information on our shop
 function information() {
-	$myShopDB = new ShopDB();
-	$res= $myShopDB->getText();
+	$inf = getTextelement('inforamtion');
 	global $information_message;
 	$lan = get_param ( "lan", "de" );
 	simple_div ( 'information', $information_message [$lan] );
-	$myShopDB->close();
 }
 //the shoppingcart and the clientInformation
 function cart() {
@@ -106,14 +103,12 @@ function cart() {
 <?php
 
 function w_message() {
-	$myShopDB = new ShopDB();
-	$res = $myShopDB->getText('welcome');
+	$texts = getTextelement('welcome');
 	echo "<div ID=\"welcome\">";
-	while($textelem = $res->fetch_object()){
-		echo "<p>$textelem->textelement</p>";
+	foreach($texts as $element){
+		echo "<p>$element</p>";
 	}
 	echo "</div>";
-	$myShopDB->close();
 }
 
 function main_page_content() {
@@ -178,6 +173,16 @@ function item_option($item) {
 <!-- general logic-->
 
 <?php
+function getTextelement($code){
+	$elements= array();
+	$myShopDB = new ShopDB();
+	$res = $myShopDB->getText('welcome');
+	while($textelem = $res->fetch_object()){
+		$elements[] = $textelem->textelement;
+	}
+		$myShopDB->close();
+		return $elements;
+	}
 
 function get_param($name, $default) {
 	if (isset ( $_GET [$name] )){
@@ -270,29 +275,32 @@ function submit_input($value, $eventhandler='', $displayed_name = '') {
 <!--Classes-->
 
 <?php
-//HTML Form as a class
-class aform{
+//HTML Form as a class ->not usabele yet
+class Form{
 	private $action;
 	private $method;
 	private $formname;
 	private $formcontent= array();
 	
 	function __construct($action, $name, $method='get'){
-		$this->action = set_url($page);
+		$this->action = $action;
 		$this->formname = $name;
 		$this->method = $method;
 		}
 		
-	function add_input($type, $value, $eventhandler='', $displayed_name = ''){
-	$formcontent[] = "<input  type=\"$type\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
+	public function addInput($type, $name, $value,  $eventhandler='', $displayed_name = ''){
+		$formcontent[] = "<input  type=\"$type\" name=\"$name\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
+	}
+	public function addString($str){
+		$formcontent[] = $str;
 	}
 	
-	function displayForm(){
-		echo "<form action=\"$action\" method=\"$method\" name=\"$name\">";
-		foreach ($formcontent as $content){
+	public function displayForm(){
+		echo "<form action=\"$this->action\" method=\"$this->method\" name=\"$this->formname\">";
+		foreach ($this->formcontent as $content){
 			echo $content;
-		echo "</form>";
 		}
+		echo "</form>";
 	}
 }
 //The productlist 
@@ -357,12 +365,6 @@ class shop_Item{
 		amount_fields($this->itemkey);
 		echo "</form></p>";
 	}
-	function displayCartItem(){
-		$url = set_url('menu');
-		echo "<p>$this->name CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
-		echo "</form></p>";
-	}
 }
 
 //a shopping cart that stores all selected Items
@@ -385,6 +387,7 @@ class shoppingcart{
 	public function removeItem($index) {
 		unset($this->items[$index]);
 		$this->resetIndices();
+		$_SESSION["cart"] = serialize($this);
 	}
 
 	public function displayCart($cartType){
@@ -397,15 +400,19 @@ class shoppingcart{
 			}
 			else{
 				$myShopDB = new ShopDB();
+				echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
 				foreach ($this->items as $index=>$shopItemKey){
 					$res = $myShopDB->getProduct($shopItemKey);
 					$item = $res->fetch_object();
 					echo "<p>$index $item->name".number_format ( $item->price, 2 ) . "</p>";
-					echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
 					echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
 					echo submit_input("remove");
-					echo "</form></p>";
 				}
+				echo "</form></p>";
+				echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
+				echo "<input  type=\"hidden\"  name=\"remove\" value=\"all\">";
+				echo submit_input("remove all");
+				echo "</form></p>";
 				$myShopDB->close();
 			}
 			echo"</div>"; ;
@@ -441,6 +448,7 @@ class shoppingcart{
 			unset($this->items[$key]);
 			}
 		$this->items = array();
+		$_SESSION["cart"] = serialize($this);
 	}
 }
 ?>
@@ -448,6 +456,7 @@ class shoppingcart{
 <!-- SQL -->
 
 <?php
+//SQL functions
 class ShopDB extends mysqli{
 	function __construct(){
 		parent::__construct("localhost", "root", "");
@@ -524,9 +533,6 @@ $options = array(
 	
 $places = array('Bern', 'Ostermundigen', 'Köniz','Ittigen');
 
-//TODELETE $welcome_message = array(	'de'=> "<p>Willkommen bei Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>",
-									//'fr'=>"<p>Bienvenue chéz Gulasch-2-Go </p><p>Wir liefern die besten und herzhaftesten Gulasche und Eintöpe direkt zu Ihnen </br>nach Hause.</p>");
-	
 $menu_message = array ('de' => "Stellen Sie sich ein Menu zusammen" , 'fr' =>"Choissisez votre menue");
 	
 	
