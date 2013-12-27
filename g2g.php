@@ -10,7 +10,6 @@
 <title><?php title();?></title>
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 <script type="text/javascript" src="file.js"></script>
-
 </head>
 
 

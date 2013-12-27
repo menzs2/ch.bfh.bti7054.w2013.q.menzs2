@@ -1,4 +1,3 @@
-//working functions
 
 function purchase_confirmation(){
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
@@ -10,33 +9,35 @@ function main() {
 function menu() {
 	window.location ="g2g.php?id=menu";
 }
+
 function information() {
 	window.location = "g2g.php?id=information";
 }
+
 function login() {
 	window.location = "g2g.php?id=login";
 }
+
 function cart() {
 	window.location ="g2g.php?id=cart";
 }
-function create(htmlStr) {
-    var frag = document.createDocumentFragment(),
-        temp = document.createElement('div');
-    temp.innerHTML = htmlStr;
-    while (temp.firstChild) {
-        frag.appendChild(temp.firstChild);
-    }
-    return frag;
-}
+
+//function create(htmlStr) {
+    //var frag = document.createDocumentFragment(),
+        //temp = document.createElement('div');
+    //temp.innerHTML = htmlStr;
+    //while (temp.firstChild) {
+        //frag.appendChild(temp.firstChild);
+    //}
+    //return frag;
+//}
 
 
-
-//functions in desing
 function toCart(){
 	var element = "checkforCart();";
 	var firstnode = document.getElementById("content").childNodes[0];
 	document.insertbefore(element,firstnode);
-
+}
 
 function validate_customer(){
 	var name = document.getElementById("name").value;

@@ -1,11 +1,11 @@
 <!--
 php code for Gulasch-2-Go 
-Author: Stephan Menzi menzs2
+Author: Stephan Menzi menzs2<script type="text/javascript" src="file.js"></script>
 -->
 
 
 
-<script type="text/javascript" src="file.js"></script>
+
 
 <!--Title-->
 <?php
@@ -38,7 +38,7 @@ function content() {
 			$_SESSION["lan"] = urldecode ( $_GET ["lan"] );
 			}
 	if (!isset($_SESSION["lan"])){
-			echo "<div ID=\"content\" onload = \"hidenavigation()\">";
+			echo "<div ID=\"content\"\">";
 				call_user_func('chooselanguage');
 			echo	"</div>";
 			}
@@ -122,9 +122,9 @@ function w_message() {
 function main_page_content() {
 	global $information_message;
 	$page = 'menu';
-	simple_div('withlogin', "Bestellen mit Login", "onclick=\"$page()\"");
+	simple_div('withlogin', "Bestellen mit Login", "onclick=\"menu()\"");
 	simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
-	simple_div('nologin',"Bestellen ohne login","onclick=\"$page()\"");
+	simple_div('nologin',"Bestellen ohne login","onclick=\"menu()\"");
 	}
 
 function client_information() {
@@ -337,6 +337,7 @@ class productList{
 }
 //a product
 class shop_Item{
+	private $arrayIndex
 	public $code;
 	public $name;
 	public $type;
@@ -352,10 +353,18 @@ class shop_Item{
 	function displayShopItem(){
 		$url = set_url('menu');
 		echo "<p>$this->name</br>$this->description</br>CHF " . number_format ( $this->price, 2 ) . "</br>";
-		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\" onsubmit=toCart() >";
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
 		amount_fields($this->name);
 		echo "</form></p>";
 	}
+	function displayCartItem(){
+		$url = set_url('menu');
+		echo "<p>$this->name CHF " . number_format ( $this->price, 2 ) . "</br>";
+		echo "<form action=\"$url\" method=\"post\" name=\"$this->name\">";
+		echo "</form></p>";
+	}
+	function setIndex($index){
+		$arrayIndex = $index; 
 }
 
 //a shopping cart that stores all selected Items
@@ -367,11 +376,14 @@ class shoppingcart{
 		}
 	}
 	
-	public function add_item($itemkey, $qty){
+	public function addItemFromMenu($itemkey, $qty){
 		for ($i = 0; $i < $qty; $i++)
 			$this->items[] = $itemkey;
-			$_SESSION["cart"] = serialize($this);//serialize ($items);
+			$_SESSION["cart"] = serialize($this);
 }
+	private function addItem(){
+		
+	}
 	public function removeItem($itemkey) {
 		if (isset($this->items[$art]) && $this->items[$art] >= $num) {
 		$this->items[$art] -= $num;
@@ -391,7 +403,6 @@ class shoppingcart{
 			else{
 				foreach ($this->items as $shopitemkey){
 					echo "$shopitemkey </br>";
-					//$productlist->displayItem($shopitemkey);
 				}
 			}
 			echo"</div>"; ;
@@ -400,9 +411,13 @@ class shoppingcart{
 		if (isset($_POST["itemkey"])){
 			$itemkey = $_POST["itemkey"];
 			$quantity = $_POST["qty"];
-			echo $itemkey;
-			echo $quantity;
-			$this->add_item($itemkey, $quantity);
+			$this->addItemFromMenu($itemkey, $quantity);
+		}
+	}
+	private function resetIndices(){
+		$items = array_values($items);
+		foreach( $items as $key=>$cartItem){
+			$cartItem->setIndex($key);
 		}
 	}
 }
