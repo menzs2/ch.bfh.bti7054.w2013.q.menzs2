@@ -13,7 +13,7 @@
 </head>
 
 
-<body background="kesselgulasch_2.jpg" >
+<body >
 
 	<!-- The Navigation Bar -->
 

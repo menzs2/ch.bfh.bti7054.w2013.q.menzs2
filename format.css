@@ -1,8 +1,10 @@
 /*Style for all pages*/
 body {
 	font-family: Helvetica;
-	background-color: RGB(250,255,200);
-}
+        background-image:url(kesselgulasch_2.jpg);
+        
+       
+	}
 
 .footer {
 	clear: both;
@@ -32,7 +34,7 @@ body {
 .reference:visited { color:#717171; background-color:transparent; }
 /*main page*/
 #chooselan{
-	font-size: 36pt;
+        font-size: 36pt;
 	text-align:center;
 }
 #welcome {
@@ -42,6 +44,8 @@ body {
 }
 
 #withlogin{
+background-image:url(colorandline.jpg);
+background-size:100%, 100%;
 float:left;
 position: relative; left:50px;
 width: 250px;
@@ -74,6 +78,7 @@ border: 5px ridge silver;
 }
 
 #maindish {
+        background-image:url(color.jpg);
 	width: 400px;
 	float: left;
 	border: 5px ridge silver;
@@ -81,6 +86,7 @@ border: 5px ridge silver;
 }
 
 #sidedish {
+        background-image:url(color.jpg);
 	width: 400px;
 	border: 5px ridge silver;
 	float: left;
@@ -88,6 +94,7 @@ border: 5px ridge silver;
 }
 
 #extras {
+        background-image:url(color.jpg);
 	width: 400px;
 	float: left;
 	border: 5px ridge silver;
@@ -96,7 +103,7 @@ border: 5px ridge silver;
 /*Information Page*/
 
 #shortshoppingcart{
-	
+	background-image:url(color.jpg);
 	width: 400px;
 	border: 5px ridge silver;
 	float: left;
@@ -105,6 +112,7 @@ border: 5px ridge silver;
 }
 
 #longshoppingcart{
+        background-image:url(color.jpg);
 	float:left;
 	border-left: 5px solid silver;
 	width: 1200px;
