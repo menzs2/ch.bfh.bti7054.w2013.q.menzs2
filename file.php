@@ -93,6 +93,7 @@ function information() {
     global $information_message;
     $lan = get_param("lan", "de");
     simple_div('information', $information_message [$lan]);
+    integrateGooglemap();
 }
 
 //the shoppingcart and the clientInformation
@@ -272,9 +273,12 @@ function text_input($name, $content, $size = 20) {
 function submit_input($value, $eventhandler = '', $displayed_name = '') {
     echo "<input  type=\"submit\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
 }
+
+
+function integrateGooglemap(){
+echo "<iframe width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A&amp;output=embed\"></iframe><br /><small><a href=\"https://maps.google.ch/maps?f=q&amp;source=embed&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A\" style=\"color:#0000FF;text-align:left\">Größere Kartenansicht</a></small>";
+}
 ?>
-
-
 <!--Classes-->
 
 <?php
