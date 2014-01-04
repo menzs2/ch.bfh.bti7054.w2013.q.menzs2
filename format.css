@@ -44,7 +44,7 @@ body {
 }
 
 #withlogin{
-background-image:url(colorandline.jpg);
+background-image:url(color.png);
 background-size:100%, 100%;
 float:left;
 position: relative; left:50px;
@@ -55,6 +55,7 @@ border: 5px ridge silver;
 }
 
 #justinfo{
+background-image:url(color.png);
 float:left;
 position: relative; left:150px;
 width: 250px;
@@ -63,6 +64,7 @@ border: 5px ridge silver;
 
 }
 #nologin{
+background-image:url(color.png);
 float:left;
 position: relative; left:250px;
 width: 250px;
@@ -78,43 +80,45 @@ border: 5px ridge silver;
 }
 
 #maindish {
-        background-image:url(color.jpg);
+        background-image:url(color.png);
 	width: 400px;
 	float: left;
-	border: 5px ridge silver;
+	border: 2px solid black;
 	border-radius: 10px;
 }
 
 #sidedish {
-        background-image:url(color.jpg);
+        background-image:url(color.png);
 	width: 400px;
-	border: 5px ridge silver;
-	float: left;
+	border: 2px solid black;
 	border-radius: 10px;
+        float: left;
+	
 }
 
 #extras {
-        background-image:url(color.jpg);
+        background-image:url(color.png);
 	width: 400px;
 	float: left;
-	border: 5px ridge silver;
+	border: 2px solid black;
 	border-radius: 10px;
 }
 /*Information Page*/
 
 #shortshoppingcart{
-	background-image:url(color.jpg);
+	background-image:url(color.png);
 	width: 400px;
-	border: 5px ridge silver;
-	float: left;
+	border: 2px solid black;
 	border-radius: 10px;
+        float: left;	
 	font-size: 12pt;
 }
 
 #longshoppingcart{
         background-image:url(color.png);
 	float:left;
-	border-left: 5px solid silver;
+	border: 2px solid black;
+        border-radius: 2px;
 	width: 1200px;
 	font-size: 24pt;
         
