@@ -104,7 +104,11 @@ border: 5px ridge silver;
 	border-radius: 10px;
 }
 /*Information Page*/
-
+#client{
+    width: 300px;
+    font-size: 20pt;
+    }
+      
 #shortshoppingcart{
 	background-image:url(color.png);
 	width: 300px;

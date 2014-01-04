@@ -4,7 +4,7 @@
 <?php session_start();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php require("file.php")
+<?php require("file.php");
 ?> 
 <head>
 <title><?php title();?></title>
