@@ -105,9 +105,15 @@ border: 5px ridge silver;
 }
 /*Information Page*/
 #client{
-    width: 300px;
+    width: 500px;
+    height:250px;
     font-size: 20pt;
     }
+    
+.clientinput{
+        font-size: 20pt;
+        position: absolute; left:200px;
+    }    
       
 #shortshoppingcart{
 	background-image:url(color.png);
@@ -120,7 +126,7 @@ border: 5px ridge silver;
 
 #longshoppingcart{
         background-image:url(color2.png);
-	float:bottom;
+	float:left;
 	border: 2px solid black;
         border-radius: 2px;
 	width: 1200px;

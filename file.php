@@ -15,7 +15,6 @@ function title() {
 <!-- Start Navigation -->
 <?php
 function navigation(){
-    
     func_div("navigation", 'navigationBar');
 }
 
@@ -74,7 +73,7 @@ function footer() {
 
 //Choose the language if it is no already set
 function chooselanguage() {
-        func_div('chooselan', 'languages', array('long'), "onmouseover=\"hideNavigation()\"");
+        func_div('chooselan', 'languages', array('long'));
         
 }
 
@@ -118,6 +117,7 @@ function userlogin(){
     echo implode(getTextelement("uname"));
     text_input('username', '');
     echo "<input  type=\"password\"  name=\"pwd\"></input> </br>";
+    submit_input('login');
     echo "</form>";
 }
 ?>
@@ -141,14 +141,16 @@ function main_page_content() {
 
 function client_information() {
     global $customer_form;
+    $class = "class=\"clientinput\"";
     $action = set_url('cart');
     $size = "size=\"20\"";
     echo "<form ID=\"customerform\"action=\"$action\" method=\"post\">";
     foreach ($customer_form as $name => $displayed_name) {
-        echo "$displayed_name";
-        text_input($name, '', $size);
+        echo "$displayed_name:";
+        text_input($name, '',$class, $size);
     }
-    echo "<select name=\"place\" size=\"1\">";
+    echo "Ort:";
+    echo "<select $class name=\"place\" size=\"1\">";
     global $places;
     foreach ($places as $place) {
         echo "<option value=\"$place\">$place</option>";
@@ -292,8 +294,8 @@ function form($action, $method, $name, $content) {
 }
 
 // create an text input field
-function text_input($name, $content, $size = 20) {
-    echo "<input  type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
+function text_input($name, $content, $class='',$size = 20) {
+    echo "<input  $class type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
 }
 
 // create an text input field
@@ -563,15 +565,6 @@ $customer_form = array('salutation' => 'Anrede',
     'postcode' => 'PLZ');
 
 // TODELETE $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
-//1=> array( 'name'=>"Scharfes Rindsgulasch",'type'=>'maincourse','description'=> " auch lecker", 'price'=> 13.50),
-//2=> array( 'name'=>"Schweinsgulasch",'type'=>'maincourse','description'=> " sehr lecker", 'price'=> 12.20),
-//3=> array( 'name'=>"Wurstgulasch",'type'=>'maincourse','description'=> "wie von Mutti", 'price'=> 10.50), 
-//4=> array( 'name'=>"Lamm Pilaw",'type'=>'maincourse','description'=> "eigentlich kein Gulasch, trotzdem lecker", 'price'=> 12.80),
-//5=> array( 'name'=>"Erädpfelgulasch",'type'=>'maincourse','description'=> "für Kartoffelliebhaber", 'price'=> 10.50),
-//6=> array( 'name'=>"Knödel",'type'=>'sidedish','description'=> "lecker", 'price'=> 2.50), 
-//7=> array( 'name'=>"Kartoffelstock",'type'=>'sidedish','description'=> " auch lecker", 'price'=> 2.20),
-//8=> array( 'name'=>"Breite Nudeln",'type'=>'sidedish','description'=> " sehr lecker", 'price'=> 2.50),
-//9=> array( 'name'=>"Spätzle",'type'=>'sidedish','description'=> "mehr schärfe", 'price'=> 1.00), 
 //10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
 //11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
 //12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
