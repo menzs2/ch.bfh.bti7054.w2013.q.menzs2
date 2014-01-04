@@ -117,4 +117,5 @@ border: 5px ridge silver;
 	border-left: 5px solid silver;
 	width: 1200px;
 	font-size: 24pt;
+        background-image:(opacity:0.5);
 }

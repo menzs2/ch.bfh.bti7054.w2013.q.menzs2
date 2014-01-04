@@ -16,13 +16,9 @@
 <body >
 
 	<!-- The Navigation Bar -->
-
-	<div id="navigation">
-		<p> 
-			<?php navigation_bar();?>
-		</p>
-	</div>
-
+	
+	<?php navigation();?>
+	
 	<!-- content -->
 
 	<?php 

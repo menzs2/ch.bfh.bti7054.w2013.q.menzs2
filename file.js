@@ -60,17 +60,14 @@ function show_options() {
     var options = getElementByID()
 
 }
+
 function hideNavigation() {
-    var element = docment.getElementByID("navigation");
-    element.style.visibility = "hidden";
-    if (element.addEventhandler) {
-        element.addEventhandler();
-    }
-    else if (element.attachEvent) {
-        element.attachEvent();
-    }
+    document.getElementById("navigation").style.visibility = "hidden";
+    
+    
 }
 function showNavigation() {
     var element = docment.getElementByID("navigation");
-    element.style.visibility = "hidden";
+    element.style.visibility = "visible";
+    element.removeEventListener("onload", hideNavigation, false);
 }

@@ -14,8 +14,13 @@ function title() {
 ?>
 <!-- Start Navigation -->
 <?php
+function navigation(){
+    
+    func_div("navigation", 'navigationBar');
+}
 
-function navigation_bar() {
+
+function navigationBar() {
     $page = get_param("id", 0);
     pages();
     if ($page != 'main') {
@@ -68,7 +73,7 @@ function footer() {
 
 //Choose the language if it is no already set
 function chooselanguage() {
-        func_div('chooselan', 'languages', array('long'), "onload=\"hideNavigation()\"");
+        func_div('chooselan', 'languages', array('long'), "onmouseover=\"hideNavigation()\"");
         
 }
 
@@ -261,7 +266,7 @@ function simple_div($div_id, $div_content, $eventhandler = '') {
 }
 
 //a HTML DIV that has a funtion as the content
-function func_div($div_id, $func, $params = false,$eventhandler = '') {
+function func_div($div_id, $func, $params = false, $eventhandler = '') {
     echo "<div ID=\"$div_id\" $eventhandler>";
     if ($params != false) {
         call_user_func_array($func, $params);
