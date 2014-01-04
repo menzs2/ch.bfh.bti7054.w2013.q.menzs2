@@ -62,7 +62,7 @@ function footer() {
     if (get_param("id", 0) == 'main') {
         languages();
     } else {
-        $g2gadress = 'Gulasch-To-Go, Zähringerstrasse 34, 3012 Bern';
+        $g2gadress = 'Gulasch-To-Go, Z&auml;hringerstrasse 34, 3012 Bern';
         echo "$g2gadress";
     }
 }
@@ -115,6 +115,7 @@ function cart() {
 function userlogin(){
     $action = set_url(get_param("id", "main"));
     echo "<form ID=\"loginform\"$action=\"\" method=\"post\">";
+    echo implode(getTextelement("uname"));
     text_input('username', '');
     echo "<input  type=\"password\"  name=\"pwd\"></input> </br>";
     echo "</form>";
@@ -196,7 +197,7 @@ function checkforCart() {
 function getTextelement($code) {
     $elements = array();
     $myShopDB = new ShopDB();
-    $res = $myShopDB->getText('welcome');
+    $res = $myShopDB->getText($code);
     while ($textelem = $res->fetch_object()) {
         $elements[] = $textelem->textelement;
     }
@@ -553,7 +554,7 @@ $content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 
 
 $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Information", 'cart' => 'Cart');
 
-$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'extras' => 'Getränke');
+$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getränke');
 
 $customer_form = array('salutation' => 'Anrede',
     'firstname' => 'Vorname',

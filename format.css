@@ -81,7 +81,7 @@ border: 5px ridge silver;
 
 #maindish {
         background-image:url(color.png);
-	width: 400px;
+	width: 300px;
 	float: left;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -89,16 +89,16 @@ border: 5px ridge silver;
 
 #sidedish {
         background-image:url(color.png);
-	width: 400px;
+	width: 300px;
 	border: 2px solid black;
 	border-radius: 10px;
         float: left;
 	
 }
 
-#extras {
+#beverages {
         background-image:url(color.png);
-	width: 400px;
+	width: 300px;
 	float: left;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -107,7 +107,7 @@ border: 5px ridge silver;
 
 #shortshoppingcart{
 	background-image:url(color.png);
-	width: 400px;
+	width: 300px;
 	border: 2px solid black;
 	border-radius: 10px;
         float: left;	
@@ -115,8 +115,8 @@ border: 5px ridge silver;
 }
 
 #longshoppingcart{
-        background-image:url(color.png);
-	float:left;
+        background-image:url(color2.png);
+	float:bottom;
 	border: 2px solid black;
         border-radius: 2px;
 	width: 1200px;
