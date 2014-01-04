@@ -47,7 +47,8 @@ function content() {
         echo "<div ID=\"content\"\">";
         call_user_func('chooselanguage');
         echo "</div>";
-    } else {
+    } 
+    else {
         func_div('content', $con);
     }
 }
@@ -111,6 +112,13 @@ function cart() {
     $shopcart = unserialize($_SESSION["cart"]);
     $shopcart->displayCart('long');
 }
+function userlogin(){
+    $action = set_url(get_param("id", "main"));
+    echo "<form ID=\"loginform\"$action=\"\" method=\"post\">";
+    text_input('username', '');
+    echo "<input  type=\"password\"  name=\"pwd\"></input> </br>";
+    echo "</form>";
+}
 ?>
 <!-- specific functions for pages-->
 <?php
@@ -125,7 +133,7 @@ function w_message() {
 }
 
 function main_page_content() {
-    simple_div('withlogin', "Bestellen mit Login", "onclick=\"menu()\"");
+    simple_div('withlogin', "Bestellen mit Login", "onclick=\"login()\"");
     simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
     simple_div('nologin', "Bestellen ohne login", "onclick=\"menu()\"");
 }
@@ -541,7 +549,7 @@ class ShopDB extends mysqli {
 
 
 <?php
-$content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 'information', 'cart' => 'cart');
+$content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 'information', 'cart' => 'cart', 'login'=>'userlogin');
 
 $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Information", 'cart' => 'Cart');
 

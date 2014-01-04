@@ -112,10 +112,10 @@ border: 5px ridge silver;
 }
 
 #longshoppingcart{
-        background-image:url(color.jpg);
+        background-image:url(color.png);
 	float:left;
 	border-left: 5px solid silver;
 	width: 1200px;
 	font-size: 24pt;
-        background-image:(opacity:0.5);
+        
 }

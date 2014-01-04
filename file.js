@@ -40,7 +40,7 @@ function toCart() {
 }
 
 function validate_customer() {
-    var name = document.getElementById("customerform").value;
+    var customerform = document.getElementById("customerform");
     if (name.length > 6 || name.length < 4) {
         alert("The user name must be 4-6 characters");
         document.getElementById("name").select();
@@ -69,5 +69,5 @@ function hideNavigation() {
 function showNavigation() {
     var element = docment.getElementByID("navigation");
     element.style.visibility = "visible";
-    element.removeEventListener("onload", hideNavigation, false);
+    document.getElemtByTag("body").removeEventListener("onload", hideNavigation, false);
 }
