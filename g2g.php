@@ -17,7 +17,7 @@
 
 	<!-- The Navigation Bar -->
 
-	<div class="navigation">
+	<div id="navigation">
 		<p> 
 			<?php navigation_bar();?>
 		</p>

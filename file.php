@@ -20,7 +20,9 @@ function navigation_bar() {
     pages();
     if ($page != 'main') {
         languages();
+        
     }
+    login();
 }
 ?>
 <!-- End Navigation -->
@@ -66,7 +68,8 @@ function footer() {
 
 //Choose the language if it is no already set
 function chooselanguage() {
-    func_div('chooselan', 'languages', array('long'));
+        func_div('chooselan', 'languages', array('long'), "onload=\"hideNavigation()\"");
+        
 }
 
 //The main/welcome page
@@ -92,7 +95,7 @@ function information() {
     $inf = getTextelement('inforamtion');
     global $information_message;
     $lan = get_param("lan", "de");
-    simple_div('information', $information_message [$lan]);
+    simple_div('information', $information_message [$lan],"onclick=\"hideNavigation()\"");
     integrateGooglemap();
 }
 
@@ -227,7 +230,7 @@ function setlanguage($language) {
 function languages($lenght = '') {
     global $language;
     $class = "class=\"reference\"";
-    $url = set_url(get_param("id", 0));
+    $url = set_url(get_param("id", "main"));
     if ($lenght == 'long') {
         referencing(add_param($url, "lan", "de"), 'Deutsch', $class);
         referencing(add_param($url, "lan", "fr"), 'Fran&ccedil;ais', $class);
@@ -236,7 +239,17 @@ function languages($lenght = '') {
         referencing(add_param($url, "lan", "fr"), 'FR', $class);
     }
 }
-
+function login(){
+    $url = set_url("login");
+    $class = "class=\"reference\"";
+    if((!isset($_SESSION['logged']) || $_SESSION['logged']!= true)){
+        referencing($url, 'login', $class);
+    }
+    else {
+        referencing($url, 'logout', $class);
+    }
+    
+}
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
     echo "<a $class href=\"$url\">$text</a> ";
@@ -248,8 +261,8 @@ function simple_div($div_id, $div_content, $eventhandler = '') {
 }
 
 //a HTML DIV that has a funtion as the content
-function func_div($div_id, $func, $params = false) {
-    echo "<div ID=\"$div_id\">";
+function func_div($div_id, $func, $params = false,$eventhandler = '') {
+    echo "<div ID=\"$div_id\" $eventhandler>";
     if ($params != false) {
         call_user_func_array($func, $params);
     } else {

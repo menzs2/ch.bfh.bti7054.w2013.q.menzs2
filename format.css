@@ -16,7 +16,7 @@ body {
 	border-radius: 25px;
 }
 
-.navigation {
+#navigation {
 	background-color: RGB(80,2,27);
 	font-size: 32pt;
 	text-align: center;
