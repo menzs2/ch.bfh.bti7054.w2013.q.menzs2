@@ -15,8 +15,16 @@ body {
 	text-align: center;
 	border-radius: 25px;
 }
-
+#logform{
+        font-size:20px;
+        visibility: hidden;
+        display:inline;
+	text-decoration:none;
+	background-color: RGB(80,2,27);
+        border-radius: 5px;
+}
 #navigation {
+        color:#717171;
 	background-color: RGB(80,2,27);
 	font-size: 32pt;
 	text-align: center;

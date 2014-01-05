@@ -17,7 +17,9 @@
 
 	<!-- The Navigation Bar -->
 	
-	<?php navigation();?>
+	<?php 
+        loginform();
+        navigation();?>
 	
 	<!-- content -->
 

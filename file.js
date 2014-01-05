@@ -3,22 +3,28 @@ function purchase_confirmation() {
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);
 }
-function main() {
+function tomain() {
     window.location = "g2g.php?id=main";
 }
-function menu() {
+function tomenu() {
     window.location = "g2g.php?id=menu";
 }
 
-function information() {
+function toinformation() {
     window.location = "g2g.php?id=information";
 }
 
 function login() {
-    window.location = "g2g.php?id=login";
+    var logform = document.getElementById("logform");
+        if (logform.style.visibility !== "hidden"){
+            logform.style.visibility = "hidden";
+        }
+        else {
+            logform.style.visibility = "visible";
+        }
 }
 
-function cart() {
+function tocart() {
     window.location = "g2g.php?id=cart";
 }
 
@@ -62,12 +68,17 @@ function show_options() {
 }
 
 function hideNavigation() {
-    document.getElementById("navigation").style.visibility = "hidden";
-    
+    var navigation =  document.getElementById("navigation");
+        if (navigation.style.visibility !== "hidden"){
+            navigation.style.visibility = "hidden";
+        }
+        else {
+            navigation.style.visibility = "visible";
+        }
     
 }
 function showNavigation() {
     var element = docment.getElementByID("navigation");
     element.style.visibility = "visible";
-    document.getElemtByTag("body").removeEventListener("onload", hideNavigation, false);
+    document.getElementByTagName("body").removeEventListener("onload", hideNavigation, false);
 }

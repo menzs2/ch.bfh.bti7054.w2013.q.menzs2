@@ -24,9 +24,9 @@ function navigationBar() {
     pages();
     if ($page != 'main') {
         languages();
-        
     }
     login();
+    
 }
 ?>
 <!-- End Navigation -->
@@ -37,11 +37,9 @@ function navigationBar() {
 
 //the main content chooser
 function content() {
+    checkForInput();
     global $content;
     $con = $content[get_param("id", "main")];
-    if (isset($_GET ["lan"])) {
-        $_SESSION["lan"] = urldecode($_GET ["lan"]);
-    }
     if (!isset($_SESSION["lan"])) {
         echo "<div ID=\"content\"\">";
         call_user_func('chooselanguage');
@@ -85,7 +83,7 @@ function main_page() {
 
 //the list of the menu items
 function menu_list() {
-    checkforCart();
+    //checkforCart();
     $shopcart = unserialize($_SESSION["cart"]);
     $menu_message = getTextelement("choose");
     $productlist = new productList();
@@ -97,6 +95,9 @@ function menu_list() {
 
 //information on our shop
 function information() {
+    if (isset($_SESSION["logedin"])){
+        echo $_SESSION["logedin"];
+    }
     $inf = getTextelement('inforamtion');
     global $information_message;
     $lan = get_param("lan", "de");
@@ -106,7 +107,7 @@ function information() {
 
 //the shoppingcart and the clientInformation
 function cart() {
-    checkforCart();
+    //checkforCart();
     func_div('client', 'client_information');
     $shopcart = unserialize($_SESSION["cart"]);
     $shopcart->displayCart('long');
@@ -134,9 +135,9 @@ function w_message() {
 }
 
 function main_page_content() {
-    simple_div('withlogin', "Bestellen mit Login", "onclick=\"login()\"");
-    simple_div('justinfo', "Ich schau mich um", "onclick=\"information()\"");
-    simple_div('nologin', "Bestellen ohne login", "onclick=\"menu()\"");
+    simple_div('withlogin', "Bestellen mit Login", "onclick=\"tologin()\"");
+    simple_div('justinfo', "Ich schau mich um", "onclick=\"toinformation()\"");
+    simple_div('nologin', "Bestellen ohne login", "onclick=\"tomenu()\"");
 }
 
 function client_information() {
@@ -170,6 +171,10 @@ function amount_fields($itemkey) {
     echo "</select>";
     submit_input("to Cart");
 }
+function checkForInput(){
+    checkForLanguage();
+    checkForCart();
+}
 
 function checkforCart() {
     $shopcart;
@@ -180,7 +185,23 @@ function checkforCart() {
     }
     $shopcart->checkForInput();
 }
-
+function checkForLanguage(){
+    if (isset($_GET ["lan"])) {
+        $_SESSION["lan"] = urldecode($_GET ["lan"]);
+        
+    }
+    
+}
+function checkForLogin(){
+    
+    if (isset($_POST["logged"])){
+        
+        $_SESSION["logedin"] =  $_POST["logged"];
+            
+        
+    }
+   
+}
 /*
   function item_option($item) {
   global $options;
@@ -196,8 +217,13 @@ function checkforCart() {
 
 <?php
 
+
 function getTextelement($code) {
-    $elements = array();
+   $elements = array();
+   if (!isset($_SESSION["lan"])){
+        return $elements;
+    }
+    else{
     $myShopDB = new ShopDB();
     $res = $myShopDB->getText($code);
     while ($textelem = $res->fetch_object()) {
@@ -205,6 +231,7 @@ function getTextelement($code) {
     }
     $myShopDB->close();
     return $elements;
+    }
 }
 
 function get_param($name, $default) {
@@ -256,19 +283,38 @@ function languages($lenght = '') {
     }
 }
 function login(){
-    $url = set_url("login");
-    $class = "class=\"reference\"";
+    $url = set_url(get_param("id", "main"));
+    
     if((!isset($_SESSION['logged']) || $_SESSION['logged']!= true)){
-        referencing($url, 'login', $class);
+        jhref('login', "Login","class=\"reference\"" );
+            
     }
     else {
         referencing($url, 'logout', $class);
     }
-    
+}   
+
+ function loginform(){
+     if ((isset($_SESSION['logged']) && $_SESSION['logged']== true)){
+         echo "sie sind eingelogt";
+     }
+     else{
+     $action = set_url(get_param("id", "main"));
+     echo "<form ID=\"logform\" action=\"$action\" method=\"post\" name=\"loginform\">";
+                echo implode(getTextelement("uname"))."<input  type=\"text\" name=\"uname\"></input>";
+                 echo "<input  type=\"password\"  name=\"pwd\"></input>";
+                 echo "<input  type=\"hidden\"  name=\"logged\" value=true></input>";
+                 echo "<input  type=\"submit\" value=\"Log in\" ></input>";     
+            echo "</form>";
+     }
 }
 // creates a reference to another page
 function referencing($url, $text, $class = '') {
     echo "<a $class href=\"$url\">$text</a> ";
+    
+}
+function jhref($func, $text, $class = ''){
+    echo "<a $class title=\"$text\" href=\"#\" onclick=\"$func();return false;\">$text</a>";
 }
 
 //a HTML DIV that has a String as the content
@@ -539,8 +585,13 @@ class ShopDB extends mysqli {
     }
 
     public function getText($code) {
+        if (!isset($_SESSION["lan"])){
+        return array();
+        }  
+        else{
         $lan = $_SESSION['lan'];
         return $this->query("SELECT TXT_$lan as textelement FROM Texts where TXT_code like \"$code%\"");
+        }
     }
 
 }
@@ -556,7 +607,7 @@ $content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 
 
 $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Information", 'cart' => 'Cart');
 
-$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getränke');
+$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getr&auml;nke');
 
 $customer_form = array('salutation' => 'Anrede',
     'firstname' => 'Vorname',
@@ -580,7 +631,7 @@ $options = array(
     4 => array('name' => "Mehr Zwiebeln", 'description' => "aber hallo", 'price' => 2.80),
     5 => array('name' => "milder", 'description' => "aber hallo", 'price' => 0.00));
 
-$places = array('Bern', 'Ostermundigen', 'Köniz', 'Ittigen');
+$places = array('Bern', 'Ostermundigen', 'K&ouml;niz', 'Ittigen');
 
 $menu_message = array('de' => "Stellen Sie sich ein Menu zusammen", 'fr' => "Choissisez votre menue");
 
