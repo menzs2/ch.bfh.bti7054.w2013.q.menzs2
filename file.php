@@ -145,7 +145,7 @@ function client_information() {
     $class = "class=\"clientinput\"";
     $action = set_url('cart');
     $size = "size=\"20\"";
-    echo "<form ID=\"customerform\"action=\"$action\" method=\"post\">";
+    echo "<form ID=\"customerform\" action=\"$action\" method=\"post\">";
     foreach ($customer_form as $name => $displayed_name) {
         echo "$displayed_name:";
         text_input($name, '',$class, $size);
@@ -156,8 +156,8 @@ function client_information() {
     foreach ($places as $place) {
         echo "<option value=\"$place\">$place</option>";
     }
-    echo "</select>";
-    submit_input('purchase', "onclick=\"purchase_confirmation()\"");
+    echo "</select></br>";
+    jhref("purchaseConfirmation",'purchase',"class=\"tocart\"" );
     echo "</form>";
 }
 
@@ -169,7 +169,7 @@ function amount_fields($itemkey) {
         echo "<option value=\"$i\">$i</option>";
     }
     echo "</select>";
-    submit_input("to Cart");
+    jhref("addToCart($itemkey)", "to Cart","class=\"tocart\"");
 }
 function checkForInput(){
     checkForLanguage();
@@ -286,7 +286,7 @@ function login(){
     $url = set_url(get_param("id", "main"));
     
     if((!isset($_SESSION['logged']) || $_SESSION['logged']!= true)){
-        jhref('login', "Login","class=\"reference\"" );
+        jhref('hideLogin', "Login","class=\"reference\"" );
             
     }
     else {
@@ -300,11 +300,12 @@ function login(){
      }
      else{
      $action = set_url(get_param("id", "main"));
-     echo "<form ID=\"logform\" action=\"$action\" method=\"post\" name=\"loginform\">";
-                echo implode(getTextelement("uname"))."<input  type=\"text\" name=\"uname\"></input>";
-                 echo "<input  type=\"password\"  name=\"pwd\"></input>";
+     echo "<form ID=\"logform\" action=\"$action\" method=\"post\" >";
+                echo implode(getTextelement("uname"))."<input  type=\"text\" id=\"uname\"></input>";
+                 echo "<input  type=\"password\"  id=\"pwd\"></input>";
                  echo "<input  type=\"hidden\"  name=\"logged\" value=true></input>";
-                 echo "<input  type=\"submit\" value=\"Log in\" ></input>";     
+                 jhref('validateLogin', "login","class=\"reference\"" );
+                    
             echo "</form>";
      }
 }
@@ -343,12 +344,6 @@ function form($action, $method, $name, $content) {
 function text_input($name, $content, $class='',$size = 20) {
     echo "<input  $class type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
 }
-
-// create an text input field
-function submit_input($value, $eventhandler = '', $displayed_name = '') {
-    echo "<input  type=\"submit\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
-}
-
 
 function integrateGooglemap(){
 echo "<iframe width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A&amp;output=embed\"></iframe><br /><small><a href=\"https://maps.google.ch/maps?f=q&amp;source=embed&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A\" style=\"color:#0000FF;text-align:left\">Größere Kartenansicht</a></small>";
@@ -455,7 +450,7 @@ class shop_Item {
     function displayShopItem() {
         $url = set_url('menu');
         echo "<p>$this->name</br>$this->description</br>CHF " . number_format($this->price, 2) . "</br>";
-        echo "<form action=\"$url\" method=\"post\" name=\"$this->itemkey\">";
+        echo "<form action=\"$url\" method=\"post\" ID=\"$this->itemkey\">";
         amount_fields($this->itemkey);
         echo "</form></p>";
     }
@@ -496,18 +491,19 @@ class shoppingcart {
             echo "Es ist noch nichts im Warenkorb";
         } else {
             $myShopDB = new ShopDB();
-            echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
             foreach ($this->items as $index => $shopItemKey) {
                 $res = $myShopDB->getProduct($shopItemKey);
                 $item = $res->fetch_object();
+                echo "<form action=\"$url\" method=\"post\" name=\"cartItem\">";
                 echo "<p>$index $item->name" . number_format($item->price, 2) . "</p>";
                 echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
-                echo submit_input("remove");
+                jhref("removeFromCart($index)", 'remove', "class=\"tocart\"");
+                echo "</form></p>";
             }
-            echo "</form></p>";
-            echo "<form action=\"$url\" method=\"post\" name=\"remove\">";
+            
+            echo "<form ID=\"clearcart\" action=\"$url\" method=\"post\" >";
             echo "<input  type=\"hidden\"  name=\"remove\" value=\"all\">";
-            echo submit_input("remove all");
+            jhref("clearCart", 'remove all', "class=\"tocart\"");
             echo "</form></p>";
             $myShopDB->close();
         }

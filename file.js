@@ -1,5 +1,5 @@
 
-function purchase_confirmation() {
+function purchaseConfirmation() {
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
     result = window.confirm(message);
 }
@@ -14,7 +14,7 @@ function toinformation() {
     window.location = "g2g.php?id=information";
 }
 
-function login() {
+function hideLogin() {
     var logform = document.getElementById("logform");
         if (logform.style.visibility !== "hidden"){
             logform.style.visibility = "hidden";
@@ -23,7 +23,21 @@ function login() {
             logform.style.visibility = "visible";
         }
 }
-
+function validateLogin(){
+    var username = document.getElememntByID("uname").value;
+         if (username.length > 6 || username[0].length < 4) {
+        alert("The user name must be 4-6 characters");
+        document.getElementById("uname").select();
+        return false;
+    }
+    var pword = document.getElementById("pwd").value;
+    if (pword[0].length > 6 || pword.length < 4) {
+        alert("The password must be 4-6 characters");
+        document.getElementById("pwd").select();
+        return false;
+    }
+    document.getElementById("logform").submit();
+}
 function tocart() {
     window.location = "g2g.php?id=cart";
 }
@@ -39,10 +53,16 @@ function tocart() {
 //}
 
 
-function toCart() {
-    var element = "checkforCart();";
-    var firstnode = document.getElementById("content").childNodes[0];
-    document.insertbefore(element, firstnode);
+function addToCart(itemkey) {
+    
+    document.getElementById(itemkey).submit();
+}
+function removeFromCart(index){
+    var cartItems = document.getElementsByName("cartItem");
+    cartItems[index].submit();
+}
+function clearCart() {
+    document.getElementById("clearcart").submit();
 }
 
 function validate_customer() {

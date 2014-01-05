@@ -111,6 +111,12 @@ border: 5px ridge silver;
 	border: 2px solid black;
 	border-radius: 10px;
 }
+.tocart{
+	display:inline;
+	text-decoration:none;
+}
+.tocart:link    { color:#717171; background-color:transparent; }
+.tocart:visited { color:#717171; background-color:transparent; }
 /*Information Page*/
 #client{
     width: 500px;
