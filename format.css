@@ -2,7 +2,7 @@
 body {
 	font-family: Helvetica;
         background-image:url(kesselgulasch_2.jpg);
-        
+        //background-color: #717171;
        
 	}
 
@@ -15,7 +15,7 @@ body {
 	text-align: center;
 	border-radius: 25px;
 }
-#logform{
+#login{
         font-size:20px;
         visibility: hidden;
         display:inline;
@@ -82,12 +82,12 @@ border: 5px ridge silver;
 
 }
 /*menu page*/
-#menu {
+div#menu {
 	margin-left: 20mm;
 	width:1800px;
 }
 
-#maindish {
+div#maindish {
         background-image:url(color.png);
 	width: 300px;
 	float: left;
@@ -95,7 +95,7 @@ border: 5px ridge silver;
 	border-radius: 10px;
 }
 
-#sidedish {
+div#sidedish {
         background-image:url(color.png);
 	width: 300px;
 	border: 2px solid black;
@@ -104,13 +104,19 @@ border: 5px ridge silver;
 	
 }
 
-#beverages {
+div#beverages {
         background-image:url(color.png);
 	width: 300px;
 	float: left;
 	border: 2px solid black;
 	border-radius: 10px;
 }
+div#g2gmap{
+        width:400px;
+        height:400px;
+        border:10px;
+}
+
 .tocart{
 	display:inline;
 	text-decoration:none;
@@ -118,6 +124,7 @@ border: 5px ridge silver;
 .tocart:link    { color:#717171; background-color:transparent; }
 .tocart:visited { color:#717171; background-color:transparent; }
 /*Information Page*/
+
 #client{
     width: 500px;
     height:250px;

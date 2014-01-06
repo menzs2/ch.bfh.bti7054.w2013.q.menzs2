@@ -14,25 +14,18 @@ function toinformation() {
     window.location = "g2g.php?id=information";
 }
 
-function hideLogin() {
-    var logform = document.getElementById("logform");
-        if (logform.style.visibility !== "hidden"){
-            logform.style.visibility = "hidden";
-        }
-        else {
-            logform.style.visibility = "visible";
-        }
-}
+
+
 function validateLogin(){
-    var username = document.getElememntByID("uname").value;
+    var username = document.getElementById("logform").value;
          if (username.length > 6 || username[0].length < 4) {
-        alert("The user name must be 4-6 characters");
+        window.alert("The user name must be 4-6 characters");
         document.getElementById("uname").select();
         return false;
     }
     var pword = document.getElementById("pwd").value;
     if (pword[0].length > 6 || pword.length < 4) {
-        alert("The password must be 4-6 characters");
+        window.alert("The password must be 4-6 characters");
         document.getElementById("pwd").select();
         return false;
     }
@@ -41,6 +34,7 @@ function validateLogin(){
 function tocart() {
     window.location = "g2g.php?id=cart";
 }
+
 
 //function create(htmlStr) {
 //var frag = document.createDocumentFragment(),

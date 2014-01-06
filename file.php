@@ -83,7 +83,6 @@ function main_page() {
 
 //the list of the menu items
 function menu_list() {
-    //checkforCart();
     $shopcart = unserialize($_SESSION["cart"]);
     $menu_message = getTextelement("choose");
     $productlist = new productList();
@@ -101,8 +100,8 @@ function information() {
     $inf = getTextelement('inforamtion');
     global $information_message;
     $lan = get_param("lan", "de");
-    simple_div('information', $information_message [$lan],"onclick=\"hideNavigation()\"");
-    integrateGooglemap();
+    simple_div('information', $information_message [$lan]);
+    echo "<div id=\"g2gmap\"></div>";
 }
 
 //the shoppingcart and the clientInformation
@@ -174,10 +173,10 @@ function amount_fields($itemkey) {
 function checkForInput(){
     checkForLanguage();
     checkForCart();
+    checkForLogin();
 }
 
 function checkforCart() {
-    $shopcart;
     if (!isset($_SESSION["cart"])) {
         $shopcart = new shoppingcart();
     } else {
@@ -192,15 +191,10 @@ function checkForLanguage(){
     }
     
 }
-function checkForLogin(){
-    
-    if (isset($_POST["logged"])){
-        
-        $_SESSION["logedin"] =  $_POST["logged"];
-            
-        
+function checkForLogin(){    
+    if (isset($_POST['logged'])){
+        $_SESSION["logged"] =  $_POST["logged"];
     }
-   
 }
 /*
   function item_option($item) {
@@ -222,13 +216,15 @@ function getTextelement($code) {
    $elements = array();
    if (!isset($_SESSION["lan"])){
         return $elements;
-    }
+   }
+    
     else{
     $myShopDB = new ShopDB();
     $res = $myShopDB->getText($code);
     while ($textelem = $res->fetch_object()) {
         $elements[] = $textelem->textelement;
     }
+    
     $myShopDB->close();
     return $elements;
     }
@@ -263,12 +259,6 @@ function pages() {
     }
 }
 
-//set the language
-function setlanguage($language) {
-    $_SESSION["lan"] = $language;
-    javascript:main();
-}
-
 //change the language
 function languages($lenght = '') {
     global $language;
@@ -282,31 +272,34 @@ function languages($lenght = '') {
         referencing(add_param($url, "lan", "fr"), 'FR', $class);
     }
 }
+//login field
 function login(){
-    $url = set_url(get_param("id", "main"));
-    
-    if((!isset($_SESSION['logged']) || $_SESSION['logged']!= true)){
-        jhref('hideLogin', "Login","class=\"reference\"" );
-            
+    $class= "class=\"reference\"";
+    $action = set_url(get_param("id", "main"));
+    if((isset($_SESSION['logged']) && $_SESSION['logged']=== 'true')){
+        jhref("logout", 'logout',  $class);
+        echo "<form ID=\"logout\" action=\"$action\" method=\"post\">";
+                echo "<input type=\"hidden\" name=\"logged\" value='false'></input>";
+        echo "</form>";
+        
     }
     else {
-        referencing($url, 'logout', $class);
+        jhref('hideLogin', "Login", $class );    
     }
 }   
-
+//login form
  function loginform(){
-     if ((isset($_SESSION['logged']) && $_SESSION['logged']== true)){
+     if ((isset($_SESSION['logged']) && $_SESSION['logged']=== 'true')){
          echo "sie sind eingelogt";
      }
      else{
      $action = set_url(get_param("id", "main"));
-     echo "<form ID=\"logform\" action=\"$action\" method=\"post\" >";
-                echo implode(getTextelement("uname"))."<input  type=\"text\" id=\"uname\"></input>";
-                 echo "<input  type=\"password\"  id=\"pwd\"></input>";
-                 echo "<input  type=\"hidden\"  name=\"logged\" value=true></input>";
-                 jhref('validateLogin', "login","class=\"reference\"" );
-                    
-            echo "</form>";
+     echo "<form ID=\"login\" action=\"$action\" method=\"post\">";
+                echo implode(getTextelement("uname")). "<input type=\"text\" name=\"uname\"></input>";
+                echo "<input type=\"password\" name=\"pwd\"></input>";
+                echo "<input type=\"hidden\"  name=\"logged\" value='true'></input>";
+                jhref("login", 'login',"class=\"reference\"");
+     echo "</form>";
      }
 }
 // creates a reference to another page
@@ -345,9 +338,6 @@ function text_input($name, $content, $class='',$size = 20) {
     echo "<input  $class type=\"text\" size=\"$size\" name=\"$name\">$content</input> </br>";
 }
 
-function integrateGooglemap(){
-echo "<iframe width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A&amp;output=embed\"></iframe><br /><small><a href=\"https://maps.google.ch/maps?f=q&amp;source=embed&amp;hl=de&amp;geocode=&amp;q=Wankdorffeldstrasse+102,+Bern&amp;aq=&amp;sll=46.965139,7.457587&amp;sspn=0.002735,0.006142&amp;ie=UTF8&amp;hq=&amp;hnear=Wankdorffeldstrasse+102,+Breitenrain-Lorraine,+3014+Bern&amp;t=m&amp;ll=46.969359,7.454224&amp;spn=0.020499,0.036478&amp;z=14&amp;iwloc=A\" style=\"color:#0000FF;text-align:left\">Größere Kartenansicht</a></small>";
-}
 ?>
 <!--Classes-->
 
@@ -495,7 +485,7 @@ class shoppingcart {
                 $res = $myShopDB->getProduct($shopItemKey);
                 $item = $res->fetch_object();
                 echo "<form action=\"$url\" method=\"post\" name=\"cartItem\">";
-                echo "<p>$index $item->name" . number_format($item->price, 2) . "</p>";
+                $this->displayCartItem($item);
                 echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
                 jhref("removeFromCart($index)", 'remove', "class=\"tocart\"");
                 echo "</form></p>";
@@ -508,7 +498,10 @@ class shoppingcart {
             $myShopDB->close();
         }
         echo"</div>";
-        ;
+        
+    }
+    private function displayCartItem($item){
+        echo "<p>$item->name</br>CHF " . number_format($item->price, 2) . "</br>";
     }
 
     public function checkForInput() {
