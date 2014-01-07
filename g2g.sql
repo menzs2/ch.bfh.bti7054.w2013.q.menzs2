@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Jan 2014 um 16:40
+-- Erstellungszeit: 07. Jan 2014 um 16:55
 -- Server Version: 5.6.11
 -- PHP-Version: 5.5.3
 
@@ -141,11 +141,11 @@ CREATE TABLE IF NOT EXISTS `options` (
 --
 
 INSERT INTO `options` (`OPT_PK`, `OPT_Type`, `OPT_Code`, `OPT_Name`, `OPT_Description`, `OPT_Price`) VALUES
-(1, 'MenuItem', 'Schärfe++', 1, 1, 0),
-(2, 'MenuItem', 'Schärfe-', 1, 1, 0),
-(3, 'MenuItem', 'Pilze', 1, 1, 2.5),
-(4, 'MenuItem', 'Zwiebel++', 1, 1, 1.5),
-(5, 'MenuItem', 'Saurr', 1, 1, 2);
+(1, 'MenuItem', 'Schärfe++', 28, 1, 0),
+(2, 'MenuItem', 'Schärfe-', 29, 1, 0),
+(3, 'MenuItem', 'Pilze', 30, 1, 2.5),
+(4, 'MenuItem', 'Zwiebel++', 31, 1, 1.5),
+(5, 'MenuItem', 'Saurr', 32, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `texts` (
   `TXT_fr` varchar(256) COLLATE latin1_bin NOT NULL,
   PRIMARY KEY (`TXT_PK`),
   UNIQUE KEY `TXT_Code` (`TXT_Code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=33 ;
 
 --
 -- Daten für Tabelle `texts`
@@ -231,7 +231,7 @@ INSERT INTO `texts` (`TXT_PK`, `TXT_Code`, `TXT_de`, `TXT_fr`) VALUES
 (7, 'MDRindS', 'Rindsgulasch scharf', 'Goulache de boeuf fort'),
 (8, 'MDSchwein', 'Schweinsgulasch', 'Goulache de porc'),
 (9, 'MDWurst', 'Wurstgulasch', 'Goulache de saussice'),
-(10, 'MDKart', 'Erdäfpelgulasch', 'Goulache de pommes de terre'),
+(10, 'MDKart', 'Erd&auml;fpelgulasch', 'Goulache de pommes de terre'),
 (11, 'MDLamm', 'Lammgulasch', 'Goulache d''''agneau'),
 (12, 'SDKnöd', 'Kn&ouml;del', 'Knoedel'),
 (13, 'SDStock', 'Kartoffelstock', 'Purée des pommes de terre'),
@@ -246,7 +246,14 @@ INSERT INTO `texts` (`TXT_PK`, `TXT_Code`, `TXT_de`, `TXT_fr`) VALUES
 (22, 'Merlot', 'Merlot', 'Merlot'),
 (23, 'Coca', 'Coca Cola', 'Coca Cola'),
 (24, 'mama', 'Wie bei Mutter', 'Comme chez mama'),
-(25, 'mehrF', 'Mit mehr Feuer', 'Le feu du Puzta');
+(25, 'mehrF', 'Mit mehr Feuer', 'Le feu du Puzta'),
+(26, 'loginname', 'Benutzername', 'Nom d''utilisateur'),
+(27, 'loginpword', 'Passwort:', 'Mot de passe:'),
+(28, 'hot++', 'mehr Sch&auml;rfe', 'plus fort'),
+(29, 'hot--', 'weniger Sch&auml;rfe', 'moins fort'),
+(30, 'pilze', 'mit Pilzen', 'avec des champignom'),
+(31, 'Zwieb++', 'mehr Zwiebeln', 'plus de oignons'),
+(32, 'sauerr', 'Sauerrahm', 'Crème aigre');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

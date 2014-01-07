@@ -123,7 +123,7 @@ function w_message() {
 }
 
 function main_page_content() {
-    simple_div('withlogin', "Bestellen mit Login", "onclick=\"tologin()\"");
+    simple_div('withlogin', "Bestellen mit Login", "onclick=\"tomenu()\"");
     simple_div('justinfo', "Ich schau mich um", "onclick=\"toinformation()\"");
     simple_div('nologin', "Bestellen ohne login", "onclick=\"tomenu()\"");
 }
@@ -466,6 +466,9 @@ class shoppingcart {
                 echo "</form></p>";
         
     }
+    private function displayOptions(){
+        
+    }
     private function clearCart(){
         $action = set_url(get_param("id", "cart"));
         echo "<form ID=\"clearcart\" action=\"$action\" method=\"post\" >";
@@ -537,7 +540,10 @@ class ShopDB extends mysqli {
         $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `MenuItem` Join Texts on TXT_PK = MIT_Name)";
         return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description WHERE MIT_PK = $key");
     }
-
+    function getOptions(){
+        $lan = $_SESSION['lan'];
+        return $this->query("SELECT OPT_PK, OPT_Type, OPT_Description, OPT_price, TXT_$lan as name FROM Options Join Texts on TXT_PK = OPT_Name");
+    }
     function insertOrder() {
         
     }
