@@ -20,7 +20,21 @@
             logform.style.visibility = "visible";
         }
 }    
-function login(){document.getElementById("login").submit();}
+function login(){
+        var username = document.getElementsByName("uname");
+        
+         if (username[0].value.length > 15 || username[0].value.lengthuser < 4) {
+            window.alert("The user name must be 4-15 characters");
+            document.getElementsByName("uname")[0].select();
+            return false;
+        }
+        var pword =  document.getElementsByName("pwd");
+        if (pword[0].value.length < 4) {
+            window.alert("The password is to short");
+            document.getElementsByName("pwd")[0].select();
+            return false;
+        }
+        document.getElementById("login").submit();}       
 function logout(){document.getElementById("logout").submit();}
 </script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmLQ7T-fWHRisGsqZcuEpi55TECdSSZgQ&sensor=false"></script>

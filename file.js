@@ -24,12 +24,12 @@ function validateLogin(){
         return false;
     }
     var pword = document.getElementById("pwd").value;
-    if (pword[0].length > 6 || pword.length < 4) {
+    if (pword.length > 6 || pword.length < 4) {
         window.alert("The password must be 4-6 characters");
         document.getElementById("pwd").select();
         return false;
     }
-    document.getElementById("logform").submit();
+    document.getElementById("login").submit();
 }
 function tocart() {
     window.location = "g2g.php?id=cart";
@@ -48,7 +48,6 @@ function tocart() {
 
 
 function addToCart(itemkey) {
-    
     document.getElementById(itemkey).submit();
 }
 function removeFromCart(index){

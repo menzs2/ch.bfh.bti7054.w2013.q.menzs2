@@ -17,14 +17,14 @@ body {
 }
 #login{
         font-size:20px;
-        visibility: hidden;
+        color:#717171;
         display:inline;
 	text-decoration:none;
 	background-color: RGB(80,2,27);
         border-radius: 5px;
 }
 #navigation {
-        color:#717171;
+        
 	background-color: RGB(80,2,27);
 	font-size: 32pt;
 	text-align: center;
@@ -83,7 +83,7 @@ border: 5px ridge silver;
 }
 /*menu page*/
 div#menu {
-	margin-left: 20mm;
+        margin-left: 20mm;
 	width:1800px;
 }
 
@@ -123,6 +123,10 @@ div#g2gmap{
 }
 .tocart:link    { color:#717171; background-color:transparent; }
 .tocart:visited { color:#717171; background-color:transparent; }
+.total{
+    font-size:larger;
+}
+
 /*Information Page*/
 
 #client{

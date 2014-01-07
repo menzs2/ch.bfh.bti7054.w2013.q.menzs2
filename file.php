@@ -84,9 +84,9 @@ function main_page() {
 //the list of the menu items
 function menu_list() {
     $shopcart = unserialize($_SESSION["cart"]);
-    $menu_message = getTextelement("choose");
+    $menu_message = implode(getTextelement("choose"));
     $productlist = new productList();
-    echo "<div ID=\"menu\"><p ID=\"first>\"> $menu_message[0]</p>";
+    echo "<div ID=\"menu\"><p ID=\"first>\"><h1>$menu_message</h1></p>";
     $productlist->displayProductList();
     $shopcart->displayCart('short');
     echo "</div>";
@@ -94,9 +94,6 @@ function menu_list() {
 
 //information on our shop
 function information() {
-    if (isset($_SESSION["logedin"])){
-        echo $_SESSION["logedin"];
-    }
     $inf = getTextelement('inforamtion');
     global $information_message;
     $lan = get_param("lan", "de");
@@ -111,15 +108,7 @@ function cart() {
     $shopcart = unserialize($_SESSION["cart"]);
     $shopcart->displayCart('long');
 }
-function userlogin(){
-    $action = set_url(get_param("id", "main"));
-    echo "<form ID=\"loginform\"$action=\"\" method=\"post\">";
-    echo implode(getTextelement("uname"));
-    text_input('username', '');
-    echo "<input  type=\"password\"  name=\"pwd\"></input> </br>";
-    submit_input('login');
-    echo "</form>";
-}
+
 ?>
 <!-- specific functions for pages-->
 <?php
@@ -160,16 +149,7 @@ function client_information() {
     echo "</form>";
 }
 
-function amount_fields($itemkey) {
-    echo "<input  type=\"hidden\"  name=\"add\" value=\"true\">";
-    echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
-    echo "<select name=\"qty\" size=\"1\">";
-    for ($i = 0; $i < 7; $i++) {
-        echo "<option value=\"$i\">$i</option>";
-    }
-    echo "</select>";
-    jhref("addToCart($itemkey)", "to Cart","class=\"tocart\"");
-}
+
 function checkForInput(){
     checkForLanguage();
     checkForCart();
@@ -222,7 +202,7 @@ function getTextelement($code) {
     $myShopDB = new ShopDB();
     $res = $myShopDB->getText($code);
     while ($textelem = $res->fetch_object()) {
-        $elements[] = $textelem->textelement;
+        $elements[$textelem->code] = $textelem->textelement;
     }
     
     $myShopDB->close();
@@ -294,9 +274,10 @@ function login(){
      }
      else{
      $action = set_url(get_param("id", "main"));
-     echo "<form ID=\"login\" action=\"$action\" method=\"post\">";
-                echo implode(getTextelement("uname")). "<input type=\"text\" name=\"uname\"></input>";
-                echo "<input type=\"password\" name=\"pwd\"></input>";
+     $texts = getTextelement("login");
+     echo "<form ID=\"login\" action=\"$action\" method=\"post\" style=\"visibility:hidden\">";
+                echo $texts['loginname']. "<input type=\"text\" name=\"uname\"></input>";
+                echo $texts['loginpword']. "<input type=\"password\" name=\"pwd\"></input>";
                 echo "<input type=\"hidden\"  name=\"logged\" value='true'></input>";
                 jhref("login", 'login',"class=\"reference\"");
      echo "</form>";
@@ -343,37 +324,6 @@ function text_input($name, $content, $class='',$size = 20) {
 
 <?php
 
-//HTML Form as a class ->not usabele yet
-class Form {
-
-    private $action;
-    private $method;
-    private $formname;
-    private $formcontent = array();
-
-    function __construct($action, $name, $method = 'get') {
-        $this->action = $action;
-        $this->formname = $name;
-        $this->method = $method;
-    }
-
-    public function addInput($type, $name, $value, $eventhandler = '', $displayed_name = '') {
-        $formcontent[] = "<input  type=\"$type\" name=\"$name\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
-    }
-
-    public function addString($str) {
-        $formcontent[] = $str;
-    }
-
-    public function displayForm() {
-        echo "<form action=\"$this->action\" method=\"$this->method\" name=\"$this->formname\">";
-        foreach ($this->formcontent as $content) {
-            echo $content;
-        }
-        echo "</form>";
-    }
-
-}
 
 //The productlist 
 class productList {
@@ -441,9 +391,19 @@ class shop_Item {
         $url = set_url('menu');
         echo "<p>$this->name</br>$this->description</br>CHF " . number_format($this->price, 2) . "</br>";
         echo "<form action=\"$url\" method=\"post\" ID=\"$this->itemkey\">";
-        amount_fields($this->itemkey);
+        $this->amount_fields($this->itemkey);
         echo "</form></p>";
     }
+    function amount_fields($itemkey) {
+        echo "<input  type=\"hidden\"  name=\"add\" value=\"true\">";
+        echo "<input  type=\"hidden\"  name=\"itemkey\" value=\"$itemkey\">";
+        echo "<select name=\"qty\" size=\"1\">";
+        for ($i = 0; $i < 7; $i++) {
+            echo "<option value=\"$i\">$i</option>";
+        }
+        echo "</select>";
+        jhref("addToCart($itemkey)", "to Cart","class=\"tocart\"");
+        }
 
 }
 
@@ -451,16 +411,18 @@ class shop_Item {
 class shoppingcart {
 
     private $items = array();
+    private $amount;
 
     function __construct() {
         if (!isset($_SESSION["cart"])) {
             $_SESSION["cart"] = serialize($this);
-        }
+            $this->amount = 0;   
+            }
     }
 
     public function addItemFromMenu($itemkey, $qty) {
         for ($i = 0; $i < $qty; $i++) {
-            $this->items[] = $itemkey;
+            $this->items[] =  $itemkey;
         }
         $this->resetIndices();
         $_SESSION["cart"] = serialize($this);
@@ -473,7 +435,7 @@ class shoppingcart {
     }
 
     public function displayCart($cartType) {
-        $url = set_url(get_param("id", "cart"));
+       
         $cartID = $cartType . 'shoppingcart';
         echo "<div ID=\"$cartID\">";
         echo "<h1>Ihr Warenkorb</h1>";
@@ -484,26 +446,34 @@ class shoppingcart {
             foreach ($this->items as $index => $shopItemKey) {
                 $res = $myShopDB->getProduct($shopItemKey);
                 $item = $res->fetch_object();
-                echo "<form action=\"$url\" method=\"post\" name=\"cartItem\">";
-                $this->displayCartItem($item);
-                echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
-                jhref("removeFromCart($index)", 'remove', "class=\"tocart\"");
-                echo "</form></p>";
-            }
+                $this->displayCartItem($item, $index);
+                $this->amount += $item->price;
+                }
+            echo "<p class\=total\">Total: CHF     " . number_format($this->amount, 2) ."</p>";
+            $this->clearCart();
             
-            echo "<form ID=\"clearcart\" action=\"$url\" method=\"post\" >";
-            echo "<input  type=\"hidden\"  name=\"remove\" value=\"all\">";
-            jhref("clearCart", 'remove all', "class=\"tocart\"");
-            echo "</form></p>";
             $myShopDB->close();
-        }
+            }
         echo"</div>";
         
     }
-    private function displayCartItem($item){
-        echo "<p>$item->name</br>CHF " . number_format($item->price, 2) . "</br>";
+    private function displayCartItem($item, $index){
+        $action = set_url(get_param("id", "cart"));
+        echo "<form action=\"$action\" method=\"post\" name=\"cartItem\">";
+                echo "<p>$item->name</br>CHF " . number_format($item->price, 2) . "</br>";
+                echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
+                jhref("removeFromCart($index)", 'remove', "class=\"tocart\"");
+                echo "</form></p>";
+        
     }
-
+    private function clearCart(){
+        $action = set_url(get_param("id", "cart"));
+        echo "<form ID=\"clearcart\" action=\"$action\" method=\"post\" >";
+            echo "<input  type=\"hidden\"  name=\"remove\" value=\"all\">";
+            jhref("clearCart", 'remove all', "class=\"tocart\"");
+        echo "</form></p>";
+    }
+            
     public function checkForInput() {
         $this->checkForAdd();
         $this->checkForRemove();
@@ -539,7 +509,6 @@ class shoppingcart {
         $this->items = array();
         $_SESSION["cart"] = serialize($this);
     }
-
 }
 ?>
 
@@ -579,7 +548,7 @@ class ShopDB extends mysqli {
         }  
         else{
         $lan = $_SESSION['lan'];
-        return $this->query("SELECT TXT_$lan as textelement FROM Texts where TXT_code like \"$code%\"");
+        return $this->query("SELECT TXT_Code as code, TXT_$lan as textelement FROM Texts where TXT_code like \"$code%\"");
         }
     }
 
@@ -604,14 +573,6 @@ $customer_form = array('salutation' => 'Anrede',
     'street' => 'Strasse',
     'postcode' => 'PLZ');
 
-// TODELETE $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
-//10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
-//11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
-//12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
-//13=> array( 'name'=>"Störtebeker Schwarzbier",'type'=>'extras','description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
-//14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
-//15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
-
 $options = array(
     0 => array('name' => "schärfer", 'description' => "lecker", 'price' => 2.50),
     1 => array('name' => "Sauerrahm", 'description' => " auch lecker", 'price' => 2.20),
@@ -622,11 +583,59 @@ $options = array(
 
 $places = array('Bern', 'Ostermundigen', 'K&ouml;niz', 'Ittigen');
 
-$menu_message = array('de' => "Stellen Sie sich ein Menu zusammen", 'fr' => "Choissisez votre menue");
-
-
 $language = array('de' => "Deutsch", 'fr' => "Fran&ccedil;ais");
 
 $information_message = array('de' => "<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
     'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");
 ?>
+<!--unused Code ready to delete 
+function userlogin(){
+    $action = set_url(get_param("id", "main"));
+    echo "<form ID=\"loginform\"$action=\"\" method=\"post\" style=\"visibility:hidden\">";
+    echo implode(getTextelement("uname"));
+    text_input('username', '');
+    echo "<input  type=\"password\"  name=\"pwd\"></input> </br>";
+    submit_input('login');
+    echo "</form>";
+}
+
+//HTML Form as a class ->not usabele yet
+class Form {
+
+    private $action;
+    private $method;
+    private $formname;
+    private $formcontent = array();
+
+    function __construct($action, $name, $method = 'get') {
+        $this->action = $action;
+        $this->formname = $name;
+        $this->method = $method;
+    }
+
+    public function addInput($type, $name, $value, $eventhandler = '', $displayed_name = '') {
+        $formcontent[] = "<input  type=\"$type\" name=\"$name\" value=\"$value\" $eventhandler>$displayed_name</input> </br>";
+    }
+
+    public function addString($str) {
+        $formcontent[] = $str;
+    }
+
+    public function displayForm() {
+        echo "<form action=\"$this->action\" method=\"$this->method\" name=\"$this->formname\">";
+        foreach ($this->formcontent as $content) {
+            echo $content;
+        }
+        echo "</form>";
+    }
+
+}
+
+TODELETE $dishes = array(	0=> array( 'name'=>"Rindsgulasch",'type'=>'maincourse','description'=> "lecker", 'price'=> 12.50), 
+10=> array( 'name'=>"Rösti",'type'=>'sidedish','description'=> "aber hallo", 'price'=> 2.80),
+11=> array( 'name'=>"Ueli Bier",'type'=>'extras','description'=> "ein feines aus der Schweiz", 'price'=> 2.50), 
+12=> array( 'name'=>"Pilsener Urquell",'type'=>'extras','description'=> "ein richtiges aus Tschechien", 'price'=> 2.20),
+13=> array( 'name'=>"Störtebeker Schwarzbier",'type'=>'extras','description'=> "ein dunkles von der Ostsee", 'price'=> 2.50),
+14=> array( 'name'=>"Merlot",'type'=>'extras','description'=> "Rotwein aus dem Tessin", 'price'=> 12.00), 
+15=> array( 'name'=>"Cola",'type'=>'extras','description'=> "Schwarz, süss, und kalt", 'price'=> 2.80));
+-->
