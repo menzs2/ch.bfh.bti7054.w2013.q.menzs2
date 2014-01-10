@@ -1,8 +1,7 @@
 /*Style for all pages*/
 body {
-	font-family: Helvetica;
-        background-image:url(kesselgulasch_2.jpg);
-        //background-color: #717171;
+	font-family: Helvetica;        
+        background-color: #ffC242;
        
 	}
 
@@ -23,7 +22,12 @@ body {
 	background-color: RGB(80,2,27);
         border-radius: 5px;
 }
-#navigation {
+#navigation{
+    background-image:url(paprika.jpg);
+    background-size:100%, 100%;
+    
+}
+#navigationbar {
         
 	background-color: RGB(80,2,27);
 	font-size: 32pt;
@@ -52,32 +56,37 @@ body {
 }
 
 #withlogin{
-background-image:url(color.png);
-background-size:100%, 100%;
+background-image:url(gulasch_3.jpg);
+background-repeat:no-repeat;
+background-size:124%, 100%;
+font-size: 20pt;
 float:left;
 position: relative; left:50px;
 width: 250px;
 height:  275px;
-border: 5px ridge silver;
+border: 2px solid black;
 
 }
 
 #justinfo{
-background-image:url(color.png);
+background-image:url(color2.png);
+font-size: 20pt;
 float:left;
 position: relative; left:150px;
 width: 250px;
 height: 275px;
-border: 5px ridge silver;
+border: 2px solid black;
 
 }
 #nologin{
-background-image:url(color.png);
+background-image:url(gulasch_2.jpg);
+background-size:100%, 100%;
+font-size: 20pt;
 float:left;
 position: relative; left:250px;
 width: 250px;
 height: 275px;
-border: 5px ridge silver;
+border: 2px solid black;
 
 
 }
@@ -88,7 +97,7 @@ div#menu {
 }
 
 div#maindish {
-        background-image:url(color.png);
+        background-image:url(color2.png);
 	width: 300px;
 	float: left;
 	border: 2px solid black;
@@ -96,7 +105,7 @@ div#maindish {
 }
 
 div#sidedish {
-        background-image:url(color.png);
+        background-image:url(color2.png);
 	width: 300px;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -105,7 +114,7 @@ div#sidedish {
 }
 
 div#beverages {
-        background-image:url(color.png);
+        background-image:url(color2.png);
 	width: 300px;
 	float: left;
 	border: 2px solid black;
@@ -141,7 +150,7 @@ div#g2gmap{
     }    
       
 #shortshoppingcart{
-	background-image:url(color.png);
+	background-image:url(color2.png);
 	width: 300px;
 	border: 2px solid black;
 	border-radius: 10px;

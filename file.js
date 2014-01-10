@@ -82,7 +82,14 @@ function hideNavigation() {
     
 }
 function showNavigation() {
-    var element = docment.getElementByID("navigation");
-    element.style.visibility = "visible";
-    document.getElementByTagName("body").removeEventListener("onload", hideNavigation, false);
+    var element = document.getElementByID("navigation").style;
+    var big = "300px";
+    var small = "100 px";
+    if (element.height == small){
+        element.height = big;
+    }
+    else {
+        element.height = small;
+    }
+    
 }

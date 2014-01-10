@@ -4,13 +4,24 @@
 <?php session_start();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php require("file.php");
-?> 
+<?php require("content.php");?> 
 <head>
-<title><?php title();?></title>
+
 <link rel="stylesheet" type="text/css" media="screen" href="format.css">
 <script type="text/javascript" src="file.js"></script>
 <script type="text/javascript" >
+ function showNavigation() {
+    var element = document.getElementByID("navigation").style;
+    var big = "300px";
+    var small = "100 px";
+    if (element.height == small){
+        element.height = big;
+    }
+    else {
+        element.height = small;
+    }
+    
+}   
     function hideLogin() {
     var logform = document.getElementById("login");
         if (logform.style.visibility !== "hidden"){
@@ -57,6 +68,8 @@ function logout(){document.getElementById("logout").submit();}
 			}
 			google.maps.event.addDomListener(window, 'load', initialize);
 		</script>
+<title><?php title();?></title>
+<?php  checkForInput();?>
 </head>
 
 
@@ -65,7 +78,6 @@ function logout(){document.getElementById("logout").submit();}
 	<!-- The Navigation Bar -->
 	
 	<?php 
-        loginform();
         navigation();?>
 	
 	<!-- content -->
