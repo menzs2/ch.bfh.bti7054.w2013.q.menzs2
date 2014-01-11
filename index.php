@@ -4,14 +4,14 @@
 <?php session_start();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php require("content.php");?> 
+<?php require("files/content.php");?> 
 <head>
 
-<link rel="stylesheet" type="text/css" media="screen" href="format.css">
-<script type="text/javascript" src="file.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="files/format.css">
+<script type="text/javascript" src="files/file.js"></script>
 <script type="text/javascript" >
  function showNavigation() {
-    var element = document.getElementByID("navigation").style;
+    var element = document.getElementById("navigation").style;
     var big = "300px";
     var small = "100 px";
     if (element.height == small){

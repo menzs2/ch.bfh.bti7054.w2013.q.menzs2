@@ -25,6 +25,7 @@ body {
 #navigation{
     background-image:url(paprika.jpg);
     background-size:100%, 100%;
+	height:250px;
     
 }
 #navigationbar {
@@ -99,6 +100,8 @@ div#menu {
 div#maindish {
         background-image:url(color2.png);
 	width: 300px;
+        margin-left: 2px;
+        padding: 20px;
 	float: left;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -107,6 +110,8 @@ div#maindish {
 div#sidedish {
         background-image:url(color2.png);
 	width: 300px;
+        margin-left: 2px;
+        padding: 20px;
 	border: 2px solid black;
 	border-radius: 10px;
         float: left;
@@ -116,6 +121,8 @@ div#sidedish {
 div#beverages {
         background-image:url(color2.png);
 	width: 300px;
+        margin-left: 2px;
+        padding: 20px;
 	float: left;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -152,6 +159,8 @@ div#g2gmap{
 #shortshoppingcart{
 	background-image:url(color2.png);
 	width: 300px;
+        margin-left: 2px;
+        padding: 20px;
 	border: 2px solid black;
 	border-radius: 10px;
         float: left;	
@@ -161,6 +170,7 @@ div#g2gmap{
 #longshoppingcart{
         background-image:url(color2.png);
 	float:left;
+        padding: 20px;
 	border: 2px solid black;
         border-radius: 2px;
 	width: 1200px;

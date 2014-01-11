@@ -4,8 +4,8 @@ Author: Stephan Menzi menzs2
 -->
 
 <?php
-require("logic.php");
-require ("classes.php");
+require("files/logic.php");
+require ("files/classes.php");
 ?>
 <?php
 
@@ -18,7 +18,7 @@ function title() {
 <!-- Start Navigation -->
 <?php
 function navigation(){
-    echo "<div ID=\"navigation\" style=\"height: 100px\" onmouseover=\"showNavigation()\">";
+    echo "<div ID=\"navigation\">";
     loginform();
     func_div("navigationbar", 'navigationBar');
     echo "</div>";

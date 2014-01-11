@@ -12,18 +12,15 @@ function topage(toid) {
         window.location.href = ref.concat(id);
 }
 function tomenu() {
-    window.location = "g2g.php?id=menu";
+    window.location = "index.php?id=menu";
 }
 
 function toinformation() {
-    window.location = "g2g.php?id=information";
+    window.location = "index.php?id=information";
 }
 
-
-
-
 function tocart() {
-    window.location = "g2g.php?id=cart";
+    window.location = "index.php?id=cart";
 }
 
 
@@ -64,32 +61,4 @@ function validate_customer() {
     }
     document.getElementById("form").submit();
 
-}
-
-function show_options() {
-    var options = getElementByID()
-
-}
-
-function hideNavigation() {
-    var navigation =  document.getElementById("navigation");
-        if (navigation.style.visibility !== "hidden"){
-            navigation.style.visibility = "hidden";
-        }
-        else {
-            navigation.style.visibility = "visible";
-        }
-    
-}
-function showNavigation() {
-    var element = document.getElementByID("navigation").style;
-    var big = "300px";
-    var small = "100 px";
-    if (element.height == small){
-        element.height = big;
-    }
-    else {
-        element.height = small;
-    }
-    
 }
