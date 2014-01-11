@@ -103,7 +103,7 @@ function referencing($url, $text, $class = '') {
     
 }
 function jhref($func, $text, $class = ''){
-    echo "<a $class title=\"$text\" href=\"#\" onclick=\"$func();return false;\">$text</a>";
+    echo "<a $class title=\"$text\" href=\"#\" onclick=\"$func();return false;\" >$text</a>";
 }
 
 //a HTML DIV that has a String as the content

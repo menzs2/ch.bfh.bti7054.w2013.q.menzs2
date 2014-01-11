@@ -70,7 +70,7 @@ border: 2px solid black;
 }
 
 #justinfo{
-background-image:url(color2.png);
+background-image:url(color.png);
 font-size: 20pt;
 float:left;
 position: relative; left:150px;
@@ -98,7 +98,7 @@ div#menu {
 }
 
 div#maindish {
-        background-image:url(color2.png);
+        background-image:url(color.png);
 	width: 300px;
         margin-left: 2px;
         padding: 20px;
@@ -108,7 +108,7 @@ div#maindish {
 }
 
 div#sidedish {
-        background-image:url(color2.png);
+        background-image:url(color.png);
 	width: 300px;
         margin-left: 2px;
         padding: 20px;
@@ -119,7 +119,7 @@ div#sidedish {
 }
 
 div#beverages {
-        background-image:url(color2.png);
+        background-image:url(color.png);
 	width: 300px;
         margin-left: 2px;
         padding: 20px;
@@ -157,7 +157,7 @@ div#g2gmap{
     }    
       
 #shortshoppingcart{
-	background-image:url(color2.png);
+	background-image:url(color.png);
 	width: 300px;
         margin-left: 2px;
         padding: 20px;
@@ -168,7 +168,7 @@ div#g2gmap{
 }
 
 #longshoppingcart{
-        background-image:url(color2.png);
+        background-image:url(color.png);
 	float:left;
         padding: 20px;
 	border: 2px solid black;
