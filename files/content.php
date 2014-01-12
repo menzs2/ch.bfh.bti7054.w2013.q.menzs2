@@ -101,6 +101,7 @@ function menu_list() {
 //information on our shop
 function information() {
     informationMessage();
+    echo "<p>".implode(getTextelement("location"))."</p>";
     echo "<div id=\"g2gmap\"></div>";
 }
 
@@ -200,7 +201,8 @@ function informationMessage(){
     foreach($inf as $textelement){
         echo $textelement;
     }
-}
+    
+    }   
 
 
 
