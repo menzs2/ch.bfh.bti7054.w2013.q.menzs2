@@ -5,8 +5,9 @@ body {
        
 	}
 
-.footer {
+#footer {
 	clear: both;
+	color:#717171;
 	position:relative; 
 	top:20px;
 	background-color: RGB(80,2,27);

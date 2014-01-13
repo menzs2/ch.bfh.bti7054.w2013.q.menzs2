@@ -208,19 +208,19 @@ class ShopDB extends mysqli {
     function getAllProducts() {
         $lan = $_SESSION['lan'];
         $fields = "MIT_PK AS itemkey, MIT_Type AS type, name.name, descr.TXT_$lan AS description, MIT_Price AS price";
-        $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `MenuItem` Join Texts on TXT_PK = MIT_Name)";
-        return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description");
+        $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `menuitem` Join texts on TXT_PK = MIT_Name)";
+        return $this->query("SELECT $fields FROM texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description");
     }
 
     function getProduct($key) {
         $lan = $_SESSION['lan'];
         $fields = "MIT_PK AS itemkey, MIT_Type AS type, name.name, descr.TXT_$lan AS description, MIT_Price AS price";
-        $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `MenuItem` Join Texts on TXT_PK = MIT_Name)";
-        return $this->query("SELECT $fields FROM Texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description WHERE MIT_PK = $key");
+        $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `menuitem` Join texts on TXT_PK = MIT_Name)";
+        return $this->query("SELECT $fields FROM texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description WHERE MIT_PK = $key");
     }
     function getOptions(){
         $lan = $_SESSION['lan'];
-        return $this->query("SELECT OPT_PK, OPT_Type, OPT_Description, OPT_price, TXT_$lan as name FROM Options Join Texts on TXT_PK = OPT_Name");
+        return $this->query("SELECT OPT_PK, OPT_Type, OPT_Description, OPT_price, TXT_$lan as name FROM options Join texts on TXT_PK = OPT_Name");
     }
     function insertOrder() {
         
@@ -232,7 +232,7 @@ class ShopDB extends mysqli {
         }  
         else{
         $lan = $_SESSION['lan'];
-        return $this->query("SELECT TXT_Code as code, TXT_$lan as textelement FROM Texts where TXT_code like \"$code%\"");
+        return $this->query("SELECT TXT_Code as code, TXT_$lan as textelement FROM texts where TXT_code like \"$code%\"");
         }
     }
 

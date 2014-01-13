@@ -18,7 +18,7 @@ function title() {
 <!-- Start Navigation -->
 <?php
 function navigation(){
-    echo "<div ID=\"navigation\">";
+    
     loginform();
     func_div("navigationbar", 'navigationBar');
     echo "</div>";
@@ -43,7 +43,7 @@ function navigationBar() {
 
 //the main content chooser
 function content() {
-    //checkForInput();
+
     global $content;
     $con = $content[get_param("id", "main")];
     if (!isset($_SESSION["lan"])) {

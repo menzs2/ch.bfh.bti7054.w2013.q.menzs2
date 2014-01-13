@@ -76,18 +76,18 @@ function logout(){document.getElementById("logout").submit();}
 <body >
 
 	<!-- The Navigation Bar -->
-	
-	<?php 
-        navigation();?>
+	<div ID="navigation">
+	<?php	navigation();?>
+	</div>
 	
 	<!-- content -->
+	<div ID="content">;
+ 	<?php	content() ;	?>
+	</div>";
 
-	<?php 
-	content() ;
-	?>
 
 <!-- footer -->
-	<div class="footer">
+	<div ID="footer">
 	<?php	footer();?>
 	</div>
 
