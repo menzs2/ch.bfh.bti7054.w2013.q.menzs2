@@ -65,7 +65,7 @@ function footer() {
     if (get_param("id", 0) == 'main') {
         languages();
     } else {
-        $g2gadress = 'Gulasch-To-Go, Z&auml;hringerstrasse 34, 3012 Bern';
+        $g2gadress = 'Gulasch-To-Go, Wankdorffeldstrasse 102, 3014 Bern';
         echo "$g2gadress";
     }
 }
@@ -107,7 +107,7 @@ function information() {
 
 //the shoppingcart and the clientInformation
 function cart() {
-    //checkforCart();
+
     func_div('client', 'client_information');
     $shopcart = unserialize($_SESSION["cart"]);
     $shopcart->displayCart('long');
@@ -152,16 +152,7 @@ function client_information() {
     jhref("purchaseConfirmation",'purchase',"class=\"tocart\"" );
     echo "</form>";
 }
-/*
-  function item_option($item) {
-  global $options;
-  echo "<form action=\"g2g.php\" method=\"get\">";
-  foreach ( $options as $item ) {
-  echo "	<input  type=\"checkbox\" >$item[name]</input>";
-  }
-  echo "</form>";
-  }
- */
+
 
 //login field
 function login(){
@@ -213,16 +204,8 @@ $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Inform
 
 $titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getr&auml;nke');
 
-$customer_form = array('salutation' => 'Anrede',
-    'firstname' => 'Vorname',
-    'lastname' => 'Nachname',
-    'street' => 'Strasse',
-    'postcode' => 'PLZ');
-
 $places = array('Bern', 'Ostermundigen', 'K&ouml;niz', 'Ittigen');
 
 $language = array('de' => "Deutsch", 'fr' => "Fran&ccedil;ais");
 
-$information_message = array('de' => "<p>	Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>",
-    'fr' => "<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod	tempor incidunt ut labore et </br>dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris</p>");
 ?>

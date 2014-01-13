@@ -139,14 +139,25 @@ class shoppingcart {
         $action = set_url(get_param("id", "cart"));
         echo "<form action=\"$action\" method=\"post\" name=\"cartItem\">";
                 echo "<p>$item->name</br>CHF " . number_format($item->price, 2) . "</br>";
+                if($item->type == "maindish"){
+					$this->displayOptions();
+				}
                 echo "<input  type=\"hidden\"  name=\"remove\" value=\"$index\">";
                 jhref("removeFromCart($index)", 'remove', "class=\"tocart\"");
                 echo "</form></p>";
-        
     }
+
     private function displayOptions(){
-        
-    }
+//		$options = array();
+		$optShopDB = new ShopDB();
+		$res= $optShopDB->getOptions('MenuItem');
+		while ($options = $res->fetch_array()) {
+			echo "<input  type=\"checkbox\" name=\"itemoption\" value=\"$options[optkey]\"> $options[name] CHF  ". number_format($options['price'], 2) . " </input></br>";
+		
+		}
+		$optShopDB->close();
+	}
+ 
     private function clearCart(){
         $action = set_url(get_param("id", "cart"));
         echo "<form ID=\"clearcart\" action=\"$action\" method=\"post\" >";
@@ -218,9 +229,9 @@ class ShopDB extends mysqli {
         $innerquery = "(SELECT MIT_PK, MIT_Type, MIT_Description, MIT_price, TXT_$lan as name FROM `menuitem` Join texts on TXT_PK = MIT_Name)";
         return $this->query("SELECT $fields FROM texts as descr JOIN $innerquery as name ON descr.TXT_PK = MIT_Description WHERE MIT_PK = $key");
     }
-    function getOptions(){
+    function getOptions($type){
         $lan = $_SESSION['lan'];
-        return $this->query("SELECT OPT_PK, OPT_Type, OPT_Description, OPT_price, TXT_$lan as name FROM options Join texts on TXT_PK = OPT_Name");
+        return $this->query("SELECT OPT_PK as optkey,  OPT_price as price, TXT_$lan as name FROM options Join texts on TXT_PK = OPT_Name WHERE OPT_Type like \"$type%\"");
     }
     function insertOrder() {
         

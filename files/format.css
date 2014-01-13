@@ -58,7 +58,7 @@ body {
 }
 
 #withlogin{
-background-image:url(gulasch_3.jpg);
+background-image:url(color.png);
 background-repeat:no-repeat;
 background-size:124%, 100%;
 font-size: 20pt;
@@ -81,7 +81,7 @@ border: 2px solid black;
 
 }
 #nologin{
-background-image:url(gulasch_2.jpg);
+background-image:url(color.png);
 background-size:100%, 100%;
 font-size: 20pt;
 float:left;
