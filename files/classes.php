@@ -28,15 +28,15 @@ class productList {
 
     public function displayProductList() {
         foreach ($this->items as $typekey => $type) {
-            global $titles;
             echo "<div ID=\"$typekey\">";
-            $this->displayItemTypeList($type, $titles[$typekey]);
+            $this->displayItemTypeList($type, $typekey);
             echo"</div>";
         }
     }
 
     private function displayItemTypeList($type, $group_title) {
-        echo "<h1>$group_title</h1>";
+        $title = implode(getTextelement($group_title));
+        echo "<h1>$title</h1>";
         foreach ($type as $item) {
             $item->displayShopItem();
         }
@@ -260,5 +260,4 @@ $content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 
 
 $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Information", 'cart' => 'Cart');
 
-$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getr&auml;nke');
 

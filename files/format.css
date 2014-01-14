@@ -59,8 +59,6 @@ body {
 
 #withlogin{
 background-image:url(color.png);
-background-repeat:no-repeat;
-background-size:124%, 100%;
 font-size: 20pt;
 float:left;
 position: relative; left:50px;
