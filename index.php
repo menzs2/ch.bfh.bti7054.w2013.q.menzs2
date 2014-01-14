@@ -10,18 +10,15 @@
 <link rel="stylesheet" type="text/css" media="screen" href="files/format.css">
 <script type="text/javascript" src="files/file.js"></script>
 <script type="text/javascript" >
- function showNavigation() {
-    var element = document.getElementById("navigation").style;
-    var big = "300px";
-    var small = "100 px";
-    if (element.height == small){
-        element.height = big;
+ function purchaseConfirmation() {
+    var message = "Mit OK bestätigen Sie Ihre Bestellung";
+    if (confirm(message)){
+        document.getElementById("longshoppingcart").submit();
     }
-    else {
-        element.height = small;
+    else{
+        return;
     }
-    
-}   
+}
     function hideLogin() {
     var logform = document.getElementById("login");
         if (logform.style.visibility !== "hidden"){

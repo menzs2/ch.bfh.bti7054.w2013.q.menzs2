@@ -128,6 +128,7 @@ class shoppingcart {
                 $this->amount += $item->price;
                 }
             echo "<p class\=total\">Total: CHF     " . number_format($this->amount, 2) ."</p>";
+            jhref("purchaseConfirmation",'purchase',"class=\"tocart\"" );
             $this->clearCart();
             
             $myShopDB->close();

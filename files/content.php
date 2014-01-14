@@ -148,7 +148,7 @@ function client_information() {
         echo "<option value=\"$place\">$place</option>";
     }
     echo "</select></br>";
-    jhref("purchaseConfirmation",'purchase',"class=\"tocart\"" );
+    
     echo "</form>";
 }
 

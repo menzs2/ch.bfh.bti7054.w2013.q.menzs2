@@ -1,9 +1,11 @@
 
 function purchaseConfirmation() {
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
-    var result = window.confirm(message);
-    if (result===true){
-        document.getElementByID("longshoppingcart").submit();
+    if (confirm(message)){
+        document.getElementById("longshoppingcart").submit();
+    }
+    else{
+        return;
     }
 }
 function topage(toid) {
