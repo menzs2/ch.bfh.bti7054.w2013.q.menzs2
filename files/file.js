@@ -1,9 +1,9 @@
 
 function purchaseConfirmation() {
     var message = "Mit OK bestätigen Sie Ihre Bestellung";
-    result = window.confirm(message);
-    if (result){
-        document.getElementByID("shoppingcart").submit();
+    var result = window.confirm(message);
+    if (result===true){
+        document.getElementByID("longshoppingcart").submit();
     }
 }
 function topage(toid) {

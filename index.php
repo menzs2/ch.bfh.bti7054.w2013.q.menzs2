@@ -81,9 +81,9 @@ function logout(){document.getElementById("logout").submit();}
 	</div>
 	
 	<!-- content -->
-	<div ID="content">;
+	<div ID="content">
  	<?php	content() ;	?>
-	</div>";
+	</div>
 
 
 <!-- footer -->

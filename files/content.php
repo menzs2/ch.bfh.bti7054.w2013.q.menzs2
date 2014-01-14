@@ -47,16 +47,15 @@ function content() {
     global $content;
     $con = $content[get_param("id", "main")];
     if (!isset($_SESSION["lan"])) {
-        echo "<div ID=\"content\"\">";
+        
         call_user_func('chooselanguage');
-        echo "</div>";
+        
     } 
     else {
-        func_div('content', $con);
+        call_user_func($con);
     }
 }
 ?>
-<!--Content -->
 
 <!--footer-->
 <?php
@@ -195,17 +194,10 @@ function informationMessage(){
     
     }   
 
-
-
-
 $content = array('main' => 'main_page', 'menu' => 'menu_list', 'information' => 'information', 'cart' => 'cart', 'login'=>'userlogin');
 
 $navigation = array('main' => "Main", 'menu' => "Menu", 'information' => "Information", 'cart' => 'Cart');
 
-$titles = array('maindish' => 'Gerichte', 'sidedish' => 'Beilagen', 'beverages' => 'Getr&auml;nke');
-
 $places = array('Bern', 'Ostermundigen', 'K&ouml;niz', 'Ittigen');
-
-$language = array('de' => "Deutsch", 'fr' => "Fran&ccedil;ais");
 
 ?>
